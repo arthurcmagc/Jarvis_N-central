@@ -1,0 +1,4 @@
+{
+    "webhook_url": "http://localhost:5678/webhook-test/jarvis-alerta",
+    "health_score_threshold": 55
+}

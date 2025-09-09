@@ -1,0 +1,362 @@
+﻿[2025-08-12 12:24:31] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 12:24:34] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 12:24:35] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 12:24:36] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 12:24:36] [ERROR] - Falha na coleta de dados de maintenance.psm1: O termo 'Get-MaintenanceStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-08-12 12:24:37] [ERROR] - Falha ao enviar dados para o webhook: O servidor remoto retornou um erro: (404) Não Localizado.
+[2025-08-12 12:24:37] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 12:24:50] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 12:24:52] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 12:24:54] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 12:24:54] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 12:24:55] [ERROR] - Falha na coleta de dados de maintenance.psm1: O termo 'Get-MaintenanceStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-08-12 12:24:55] [INFO] - Dados enviados com sucesso para o webhook.
+[2025-08-12 12:24:55] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 12:33:50] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 12:33:52] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 12:33:53] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 12:33:54] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 12:33:55] [ERROR] - Falha na coleta de dados de maintenance.psm1: O termo 'Get-MaintenanceStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-08-12 12:33:55] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:11:47] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:11:49] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:11:50] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:11:57] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:11:57] [ERROR] - Falha na coleta de dados de maintenance.psm1: O termo 'Get-MaintenanceStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-08-12 16:11:58] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:17:18] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:17:20] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:17:21] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:17:22] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:17:23] [ERROR] - Falha na coleta de dados de services.psm1: O termo 'Get-CriticalServiceStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-08-12 16:17:23] [ERROR] - Falha na coleta de dados de hardware.psm1: O termo 'Get-ManufacturerInfo' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-08-12 16:17:23] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:28:46] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:28:48] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:28:49] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:28:49] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:28:50] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 16:28:51] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:28:51] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:29:17] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:29:19] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:29:20] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:29:20] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:29:21] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 16:29:21] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:29:22] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:32:45] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:32:47] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:32:49] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:32:49] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:32:50] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 16:32:50] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:32:51] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:37:29] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:37:31] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:37:32] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:37:32] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:37:33] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 16:37:34] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:37:34] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:41:25] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:41:27] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:41:28] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:41:29] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:41:29] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 16:41:30] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:41:30] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:43:04] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:43:06] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:43:07] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:43:08] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:43:09] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 16:43:09] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:43:10] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:44:02] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:44:04] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:44:05] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:44:06] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:44:06] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 16:44:07] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:44:07] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:50:19] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:50:21] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:50:22] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:50:23] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:50:23] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 16:50:24] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:50:24] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 16:51:13] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 16:51:15] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:51:16] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 16:51:17] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 16:51:17] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 16:51:18] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 16:51:18] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:06:28] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:06:30] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:06:31] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 17:06:32] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:06:32] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:06:33] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:06:33] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:11:20] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:11:22] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:11:23] [INFO] - Coleta de dados de network.psm1 concluída.
+[2025-08-12 17:11:24] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:11:25] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:11:25] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:11:25] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:15:08] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:15:10] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:15:10] [ERROR] - Falha na coleta de dados de networking.psm1: O termo 'Get-NetworkStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-08-12 17:15:11] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:15:12] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:15:12] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:15:12] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:17:24] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:17:26] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:17:27] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:17:28] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:17:28] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:17:29] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:17:29] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:19:22] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:19:24] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:19:29] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:19:29] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:19:30] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:19:30] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:19:30] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:21:05] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:21:07] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:21:08] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:21:09] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:21:10] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:21:10] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:21:10] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:21:50] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:21:52] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:21:53] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:21:54] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:21:54] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:21:55] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:21:55] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:27:44] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:27:46] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:27:47] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:27:48] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:27:49] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:27:50] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:27:50] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:28:17] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:28:19] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:28:21] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:28:22] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:28:23] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:28:23] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:28:24] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:32:02] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:32:04] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:32:06] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:32:07] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:32:07] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:32:08] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:32:08] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:34:12] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:34:14] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:34:15] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:34:16] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:34:17] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:34:18] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:34:18] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:35:27] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:35:29] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:35:30] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:35:32] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:35:33] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:35:33] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:35:33] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:36:46] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:36:48] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:36:49] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:36:50] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:36:51] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:36:52] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:36:52] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:39:46] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:39:48] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:39:49] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:39:50] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:39:51] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:39:52] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:39:52] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 17:40:50] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 17:40:52] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:40:53] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 17:40:54] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 17:40:55] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 17:40:56] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 17:40:56] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 22:46:46] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 22:46:48] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 22:46:49] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 22:46:50] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 22:46:51] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 22:46:52] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 22:46:52] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-12 23:25:10] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 23:25:12] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 23:35:45] [INFO] - Iniciando diagnóstico completo.
+[2025-08-12 23:35:47] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 23:35:48] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-12 23:35:50] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-12 23:35:50] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-12 23:35:51] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-12 23:35:51] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-13 00:03:17] [INFO] - Iniciando diagnóstico completo.
+[2025-08-13 00:03:19] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 00:03:21] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-13 00:03:22] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-13 00:03:23] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-13 00:03:25] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 00:03:25] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-13 10:52:43] [INFO] - Iniciando diagnóstico completo.
+[2025-08-13 10:52:46] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 10:52:47] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-13 10:52:48] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-13 10:52:49] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-13 10:52:49] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 10:52:50] [ERROR] - Falha ao enviar dados para o webhook: O servidor remoto retornou um erro: (404) Não Localizado.
+[2025-08-13 10:52:50] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-13 10:53:32] [INFO] - Iniciando diagnóstico completo.
+[2025-08-13 10:53:34] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 10:53:35] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-13 10:53:36] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-13 10:53:37] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-13 10:53:38] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 10:53:38] [INFO] - Dados enviados com sucesso para o webhook.
+[2025-08-13 10:53:38] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-13 14:13:33] [INFO] - Iniciando diagnóstico completo.
+[2025-08-13 14:13:35] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 14:13:37] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-13 14:13:38] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-13 14:13:38] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-13 14:13:39] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 14:13:39] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-13 14:20:38] [INFO] - Iniciando diagnóstico completo.
+[2025-08-13 14:20:40] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 14:20:42] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-13 14:20:43] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-13 14:20:44] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-13 14:20:45] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 14:20:45] [INFO] - Dados enviados com sucesso para o webhook.
+[2025-08-13 14:20:45] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-13 14:26:10] [INFO] - Iniciando diagnóstico completo.
+[2025-08-13 14:26:12] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 14:26:13] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-13 14:26:14] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-13 14:26:14] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-13 14:26:15] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-13 14:26:15] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-19 16:04:26] [INFO] - Iniciando diagnóstico completo.
+[2025-08-19 16:04:28] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:04:29] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-19 16:04:30] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-19 16:04:31] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-19 16:04:31] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:04:32] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-19 16:10:03] [INFO] - Iniciando diagnóstico completo.
+[2025-08-19 16:10:04] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:10:06] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-19 16:10:07] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-19 16:10:07] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-19 16:10:08] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:10:08] [INFO] - Dados enviados com sucesso para o webhook.
+[2025-08-19 16:10:08] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-19 16:10:29] [INFO] - Iniciando diagnóstico completo.
+[2025-08-19 16:10:30] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:10:32] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-19 16:10:33] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-19 16:10:33] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-19 16:10:34] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:10:34] [ERROR] - Falha ao enviar dados para o webhook: O servidor remoto retornou um erro: (404) Não Localizado.
+[2025-08-19 16:10:34] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-19 16:11:52] [INFO] - Iniciando diagnóstico completo.
+[2025-08-19 16:11:54] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:11:55] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-19 16:11:56] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-19 16:11:57] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-19 16:11:58] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:11:58] [ERROR] - Falha ao enviar dados para o webhook: O servidor remoto retornou um erro: (404) Não Localizado.
+[2025-08-19 16:11:58] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-19 16:19:45] [INFO] - Iniciando diagnóstico completo.
+[2025-08-19 16:19:47] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:19:49] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-19 16:19:50] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-19 16:19:50] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-19 16:19:51] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:19:51] [INFO] - Dados enviados com sucesso para o webhook.
+[2025-08-19 16:19:51] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-19 16:36:09] [INFO] - Iniciando diagnóstico completo.
+[2025-08-19 16:36:11] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:36:12] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-19 16:36:13] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-19 16:36:13] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-19 16:36:14] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:36:14] [INFO] - Dados enviados com sucesso para o webhook.
+[2025-08-19 16:36:14] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-19 16:39:01] [INFO] - Iniciando diagnóstico completo.
+[2025-08-19 16:39:03] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:39:05] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-19 16:39:05] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-19 16:39:06] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-19 16:39:07] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-19 16:39:07] [INFO] - Dados enviados com sucesso para o webhook.
+[2025-08-19 16:39:07] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-21 12:09:13] [INFO] - Iniciando diagnóstico completo.
+[2025-08-21 12:09:15] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-21 12:09:17] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-21 12:09:17] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-21 12:09:18] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-21 12:09:19] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-21 12:09:19] [INFO] - Dados enviados com sucesso para o webhook.
+[2025-08-21 12:09:19] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-08-29 15:12:44] [INFO] - Iniciando diagnóstico completo.
+[2025-08-29 15:12:46] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-29 15:12:48] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-08-29 15:12:48] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-08-29 15:12:49] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-08-29 15:12:49] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-08-29 15:12:54] [ERROR] - Falha ao enviar dados para o webhook: Impossível conectar-se ao servidor remoto
+[2025-08-29 15:12:54] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-09-02 08:09:06] [INFO] - Iniciando diagnóstico completo.
+[2025-09-02 08:09:08] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-02 08:09:09] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-09-02 08:09:10] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-09-02 08:09:11] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-09-02 08:09:11] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-02 08:09:12] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis\output\status-maquina.json'.
+[2025-09-03 12:32:47] [INFO] - Iniciando diagnóstico completo.
+[2025-09-03 13:29:41] [INFO] - Iniciando diagnóstico completo.
+[2025-09-03 13:29:44] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-03 13:29:45] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-09-03 13:29:46] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-09-03 13:29:47] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-09-03 13:29:47] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-03 13:29:48] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis v1.0\output\status-maquina.json'.
+[2025-09-09 18:35:02] [INFO] - Iniciando diagnóstico completo.
+[2025-09-09 18:35:04] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-09 18:35:06] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-09-09 18:35:06] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-09-09 18:35:07] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-09-09 18:35:08] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-09 18:35:08] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis v1.0\output\status-maquina.json'.
+[2025-09-09 18:42:40] [INFO] - Iniciando diagnóstico completo.
+[2025-09-09 18:42:42] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-09 18:42:43] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-09-09 18:42:44] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-09-09 18:42:45] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-09-09 18:42:46] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-09 18:42:46] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis - N-central\output\status-maquina.json'.

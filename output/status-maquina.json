@@ -1,0 +1,652 @@
+﻿{
+    "Timestamp":  "2025-09-09T18:42:40",
+    "Hostname":  "HYPE-0146",
+    "Hardware":  {
+                     "CPU":  "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+                     "RAM":  {
+                                 "TotalGB":  19.73,
+                                 "UsedPercent":  87.48
+                             },
+                     "Disks":  [
+                                   {
+                                       "DeviceID":  "C:",
+                                       "FreeGB":  75.83,
+                                       "TotalGB":  237.17,
+                                       "FreePercent":  31.97,
+                                       "Tipo":  "Disco Local Físico"
+                                   },
+                                   {
+                                       "DeviceID":  "G:",
+                                       "FreeGB":  72.04,
+                                       "TotalGB":  237.17,
+                                       "FreePercent":  30.37,
+                                       "Tipo":  "Unidade Mapeada (Google Drive)"
+                                   }
+                               ]
+                 },
+    "Rede":  {
+                 "HasInternetConnection":  true,
+                 "IPAddress":  "N/A",
+                 "MACAddress":  "5C:CD:5B:EE:58:4A"
+             },
+    "EventosCriticos":  {
+                            "TotalEventos":  99,
+                            "EventosRelevantes":  [
+                                                      {
+                                                          "TimeCreated":  "2025-09-08T20:53:47.8100477-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {A463FCB9-6B1C-4E0D-A80B-A2CA7999E25D} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-08T20:53:46.2937062-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {A463FCB9-6B1C-4E0D-A80B-A2CA7999E25D} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-05T17:46:25.1865670-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor Microsoft.AAD.BrokerPlugin_1000.19580.1000.2_neutral_neutral_cw5n1h2txyewy!Windows.Security.Authentication.Web.Core.BackgroundGetTokenTask.ClassId.WebAccountProvider não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-05T16:41:16.7425288-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {8CFC164F-4BE5-4FDD-94E9-E2AF73ED4A19} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-04T17:18:44.9407832-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor Microsoft.AAD.BrokerPlugin_1000.19580.1000.2_neutral_neutral_cw5n1h2txyewy!Windows.Security.Authentication.Web.Core.BackgroundGetTokenTask.ClassId.WebAccountProvider não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-04T06:48:32.9860941-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {B91D5831-B1BD-4608-8198-D72E155020F7} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-03T07:35:31.7240398-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {A463FCB9-6B1C-4E0D-A80B-A2CA7999E25D} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-03T07:35:31.6968558-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {A463FCB9-6B1C-4E0D-A80B-A2CA7999E25D} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-03T07:35:30.1443059-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {A463FCB9-6B1C-4E0D-A80B-A2CA7999E25D} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:24.1482863-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:24.1227841-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:24.0949753-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:24.0562605-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:24.0337426-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.9995792-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.9726193-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.9393508-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.9162199-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.8821487-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.8559490-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.8271038-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.7961066-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.7727704-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.7447333-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.7059094-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.6724552-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.6391413-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.6148224-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.5826762-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.5394779-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.4974563-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "2025-09-02T21:50:23.4622731-03:00",
+                                                          "Id":  10010,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O servidor {AB8902B4-09CA-4BB6-B78D-A8F59079A8D5} não se registrou no DCOM dentro do tempo limite necessário."
+                                                      }
+                                                  ],
+                            "EventosCriticos":  [
+                                                    {
+                                                        "TimeCreated":  "2025-09-09T17:16:15.4565314-03:00",
+                                                        "Id":  21,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-09T17:16:15.4565284-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-09T17:16:15.4541891-03:00",
+                                                        "Id":  21,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-09T17:16:15.4541821-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-09T17:16:15.4524651-03:00",
+                                                        "Id":  21,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-09T17:16:15.4524564-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-09T07:47:33.8797982-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T20:50:53.2271996-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T15:50:14.2729714-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T15:48:15.7436732-03:00",
+                                                        "Id":  7011,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a resposta de uma transação do serviço WSearch."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T15:46:15.7299587-03:00",
+                                                        "Id":  7011,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a resposta de uma transação do serviço WSearch."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T15:44:15.7173548-03:00",
+                                                        "Id":  7011,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a resposta de uma transação do serviço WSearch."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T15:42:15.7164217-03:00",
+                                                        "Id":  7011,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a resposta de uma transação do serviço WSearch."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T15:40:15.7122803-03:00",
+                                                        "Id":  7011,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a resposta de uma transação do serviço WSearch."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T15:34:55.5855545-03:00",
+                                                        "Id":  29,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "As cópias de sombra do volume E: foram anuladas durante a detecção."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T15:33:54.8436799-03:00",
+                                                        "Id":  7011,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a resposta de uma transação do serviço WSearch."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T13:15:33.5703180-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T10:31:13.5387899-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-08T08:07:45.3743259-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T17:54:12.0220323-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T17:39:12.3344288-03:00",
+                                                        "Id":  21,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T17:39:12.3344259-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T17:39:12.3335291-03:00",
+                                                        "Id":  21,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T17:39:12.3335261-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T17:39:12.3325550-03:00",
+                                                        "Id":  21,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T17:39:12.3325531-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T16:59:54.5689753-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T15:56:35.3889112-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T10:19:41.6455121-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-05T08:10:52.1199143-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T07:49:56.6474783-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:16.2365870-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:16.1949858-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:16.1903652-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:16.1630370-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:16.1264822-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.5809188-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.5703824-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.5227121-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.5106130-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.4589611-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.4340545-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.4110635-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.3998954-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.3720583-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.3597703-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.3319590-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.3218728-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.2921681-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:49:15.2529969-03:00",
+                                                        "Id":  10005,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:"
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:48:36.0522119-03:00",
+                                                        "Id":  7023,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O serviço Serviço orquestrador de atualizações terminou com o erro: "
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:47:06.7221325-03:00",
+                                                        "Id":  30,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O serviço de log de eventos encontrou um erro (5) ao habilitar o fornecedor {8e889f0c-7d54-52b3-e4ae-2c8b27a482c2} para o canal Microsoft-Windows-LocationServiceProvider/Operational. Isso não afeta a operação do canal, mas afeta a capacidade do editor de publicar eventos no canal. Uma razão comum para esse erro é o fato de o Provedor usar ETW Provider Security e não ter concedido permissões de habilitação à identidade do serviço Log de Eventos."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:46:35.0120041-03:00",
+                                                        "Id":  21,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:46:35.0120017-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-04T06:46:33.0256238-03:00",
+                                                        "Id":  7023,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O serviço Serviço orquestrador de atualizações terminou com o erro: "
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-03T15:30:46.9267022-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-03T09:39:20.7142650-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-03T09:38:38.0247057-03:00",
+                                                        "Id":  22,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O serviço de log de eventos encontrou um erro ao inicializar recursos de publicação para o canal Microsoft-Windows-USBVideo/Analytic. Se o tipo de canal for Analítico ou Depurar, isso poderá significar que também ocorreu um erro ao serem inicializados recursos de log."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-03T07:32:50.6226566-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O driver detectou um erro de controlador em \\Device\\Harddisk1\\DR1."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-03T07:32:49.6103949-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O driver detectou um erro de controlador em \\Device\\Harddisk1\\DR1."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-03T07:30:31.8113898-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-03T07:30:08.4016936-03:00",
+                                                        "Id":  22,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O serviço de log de eventos encontrou um erro ao inicializar recursos de publicação para o canal Microsoft-Windows-USBVideo/Analytic. Se o tipo de canal for Analítico ou Depurar, isso poderá significar que também ocorreu um erro ao serem inicializados recursos de log."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-02T20:25:50.7101691-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9NHT9RB2F4HD-Microsoft.Copilot."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-02T20:25:02.2598544-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9NTXGKQ8P7N0-MicrosoftWindows.CrossDevice."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-02T20:23:13.9353211-03:00",
+                                                        "Id":  20,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9WZDNCRFJBMP-MICROSOFT.WINDOWSSTORE."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-02T18:46:28.5169599-03:00",
+                                                        "Id":  11,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                    },
+                                                    {
+                                                        "TimeCreated":  "2025-09-02T18:46:06.0285384-03:00",
+                                                        "Id":  22,
+                                                        "LevelDisplayName":  "Erro",
+                                                        "Message":  "O serviço de log de eventos encontrou um erro ao inicializar recursos de publicação para o canal Microsoft-Windows-USBVideo/Analytic. Se o tipo de canal for Analítico ou Depurar, isso poderá significar que também ocorreu um erro ao serem inicializados recursos de log."
+                                                    }
+                                                ]
+                        },
+    "Servicos":  {
+                     "CriticalServicesNotRunning":  [
+                                                        {
+                                                            "Name":  "Serviços de Área de Trabalho Remota",
+                                                            "Status":  1
+                                                        }
+                                                    ]
+                 },
+    "Fabricante":  {
+                       "Manufacturer":  "Dell Inc."
+                   },
+    "Analise":  {
+                    "SaudePontuacao":  75,
+                    "ProblemasIdentificados":  [
+                                                   "[ALERTA] Uso de RAM: 87% (uso alto, mas normal).",
+                                                   "[CRÍTICO] Evento relevante (ID: 10010) detectado 32 vezes.",
+                                                   "[CRÍTICO] Um ou mais serviços essenciais não estão em execução."
+                                               ]
+                }
+}
