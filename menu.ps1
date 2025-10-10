@@ -1,4 +1,4 @@
-# menu.ps1
+﻿# menu.ps1
 #
 # Script principal para o Assistente de Diagnóstico - Jarvis
 
