@@ -1,4 +1,4 @@
-# maintenance.psm1
+﻿# maintenance.psm1
 # Módulo com funções de manutenção e correção do sistema.
 # Versão: Integrada — preserva funções antigas + novas funções reais e instrumentadas.
 
