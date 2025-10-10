@@ -1,4 +1,4 @@
-﻿# menu.ps1
+# menu.ps1
 #
 # Script principal para o Assistente de Diagnóstico - Jarvis
 
@@ -26,7 +26,6 @@ catch {
 
 # Inicia as correções automáticas
 Function Start-Fixes {
-    # Chama a função de correção do módulo de manutenção.
     try {
         Invoke-Corrections
     }
@@ -52,7 +51,6 @@ function Show-JarvisFinalSuggestion {
         
         $manufacturer = $data.Fabricante.Manufacturer
         if ($manufacturer) {
-            # Escreve a tag [JARVIS] em azul e o restante da mensagem em branco.
             Write-Host "[JARVIS] " -NoNewline -ForegroundColor Blue
             $suggestion = Get-ManufacturerSoftwareSuggestion -Manufacturer $manufacturer
             Write-TypingFormattedText -Text $suggestion -Delay 10 -ForegroundColor "White" -LineWidth ($windowWidth - 4) -Indent "          "
@@ -69,11 +67,10 @@ function Show-JarvisFinalSuggestion {
 
 # Menu principal
 while ($true) {
-    # Adiciona o tratamento para a interrupção por Ctrl+C
     trap [System.Management.Automation.Host.HostException] {
         Write-Host "`nOperação cancelada pelo usuário (Ctrl+C). Retornando ao menu principal..." -ForegroundColor Yellow
         Start-Sleep -Seconds 2
-        continue # Retorna ao início do loop 'while'
+        continue
     }
 
     Clear-Host
@@ -85,7 +82,7 @@ while ($true) {
     Write-Host "`n"
     Write-Host "[1] Executar Diagnóstico Completo" -ForegroundColor White
     Write-Host "[2] Visualizar Relatórios" -ForegroundColor White
-    Write-Host "[3] Executar Correções Automáticas" -ForegroundColor White
+    Write-Host "[3] Menu de Correções" -ForegroundColor White
     Write-Host "[4] Sair" -ForegroundColor White
     Write-Host "`n=================================================" -ForegroundColor Cyan
 
@@ -94,17 +91,13 @@ while ($true) {
     switch ($opcao) {
         "1" {
             Clear-Host
-            # AJUSTE: Remove a indentação para alinhar o cabeçalho à esquerda
-            # AJUSTE: Formato da data para ser mais legível
             $currentDate = Get-Date -Format 'dd/MM/yyyy HH:mm'
             Write-Host "ANÁLISE DO DIAGNÓSTICO" -ForegroundColor Cyan
             Write-Host "Análise do sistema '$(hostname)' em $currentDate" -ForegroundColor White
             Write-Host "`n"
             
-            # Chama o script de orquestração 'diagnostic-v2.ps1'
             try {
                 & $diagnosticScriptPath
-                # Exibe a sugestão do Jarvis aqui, como um resumo rápido.
                 Show-JarvisFinalSuggestion -JsonPath $logPath
             }
             catch {
@@ -113,7 +106,6 @@ while ($true) {
             Read-Host "`nPressione ENTER para voltar ao menu"
         }
         "2" {
-            # Submenu de visualização de relatórios
             $inSubmenuRelatorios = $true
             while ($inSubmenuRelatorios) {
                 Clear-Host
@@ -130,7 +122,6 @@ while ($true) {
                 switch ($submenuOpcao) {
                     "1" {
                         try {
-                            # Exibe o relatório detalhado apenas aqui.
                             Start-DiagnosticAnalysis -JsonPath $logPath
                         }
                         catch {
@@ -149,9 +140,7 @@ while ($true) {
                         }
                         Read-Host "`nPressione ENTER para continuar"
                     }
-                    "3" {
-                        $inSubmenuRelatorios = $false
-                    }
+                    "3" { $inSubmenuRelatorios = $false }
                     default {
                         Write-Host "Opção inválida. Tente novamente." -ForegroundColor Red
                         Start-Sleep -Seconds 2
@@ -160,7 +149,7 @@ while ($true) {
             }
         }
         "3" {
-            # Novo submenu de correções
+            # Submenu de Correções + Limpeza + Otimização
             $inSubmenuCorrecoes = $true
             while ($inSubmenuCorrecoes) {
                 Clear-Host
@@ -170,29 +159,26 @@ while ($true) {
                 Write-Host "`n"
                 Write-Host "[1] Executar SFC (System File Checker)" -ForegroundColor White
                 Write-Host "[2] Executar DISM (Deployment Image Servicing and Management)" -ForegroundColor White
-                # AJUSTE: Descrição da opção corrigida com capitalização
-                Write-Host "[3] Executar Correções de Rede Imediatas" -NoNewline -ForegroundColor White
-                Write-Host " (Sequência de Comandos para Limpeza de Serviços de Rede)" -ForegroundColor DarkGray
-                Write-Host "[4] Voltar" -ForegroundColor White
+                Write-Host "[3] Executar Correções de Rede Imediatas (Sequência de Comandos para Limpeza de Serviços de Rede)" -ForegroundColor White
+                Write-Host "[4] Limpeza Rápida" -ForegroundColor White
+                Write-Host "[5] Limpeza Completa" -ForegroundColor White
+                Write-Host "[6] Otimização Inteligente (RAM + Limpeza)" -ForegroundColor White
+                Write-Host "[7] Voltar" -ForegroundColor White
                 Write-Host "`n=================================================" -ForegroundColor Cyan
-                $correcoesOpcao = Read-Host "`nEscolha uma opção (1-4)"
+                $correcoesOpcao = Read-Host "`nEscolha uma opção (1-7)"
 
                 switch ($correcoesOpcao) {
-                    "1" {
-                        Invoke-SFC
+                    "1" { Invoke-SFC; Read-Host "`nPressione ENTER para continuar" }
+                    "2" { Invoke-DISM; Read-Host "`nPressione ENTER para continuar" }
+                    "3" { Invoke-NetworkCorrections; Read-Host "`nPressione ENTER para continuar" }
+                    "4" { Invoke-QuickClean; Read-Host "`nPressione ENTER para continuar" }
+                    "5" { Invoke-FullClean; Read-Host "`nPressione ENTER para continuar" }
+                    "6" { 
+                        Invoke-OptimizeMemory
+                        Invoke-QuickClean
                         Read-Host "`nPressione ENTER para continuar"
                     }
-                    "2" {
-                        Invoke-DISM
-                        Read-Host "`nPressione ENTER para continuar"
-                    }
-                    "3" {
-                        Invoke-NetworkCorrections
-                        Read-Host "`nPressione ENTER para continuar"
-                    }
-                    "4" {
-                        $inSubmenuCorrecoes = $false
-                    }
+                    "7" { $inSubmenuCorrecoes = $false }
                     default {
                         Write-Host "Opção inválida. Tente novamente." -ForegroundColor Red
                         Start-Sleep -Seconds 2
@@ -201,10 +187,8 @@ while ($true) {
             }
         }
         "4" {
-            # AJUSTE: Corrigido o encerramento para não quebrar a linha
             Write-Host "`n"
             Write-Host "[JARVIS]" -ForegroundColor Blue
-            # Adiciona um valor alto para a largura da linha, forçando o texto a não quebrar.
             Write-TypingFormattedText -Text "Encerrando operações..." -Delay 10 -ForegroundColor White -LineWidth 120
             Start-Sleep -Seconds 1
             Write-TypingFormattedText -Text "Procedimentos finalizados. Permanecerei em standby até a próxima missão." -Delay 10 -ForegroundColor White -LineWidth 120
