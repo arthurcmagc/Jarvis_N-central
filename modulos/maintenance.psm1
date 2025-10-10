@@ -30,7 +30,6 @@ function Write-Jarvis {
 # FUNÇÕES ANTIGAS (ORIGINAIS)
 # ===========================
 
-# Função de correção combinada, pode ser chamada por automação
 function Invoke-Corrections {
     Write-Jarvis "Iniciando rotina de correções completas..." Yellow
     Invoke-SFC
@@ -41,58 +40,41 @@ function Invoke-Corrections {
     Write-Jarvis "Rotina de correções completa." Green
 }
 
-# Função para executar o System File Checker
 function Invoke-SFC {
     Write-Jarvis "Iniciando SFC (System File Checker)..." Green
     try {
-        Write-LogEntry -Level INFO -Message "Executando: sfc /scannow"
+        Write-LogEntry -Message "Executando: sfc /scannow"
         sfc /scannow
         Write-Jarvis "SFC concluído. Verifique o resultado acima." Yellow
-    }
-    catch {
+    } catch {
         Write-Jarvis "Erro ao executar SFC: $($_.Exception.Message)" Red
         Write-LogEntry -Level ERROR -Message "SFC error: $($_.Exception.Message)"
     }
 }
 
-# Função para executar o DISM
 function Invoke-DISM {
     Write-Jarvis "Iniciando DISM (Deployment Image Servicing and Management)..." Green
     Write-Jarvis "Isso pode demorar alguns minutos. Por favor, aguarde." DarkGray
     try {
-        Write-LogEntry -Level INFO -Message "Executando: Dism /Online /Cleanup-Image /RestoreHealth"
+        Write-LogEntry -Message "Executando: Dism /Online /Cleanup-Image /RestoreHealth"
         Dism /Online /Cleanup-Image /RestoreHealth
         Write-Jarvis "DISM concluído. Verifique o resultado acima." Yellow
-    }
-    catch {
+    } catch {
         Write-Jarvis "Erro ao executar DISM: $($_.Exception.Message)" Red
         Write-LogEntry -Level ERROR -Message "DISM error: $($_.Exception.Message)"
     }
 }
 
-# NOVA FUNÇÃO: Executa um conjunto de correções de rede comuns
 function Invoke-NetworkCorrections {
     Write-Jarvis "Iniciando correções de rede imediatas..." Green
     try {
         Write-Jarvis "-> Limpando cache DNS..." DarkGray
         ipconfig /flushdns | Out-Null
-        Write-LogEntry -Level INFO -Message "ipconfig /flushdns"
-        
-        Write-Jarvis "-> Resetando a pilha de IP..." DarkGray
         netsh int ip reset | Out-Null
-        Write-LogEntry -Level INFO -Message "netsh int ip reset"
-        
-        Write-Jarvis "-> Resetando o catálogo Winsock..." DarkGray
         netsh winsock reset | Out-Null
-        Write-LogEntry -Level INFO -Message "netsh winsock reset"
-        
-        Write-Jarvis "-> Resetando o proxy WinHTTP..." DarkGray
         netsh winhttp reset proxy | Out-Null
-        Write-LogEntry -Level INFO -Message "netsh winhttp reset proxy"
-        
-        Write-Jarvis "Correções de rede concluídas. Recomenda-se reiniciar o computador para aplicar todas as mudanças." Yellow
-    }
-    catch {
+        Write-Jarvis "Correções de rede concluídas. Recomenda-se reiniciar o computador." Yellow
+    } catch {
         Write-Jarvis "Erro nas correções de rede: $($_.Exception.Message)" Red
         Write-LogEntry -Level ERROR -Message "NetworkCorrections error: $($_.Exception.Message)"
     }
@@ -102,14 +84,12 @@ function Invoke-NetworkCorrections {
 # NOVAS FUNÇÕES REAIS
 # ===========================
 
-# Lista de processos/serviços protegidos (não tocar)
 $ProtectedProcesses = @(
     "explorer","winlogon","csrss","services","lsass","svchost","System",
     "taskhostw","dwm","ctfmon","searchui","StartMenuExperienceHost",
     "msedge","chrome","firefox","winword","excel","outlook","powerpnt","teams","powershell"
 )
 
-# Função helper: size/count of a path (returns [pscustomobject] @{Count=..;SizeBytes=..})
 function Get-PathStats {
     param([string]$Path)
     if (-not (Test-Path $Path)) { return @{ Count = 0; SizeBytes = 0 } }
@@ -124,19 +104,16 @@ function Get-PathStats {
     } catch { return @{ Count = 0; SizeBytes = 0 } }
 }
 
-# Função para remover e retornar stats freed
 function Remove-PathAndReport {
     param([string]$Path)
     $before = Get-PathStats -Path $Path
     Try {
         if ($before.Count -gt 0) {
-            # Remove items individually so we can catch errors
             $items = Get-ChildItem -Path $Path -Recurse -Force -ErrorAction SilentlyContinue
             foreach ($i in $items) {
                 try { Remove-Item -LiteralPath $i.FullName -Force -Recurse -ErrorAction SilentlyContinue -Confirm:$false } catch {}
             }
         } else {
-            # If wildcard path may represent files, attempt Remove-Item anyway (will be fast)
             try { Remove-Item -Path $Path -Recurse -Force -ErrorAction SilentlyContinue -Confirm:$false } catch {}
         }
     } catch { }
@@ -147,81 +124,17 @@ function Remove-PathAndReport {
 }
 
 # -----------------
-# Limpeza Rápida
-# -----------------
-function Invoke-QuickClean {
-    <#
-    Descrição: Limpeza rápida de cache e temporários. 
-    Relata o que foi removido (quantidade e tamanho).
-    #>
-    Write-Jarvis "`n[MANUTENÇÃO] Iniciando Limpeza Rápida..." Cyan
-    Write-LogEntry -Level INFO -Message "Start QuickClean"
-
-    $totalFreed = 0
-    $totalRemoved = 0
-
-    $paths = @(
-        "$env:TEMP\*",
-        "$env:LOCALAPPDATA\Temp\*",
-        "$env:WINDIR\Temp\*"
-    )
-
-    foreach ($p in $paths) {
-        $res = Remove-PathAndReport -Path $p
-        $totalFreed += $res.FreedBytes
-        $totalRemoved += $res.RemovedCount
-        Write-Jarvis "  -> Path: $p  | Arquivos removidos: $($res.RemovedCount)  | Espaço liberado: $([math]::Round($res.FreedBytes/1MB,2)) MB" DarkGray
-        Write-LogEntry -Level INFO -Message "QuickClean path $p removed $($res.RemovedCount) items freed $([math]::Round($res.FreedBytes/1MB,2)) MB"
-    }
-
-    # Lixeira: contar antes e limpar
-    try {
-        $shell = New-Object -ComObject Shell.Application
-        $recycle = $shell.Namespace(0xA)
-        if ($recycle) {
-            $items = $recycle.Items()
-            $count = ($items | Measure-Object).Count
-            # Attempt Clear-RecycleBin first (works on modern systems)
-            try {
-                Clear-RecycleBin -Force -ErrorAction SilentlyContinue
-            } catch {
-                # fallback: remove recycle bin contents by path
-                $recyclePath = "$env:SYSTEMDRIVE\$Recycle.Bin\*"
-                $res = Remove-PathAndReport -Path $recyclePath
-                $totalFreed += $res.FreedBytes
-                $totalRemoved += $res.RemovedCount
-            }
-            Write-Jarvis "  -> Lixeira: $count itens removidos (estimado)." DarkGray
-            Write-LogEntry -Level INFO -Message "QuickClean recycle items: $count"
-        }
-    } catch {
-        Write-LogEntry -Level WARNING -Message "QuickClean: erro ao limpar lixeira: $($_.Exception.Message)"
-    }
-
-    $totalFreedMB = [math]::Round($totalFreed / 1MB, 2)
-    Write-Jarvis "`n[RESULTADO] Limpeza rápida concluída. Total removido: $totalRemoved itens | Espaço liberado: $totalFreedMB MB" Green
-    Write-LogEntry -Level INFO -Message "QuickClean finished: items $totalRemoved freed ${totalFreedMB}MB"
-    return @{ ItemsRemoved = $totalRemoved; FreedMB = $totalFreedMB }
-}
-
-# -----------------
-# Limpeza Completa
+# Limpeza Completa (com opção agressiva)
 # -----------------
 function Invoke-FullClean {
-    <#
-    Descrição: Limpeza completa com confirmação. Limpa caches, logs (wevtutil), SoftwareDistribution, Explorer cache, navegadores (padrão paths),
-    e reporta counts/space.
-    #>
     Write-Jarvis "`n[MANUTENÇÃO] Iniciando Limpeza Completa..." Cyan
-    Write-Jarvis "A limpeza completa pode remover caches, logs e arquivos temporários do sistema e aplicativos. Esse processo pode levar alguns minutos e pode afetar temporariamente o usuário final." DarkYellow
+    Write-Jarvis "A limpeza completa pode remover caches, logs e arquivos temporários do sistema e aplicativos." DarkYellow
     $confirm = Read-Host "`nTem certeza que deseja continuar? (S/N)"
     if ($confirm -notin @('S','s')) {
-        Write-Jarvis "Operação de Limpeza Completa cancelada pelo usuário." Yellow
-        Write-LogEntry -Level INFO -Message "FullClean cancelled by user"
+        Write-Jarvis "Operação cancelada pelo usuário." Yellow
         return
     }
 
-    Write-LogEntry -Level INFO -Message "Start FullClean"
     $totalFreed = 0
     $totalRemoved = 0
 
@@ -243,43 +156,59 @@ function Invoke-FullClean {
         $totalFreed += $res.FreedBytes
         $totalRemoved += $res.RemovedCount
         Write-Jarvis "  -> Path: $p | Removidos: $($res.RemovedCount) | Liberado: $([math]::Round($res.FreedBytes/1MB,2)) MB" DarkGray
-        Write-LogEntry -Level INFO -Message "FullClean path $p removed $($res.RemovedCount) items freed $([math]::Round($res.FreedBytes/1MB,2)) MB"
     }
 
-    # Limpar logs via wevtutil (apaga as logs; pode demandar privilégios)
     try {
         $logs = wevtutil el
-        foreach ($l in $logs) {
-            try {
-                wevtutil cl $l 2>$null
-                Write-LogEntry -Level INFO -Message "Cleared event log: $l"
-            } catch {}
-        }
+        foreach ($l in $logs) { try { wevtutil cl $l 2>$null } catch {} }
         Write-Jarvis "  -> Logs do Windows limpos (wevtutil)." DarkGray
-    } catch {
-        Write-LogEntry -Level WARNING -Message "FullClean: wevtutil failed: $($_.Exception.Message)"
-    }
+    } catch {}
 
-    # Lixeira via Clear-RecycleBin
     try {
         Clear-RecycleBin -Force -ErrorAction SilentlyContinue
         Write-Jarvis "  -> Lixeira esvaziada." DarkGray
-        Write-LogEntry -Level INFO -Message "FullClean: recyclebin cleared"
-    } catch {
-        Write-LogEntry -Level WARNING -Message "FullClean: recycle clear error: $($_.Exception.Message)"
+    } catch {}
+
+    # -------- LIMPEZA AGRESSIVA (opcional) --------
+    Write-Jarvis "`nDeseja executar a limpeza agressiva (Dell SARemediation e Remediation Packages)?`nATENÇÃO: Isso pode remover utilitários de recuperação Dell." Red
+    $confirm2 = Read-Host "Executar limpeza agressiva? (S/N)"
+    if ($confirm2 -in @('S','s')) {
+        Write-Jarvis "`n[AGRESSIVA] Iniciando remoção de componentes Remediation..." Yellow
+
+        $extraPaths = @(
+            @{Path = "C:\ProgramData\Dell\SARemediation\SystemRepair\*"; Description = "Dell System Repair Snapshots"},
+            @{Path = "C:\ProgramData\Dell\SARemediation\Snapshots\*"; Description = "Dell SARemediation Snapshots"}
+        )
+
+        foreach ($ep in $extraPaths) {
+            $res = Remove-PathAndReport -Path $ep.Path
+            Write-Jarvis "  -> $($ep.Description): Removidos $($res.RemovedCount) | Liberado $([math]::Round($res.FreedBytes/1MB,2)) MB" DarkGray
+            $totalFreed += $res.FreedBytes
+            $totalRemoved += $res.RemovedCount
+        }
+
+        try {
+            $remediations = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "*Remediation*" }
+            foreach ($r in $remediations) {
+                Write-Jarvis "  -> Desinstalando pacote: $($r.Name)" DarkGray
+                $r.Uninstall() | Out-Null
+            }
+            Write-Jarvis "[AGRESSIVA] Remoção de pacotes Remediation concluída." Green
+        } catch {
+            Write-Jarvis "[AGRESSIVA] Falha ao remover componentes Remediation: $($_.Exception.Message)" Red
+        }
+    } else {
+        Write-Jarvis "[INFO] Limpeza agressiva ignorada pelo usuário." DarkGray
     }
 
     $totalFreedMB = [math]::Round($totalFreed / 1MB, 2)
-    Write-Jarvis "`n[RESULTADO] Limpeza completa concluída. Total removido: $totalRemoved itens | Espaço liberado: $totalFreedMB MB" Green
-    Write-LogEntry -Level INFO -Message "FullClean finished: items $totalRemoved freed ${totalFreedMB}MB"
+    Write-Jarvis "`n[RESULTADO] Limpeza completa concluída. Itens removidos: $totalRemoved | Espaço liberado: $totalFreedMB MB" Green
     return @{ ItemsRemoved = $totalRemoved; FreedMB = $totalFreedMB }
 }
 
 # -----------------
-# Otimização de Memória (nativo, tenta reduzir working set)
+# Otimização de Memória
 # -----------------
-# Declara EmptyWorkingSet via psapi
-$null = $null
 if (-not ([System.Management.Automation.PSTypeName]'MemApi').Type) {
     $memApi = @"
 using System;
@@ -293,59 +222,33 @@ public static class MemApi {
 }
 
 function Invoke-OptimizeMemory {
-    <#
-    Descrição: Tenta liberar RAM via EmptyWorkingSet em processos "seguros".
-    Relata memória livre antes/depois e quantos processos foram 'trimmed'.
-    #>
     Write-Jarvis "`n[MANUTENÇÃO] Iniciando Otimização de Memória (nativa)..." Cyan
-    Write-LogEntry -Level INFO -Message "Start OptimizeMemory"
-
     try {
         $beforeKB = (Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory
         $beforeMB = [math]::Round($beforeKB / 1024,2)
         Write-Jarvis "Memória disponível antes: $beforeMB MB" DarkGray
 
-        $procs = Get-Process -ErrorAction SilentlyContinue | Where-Object {
+        $procs = Get-Process | Where-Object {
             $_.Name -and ($ProtectedProcesses -notcontains $_.ProcessName) -and $_.Id -ne $PID
-        } | Sort-Object -Property WS -Descending
+        }
 
         $trimmed = 0
         foreach ($p in $procs) {
-            try {
-                # Skip system-critical processes
-                if ($p.HasExited) { continue }
-                # Try to empty working set
-                $ok = [MemApi]::EmptyWorkingSet($p.Handle)
-                if ($ok) { $trimmed++ }
-            } catch {
-                # ignore processes we cannot touch
-            }
+            try { [MemApi]::EmptyWorkingSet($p.Handle) | Out-Null; $trimmed++ } catch {}
         }
 
-        # Force GC in current process as well
-        [System.GC]::Collect()
-        [System.GC]::WaitForPendingFinalizers()
-        [System.GC]::Collect()
-
-        Start-Sleep -Milliseconds 500
+        [System.GC]::Collect(); Start-Sleep -Milliseconds 400
         $afterKB = (Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory
         $afterMB = [math]::Round($afterKB / 1024,2)
         $freedMB = [math]::Round($afterMB - $beforeMB,2)
 
-        Write-Jarvis "Memória disponível depois: $afterMB MB" DarkGray
-        Write-Jarvis "`n[RESULTADO] Memória liberada (estimada): $freedMB MB | Processos trimados: $trimmed" Green
-        Write-LogEntry -Level INFO -Message "OptimizeMemory finished: freed ${freedMB}MB trimmed ${trimmed} procs"
+        Write-Jarvis "`n[RESULTADO] Memória liberada: $freedMB MB | Processos ajustados: $trimmed" Green
         return @{ FreedMB = $freedMB; ProcessesTrimmed = $trimmed }
     } catch {
-        Write-Jarvis "Erro durante otimização de memória: $($_.Exception.Message)" Red
-        Write-LogEntry -Level ERROR -Message "OptimizeMemory error: $($_.Exception.Message)"
-        return @{ FreedMB = 0; ProcessesTrimmed = 0 }
+        Write-Jarvis "Erro: $($_.Exception.Message)" Red
     }
 }
 
-# ---------------------------
-# Exporta todas funções (antigas + novas)
-# ---------------------------
 Export-ModuleMember -Function `
     Invoke-Corrections, Invoke-SFC, Invoke-DISM, Invoke-NetworkCorrections, `
-    Invoke-QuickClean, Invoke-FullClean, Invoke-OptimizeMemory
+    Invoke-FullClean, Invoke-OptimizeMemory
