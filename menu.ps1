@@ -32,6 +32,12 @@ catch {
 }
 
 # =========================
+# Estado do Prompt (para fallback)
+# =========================
+$script:LastPrompt      = $null
+$script:LastPromptPath  = $null
+
+# =========================
 # Helpers Sessão/Entrada
 # =========================
 function Test-InteractiveSession {
@@ -62,6 +68,52 @@ function Get-UserSymptom {
     $v = Read-Host "Sintoma"
     if ([string]::IsNullOrWhiteSpace($v)) { return $null }
     return $v.Trim()
+}
+
+# =========================
+# Clipboard com múltiplas tentativas
+# =========================
+function Set-ClipboardSafe {
+    param([Parameter(Mandatory=$true)][string]$Text)
+
+    # Tenta Set-Clipboard direto
+    try {
+        Set-Clipboard -Value $Text -ErrorAction Stop
+        return @{ Copied=$true; Method="Set-Clipboard"; Path=$null; Error=$null }
+    } catch {
+        $err1 = $_.Exception.Message
+    }
+
+    # Tenta via sessão STA usando arquivo temporário
+    $tmp = [System.IO.Path]::GetTempFileName()
+    try {
+        Set-Content -Path $tmp -Value $Text -Encoding UTF8 -Force
+        $psi = New-Object System.Diagnostics.ProcessStartInfo
+        $psi.FileName = "powershell.exe"
+        $psi.Arguments = "-NoProfile -STA -Command `"Get-Content -Raw -Encoding UTF8 '$tmp' | Set-Clipboard`""
+        $psi.CreateNoWindow = $true
+        $psi.WindowStyle = 'Hidden'
+        $p = [System.Diagnostics.Process]::Start($psi)
+        $p.WaitForExit()
+        if ($p.ExitCode -eq 0) {
+            try { Remove-Item $tmp -Force -ErrorAction SilentlyContinue } catch {}
+            return @{ Copied=$true; Method="STA helper"; Path=$null; Error=$null }
+        }
+    } catch {
+        $err2 = $_.Exception.Message
+    }
+
+    # Tenta clip.exe com arquivo (mais compatível)
+    try {
+        cmd.exe /c "type `"$tmp`" | clip" | Out-Null
+        try { Remove-Item $tmp -Force -ErrorAction SilentlyContinue } catch {}
+        return @{ Copied=$true; Method="clip.exe"; Path=$null; Error=$null }
+    } catch {
+        $err3 = $_.Exception.Message
+    }
+
+    # Fallback final: mantém o arquivo temporário para o usuário copiar manualmente
+    return @{ Copied=$false; Method="file"; Path=$tmp; Error=("Set-Clipboard: $err1; STA: $err2; clip.exe: $err3") }
 }
 
 # =========================
@@ -96,9 +148,25 @@ function Invoke-IntelligentPrompt {
 
         # Usa o módulo promptbuilder
         $prompt = Build-IntelligentPrompt -AllLogs $logs -UserSymptom $UserSymptom -TargetTokenBudget 2200
-        Set-Clipboard -Value $prompt
-        Write-Host "✅ Prompt copiado para a área de transferência!" -ForegroundColor Green
 
+        # Guarda para submenu de relatórios
+        $script:LastPrompt = $prompt
+        $script:LastPromptPath = $null
+
+        # Tenta copiar para clipboard
+        $copy = Set-ClipboardSafe -Text $prompt
+        if ($copy.Copied) {
+            Write-Host "✅ Prompt copiado para a área de transferência! ($($copy.Method))" -ForegroundColor Green
+        } else {
+            Write-Host "⚠️ Não foi possível copiar automaticamente para o clipboard." -ForegroundColor Yellow
+            if ($copy.Path) {
+                $script:LastPromptPath = $copy.Path
+                Write-Host "O prompt foi salvo em:" -ForegroundColor Yellow
+                Write-Host "  $($copy.Path)" -ForegroundColor Cyan
+            }
+        }
+
+        # Abre ChatGPT quando possível (no System Shell normalmente não abre; tudo bem)
         $url = "https://chat.openai.com/?model=gpt-5"
         $opened = $false
 
@@ -115,8 +183,15 @@ function Invoke-IntelligentPrompt {
 
         if (-not $opened) {
             Write-Host ""
-            Write-Host "Abra o link no navegador e cole o conteúdo do seu clipboard (CTRL+V):" -ForegroundColor Yellow
+            if ($copy.Copied) {
+                Write-Host "Abra o link no navegador e cole o conteúdo do seu clipboard (CTRL+V):" -ForegroundColor Yellow
+            } else {
+                Write-Host "Abra o link no navegador e cole o conteúdo do arquivo/prompt acima:" -ForegroundColor Yellow
+            }
             Write-Host "  $url" -ForegroundColor Cyan
+            Write-Host ""
+            Write-Host "Dica: Você também pode visualizar o texto do prompt em:" -ForegroundColor DarkGray
+            Write-Host "  Menu [2] > Ver Prompt Inteligente (texto)" -ForegroundColor DarkGray
         } else {
             Write-Host "`nCole (CTRL+V) no ChatGPT e gere o relatório técnico." -ForegroundColor Cyan
         }
@@ -149,6 +224,34 @@ function Show-JarvisFinalSuggestion {
         Write-Host ("=" * $windowWidth) -ForegroundColor Cyan
     }
     catch { Write-Host "[ERRO] Falha ao exibir a sugestão do Jarvis: $($_.Exception.Message)" -ForegroundColor Red }
+}
+
+# =========================
+# Exibir Prompt em texto (submenu Relatórios)
+# =========================
+function Show-LastPromptText {
+    if (-not $script:LastPrompt -and -not $script:LastPromptPath) {
+        Write-Host "Nenhum Prompt Inteligente gerado nesta sessão. Use o menu [4] primeiro." -ForegroundColor Yellow
+        return
+    }
+
+    Write-Host ""
+    Write-Host "=== Prompt Inteligente (texto) ===" -ForegroundColor Cyan
+    Write-Host ""
+
+    if ($script:LastPrompt) {
+        # Paginação amigável pro terminal
+        $script:LastPrompt | Out-Host -Paging
+    }
+    elseif (Test-Path $script:LastPromptPath) {
+        Get-Content -Path $script:LastPromptPath -Raw | Out-Host -Paging
+    } else {
+        Write-Host "(O arquivo de prompt temporário não está mais disponível.)" -ForegroundColor Yellow
+    }
+
+    Write-Host ""
+    Write-Host "Abra o link no navegador e cole o conteúdo exibido acima (CTRL+A, CTRL+C, depois CTRL+V no ChatGPT):" -ForegroundColor Yellow
+    Write-Host "  https://chat.openai.com/?model=gpt-5" -ForegroundColor Cyan
 }
 
 # =========================
@@ -190,13 +293,15 @@ while ($true) {
                 Write-Host "=================================================" -ForegroundColor Cyan
                 Write-Host "`n[1] Ver Relatório Formatado" -ForegroundColor White
                 Write-Host "[2] Ver JSON Completo" -ForegroundColor White
-                Write-Host "[3] Voltar" -ForegroundColor White
+                Write-Host "[3] Ver Prompt Inteligente (texto)" -ForegroundColor White
+                Write-Host "[4] Voltar" -ForegroundColor White
                 Write-Host "`n=================================================" -ForegroundColor Cyan
-                $submenuOpcao = Read-Host "`nEscolha uma opção (1-3)"
+                $submenuOpcao = Read-Host "`nEscolha uma opção (1-4)"
                 switch ($submenuOpcao) {
                     "1" { Start-DiagnosticAnalysis -JsonPath $logPath; Read-Host "`nPressione ENTER para continuar" }
                     "2" { Clear-Host; Get-Content $logPath -Raw | Write-Host -ForegroundColor Gray; Read-Host "`nPressione ENTER para continuar" }
-                    "3" { $inSubmenuRelatorios = $false }
+                    "3" { Clear-Host; Show-LastPromptText; Read-Host "`nPressione ENTER para continuar" }
+                    "4" { $inSubmenuRelatorios = $false }
                     default { Write-Host "Opção inválida." -ForegroundColor Red; Start-Sleep 2 }
                 }
             }
