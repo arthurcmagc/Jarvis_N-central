@@ -1,0 +1,122 @@
+﻿{
+    "Hostname":  "HYPE-0146",
+    "DataColeta":  "2025-09-17 09:13:27",
+    "CPU_Atual_Percent":  45,
+    "CPU_Pico_10s_Percent":  45,
+    "Memoria_Usada_Percent":  82.25,
+    "Discos":  [
+                   {
+                       "Drive":  "C",
+                       "Total_GB":  237.17,
+                       "Free_GB":  76.12,
+                       "Percent_Free":  32.09
+                   },
+                   {
+                       "Drive":  "G",
+                       "Total_GB":  237.17,
+                       "Free_GB":  72.31,
+                       "Percent_Free":  30.49
+                   }
+               ],
+    "Top5_Processos":  {
+
+                       },
+    "Eventos_Lentidao":  [
+                             {
+                                 "TimeCreated":  "\/Date(1758107243929)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 7 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758107243927)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 5 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758107243926)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 3 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758107243925)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 1 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758107243924)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 6 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758107243923)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 4 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758107243922)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 2 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758107243895)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 0 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 16\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758019451939)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 7 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758019451938)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 5 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758019451937)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 3 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758019451936)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 1 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758019451935)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 6 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758019451934)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 4 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758019451933)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 2 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             },
+                             {
+                                 "TimeCreated":  "\/Date(1758019451908)\/",
+                                 "Id":  55,
+                                 "LevelDisplayName":  "Informações",
+                                 "Message":  "O processador 0 no grupo 0 expõe os seguintes recursos de gerenciamento de energia:\r\n\r\nTipo de estado ocioso: ACPI Idle (C) States (3 estado(s))\r\n\r\nTipo de estado de desempenho: ACPI Collaborative Processor Performance Control\r\nFrequência Nominal (MHz): 2419\r\nPercentual de desempenho máximo: 175\r\nPercentual de desempenho mínimo: 62\r\nPercentual de aceleração mínimo: 4"
+                             }
+                         ]
+}

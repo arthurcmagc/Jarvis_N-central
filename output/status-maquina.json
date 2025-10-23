@@ -1,0 +1,108 @@
+{
+  "Timestamp": "2025-10-22T13:11:17",
+  "Hostname": "HYPE-0146",
+  "Hardware": {
+    "CPU": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+    "RAM": {
+      "UsedPercent": 78.87,
+      "TotalGB": 19.73
+    },
+    "Disks": [
+      {
+        "DeviceID": "C:",
+        "FreeGB": 69.91,
+        "TotalGB": 235.74,
+        "FreePercent": 29.66,
+        "Tipo": "Disco Local Físico"
+      },
+      {
+        "DeviceID": "G:",
+        "FreeGB": 66.41,
+        "TotalGB": 235.74,
+        "FreePercent": 28.17,
+        "Tipo": "Unidade Mapeada (Google Drive)"
+      }
+    ]
+  },
+  "Rede": {
+    "Snapshot": {
+      "InterfaceName": "Wi-Fi",
+      "Status": "Up",
+      "MAC": "5C-CD-5B-EE-58-4A",
+      "IPv4": "192.168.1.110",
+      "IPv6": "2804:7c74:1103:df00:7d0e:9e40:993:481f",
+      "Gateway": "192.168.1.1",
+      "DNSServers": "Microsoft.Management.Infrastructure.CimInstance&, Microsoft.Management.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35 Address(int )",
+      "LinkSpeed": "72.2 Mbps",
+      "DHCPEnabled": true
+    },
+    "HasInternetConnection": true,
+    "Latency": [
+      {
+        "Target": "1.1.1.1",
+        "Count": 4,
+        "AvgMs": 10.5,
+        "MedMs": 11.0,
+        "MinMs": 10.0,
+        "MaxMs": 11.0,
+        "LossPct": 0.0
+      },
+      {
+        "Target": "8.8.8.8",
+        "Count": 4,
+        "AvgMs": 10.5,
+        "MedMs": 11.0,
+        "MinMs": 10.0,
+        "MaxMs": 11.0,
+        "LossPct": 0.0
+      }
+    ]
+  },
+  "EventosCriticos": {
+    "TotalEventos": 4,
+    "EventosRelevantes": [],
+    "EventosCriticos": [
+      {
+        "TimeCreated": "2025-10-22T12:35:11.1500747-03:00",
+        "Id": 21,
+        "LevelDisplayName": "Erro",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "TimeCreated": "2025-10-22T12:35:11.1500707-03:00",
+        "Id": 20,
+        "LevelDisplayName": "Erro",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "TimeCreated": "2025-10-22T12:34:33.0810098-03:00",
+        "Id": 21,
+        "LevelDisplayName": "Erro",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "TimeCreated": "2025-10-22T12:34:33.0810076-03:00",
+        "Id": 20,
+        "LevelDisplayName": "Erro",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      }
+    ]
+  },
+  "Servicos": {
+    "CriticalServicesNotRunning": [
+      {
+        "Name": "Serviços de Área de Trabalho Remota",
+        "Status": 1
+      }
+    ]
+  },
+  "Fabricante": {
+    "Manufacturer": "Dell Inc."
+  },
+  "Analise": {
+    "SaudePontuacao": 85,
+    "ProblemasIdentificados": [
+      "[CRÍTICO] Um ou mais serviços essenciais não estão em execução."
+    ]
+  }
+}

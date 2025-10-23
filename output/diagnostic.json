@@ -1,0 +1,28 @@
+﻿{
+    "Timestamp":  "2025-09-09T18:27:11.2389486-03:00",
+    "Hardware":  {
+                     "CPU":  "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+                     "RAM":  {
+                                 "TotalGB":  19.73,
+                                 "UsedPercent":  88.16
+                             },
+                     "Disks":  [
+                                   {
+                                       "DeviceID":  "C:",
+                                       "FreeGB":  75.9,
+                                       "TotalGB":  237.17,
+                                       "FreePercent":  32,
+                                       "Tipo":  "Disco Local Físico"
+                                   },
+                                   {
+                                       "DeviceID":  "G:",
+                                       "FreeGB":  72.1,
+                                       "TotalGB":  237.17,
+                                       "FreePercent":  30.4,
+                                       "Tipo":  "Unidade Mapeada (Google Drive)"
+                                   }
+                               ]
+                 },
+    "Eventos":  null,
+    "Fabricante":  "Dell Inc."
+}

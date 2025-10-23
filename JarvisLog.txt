@@ -1,0 +1,164 @@
+﻿[2025-09-11 10:14:43] [INFO] - Iniciando diagnóstico completo.
+[2025-09-11 10:14:45] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-11 10:14:46] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-09-11 10:14:47] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-09-11 10:14:48] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-09-11 10:14:49] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-11 10:14:49] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-09-12 12:03:50] [INFO] - Iniciando diagnóstico completo.
+[2025-09-12 12:03:53] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-12 12:03:53] [ERROR] - Falha na coleta de dados de networking.psm1: O termo 'Get-NetworkStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-09-12 12:03:54] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-09-12 12:03:55] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-09-12 12:03:56] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-12 12:03:56] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-09-12 18:59:22] [INFO] - Iniciando diagnóstico completo.
+[2025-09-12 18:59:24] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-12 18:59:25] [ERROR] - Falha na coleta de dados de networking.psm1: O termo 'Get-NetworkStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-09-12 18:59:25] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-09-12 18:59:26] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-09-12 18:59:26] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-12 18:59:27] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis_N-central-main - Backup\output\status-maquina.json'.
+[2025-09-12 19:17:46] [INFO] - Iniciando diagnóstico completo.
+[2025-09-12 19:17:48] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-12 19:17:49] [ERROR] - Falha na coleta de dados de networking.psm1: O termo 'Get-NetworkStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-09-12 19:17:50] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-09-12 19:17:50] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-09-12 19:17:51] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-12 19:17:51] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis_N-central-main - Backup\output\status-maquina.json'.
+[2025-09-12 19:59:25] [INFO] - Iniciando diagnóstico completo.
+[2025-09-12 19:59:27] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-12 19:59:28] [ERROR] - Falha na coleta de dados de networking.psm1: O termo 'Get-NetworkStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-09-12 19:59:28] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-09-12 19:59:29] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-09-12 19:59:29] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-09-12 19:59:30] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis_N-central-main - Backup\output\status-maquina.json'.
+[2025-10-10 06:31:56] [INFO] - Iniciando diagnóstico completo.
+[2025-10-10 06:31:58] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-10 06:31:58] [ERROR] - Falha na coleta de dados de networking.psm1: O termo 'Get-NetworkStatus' não é reconhecido como nome de cmdlet, função, arquivo de script ou programa operável. Verifique a grafia do nome ou, se um caminho tiver sido incluído, veja se o caminho está correto e tente novamente.
+[2025-10-10 06:31:59] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-10 06:32:00] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-10 06:32:01] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-10 06:32:01] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Documents\Arthur\Projetos Hype\Jarvis_N-central-main - Backup\output\status-maquina.json'.
+[2025-10-10 20:36:10] [INFO] - Iniciando diagnóstico completo.
+[2025-10-10 20:36:12] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-10 20:36:13] [ERROR] - Falha na coleta de dados de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-10 20:36:14] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-10 20:36:15] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-10 20:36:16] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-10 20:36:17] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-10 20:52:43] [INFO] - Iniciando diagnóstico completo.
+[2025-10-10 20:52:45] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-10-10 20:52:46] [ERROR] - Falha na coleta de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-10 20:52:47] [INFO] - Coleta de events.psm1 concluída.
+[2025-10-10 20:52:47] [INFO] - Coleta de services.psm1 concluída.
+[2025-10-10 20:52:48] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-10-10 20:52:48] [INFO] - Diagnóstico completo concluído.
+[2025-10-10 21:02:49] [INFO] - Iniciando diagnóstico completo.
+[2025-10-10 21:02:51] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-10-10 21:02:51] [ERROR] - Falha na coleta de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-10 21:02:53] [INFO] - Coleta de events.psm1 concluída.
+[2025-10-10 21:02:54] [INFO] - Coleta de services.psm1 concluída.
+[2025-10-10 21:02:54] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-10-10 21:02:55] [ERROR] - Erro fatal no diagnóstico: The term 'Invoke-HealthAnalysis' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-14 12:52:48] [INFO] - Iniciando diagnóstico completo.
+[2025-10-14 12:52:50] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-14 12:52:51] [ERROR] - Falha na coleta de dados de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-14 12:52:52] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-14 12:52:52] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-14 12:52:53] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-14 12:52:53] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-14 12:56:26] [INFO] - Iniciando diagnóstico completo.
+[2025-10-14 12:56:28] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-14 12:56:29] [ERROR] - Falha na coleta de dados de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-14 12:56:30] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-14 12:56:31] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-14 12:56:32] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-14 12:56:32] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-14 12:59:53] [INFO] - Iniciando diagnóstico completo.
+[2025-10-14 12:59:56] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-14 12:59:56] [ERROR] - Falha na coleta de dados de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-14 12:59:57] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-14 12:59:58] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-14 12:59:59] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-14 12:59:59] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-20 12:29:44] [INFO] - Iniciando diagnóstico completo.
+[2025-10-20 12:29:47] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-20 12:29:48] [ERROR] - Falha na coleta de dados de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-20 12:29:49] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-20 12:29:49] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-20 12:29:50] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-20 12:29:50] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-20 12:49:58] [INFO] - Iniciando diagnóstico completo.
+[2025-10-20 12:50:00] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-20 12:50:01] [ERROR] - Falha na coleta de dados de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-20 12:50:02] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-20 12:50:03] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-20 12:50:03] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-20 12:50:03] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-20 16:50:30] [INFO] - Iniciando diagnóstico completo.
+[2025-10-20 16:50:32] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-20 16:50:33] [ERROR] - Falha na coleta de dados de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-20 16:50:34] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-20 16:50:35] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-20 16:50:36] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-20 16:50:36] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-20 16:55:58] [INFO] - Iniciando diagnóstico completo.
+[2025-10-20 16:56:01] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-20 16:56:02] [ERROR] - Falha na coleta de dados de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-20 16:56:03] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-20 16:56:04] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-20 16:56:05] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-20 16:56:05] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-22 11:26:04] [INFO] - Iniciando diagnóstico completo.
+[2025-10-22 11:26:06] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-22 11:26:09] [ERROR] - Falha na coleta de dados de networking.psm1: The term 'Get-NetworkStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-22 11:26:10] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-22 11:26:11] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-22 11:26:11] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-22 11:26:12] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-22 12:29:14] [INFO] - Iniciando diagnóstico completo.
+[2025-10-22 12:29:16] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-22 12:29:18] [ERROR] Erro ao obter adaptadores de rede: Cannot convert value "72.2 Mbps" to type "System.Int32". Error: "The input string '72.2 Mbps' was not in a correct format."
+[2025-10-22 12:29:21] [INFO] Ping para 8.8.8.8 bem-sucedido (Média: ms)
+[2025-10-22 12:29:23] [ERROR] Erro no teste de velocidade: An error occurred while sending the request.
+[2025-10-22 12:29:26] [INFO] Obtidos Gateway e DNS
+[2025-10-22 12:29:28] [INFO] Diagnóstico de rede concluído com status: WARN
+[2025-10-22 12:29:28] [INFO] HealthCheck de rede concluído com status: WARN
+[2025-10-22 12:29:29] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-10-22 12:29:30] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-22 12:29:30] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-22 12:29:31] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-22 12:29:31] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-22 12:53:36] [INFO] - Iniciando diagnóstico completo.
+[2025-10-22 12:53:38] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-22 12:53:41] [ERROR] Erro ao obter adaptadores de rede: Cannot convert value "72.2 Mbps" to type "System.Int32". Error: "The input string '72.2 Mbps' was not in a correct format."
+[2025-10-22 12:53:44] [INFO] Ping para 8.8.8.8 bem-sucedido (Média: ms)
+[2025-10-22 12:53:46] [ERROR] Erro no teste de velocidade: An error occurred while sending the request.
+[2025-10-22 12:53:48] [INFO] Obtidos Gateway e DNS
+[2025-10-22 12:53:51] [INFO] Diagnóstico de rede concluído com status: WARN
+[2025-10-22 12:53:51] [INFO] HealthCheck de rede concluído com status: WARN
+[2025-10-22 12:53:54] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-10-22 12:53:55] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-22 12:53:56] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-22 12:53:56] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-22 12:53:57] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-22 13:11:17] [INFO] - Iniciando diagnóstico completo.
+[2025-10-22 13:11:19] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-22 13:11:25] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-10-22 13:11:26] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-22 13:11:26] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-22 13:11:27] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-22 13:11:27] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
