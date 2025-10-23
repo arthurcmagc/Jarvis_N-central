@@ -32,7 +32,27 @@ catch {
 }
 
 # =========================
-# Estado do Prompt (para fallback)
+# Saída fixa de fallback (TXT)
+# =========================
+$script:FixedOutputDir = 'C:\HealthCheck\Assistente Jarvis - Hype\Jarvis_N-central-main\output'
+
+function Save-PromptToFixedPath {
+    param([Parameter(Mandatory=$true)][string]$Text)
+    try {
+        if (-not (Test-Path -LiteralPath $script:FixedOutputDir)) {
+            New-Item -ItemType Directory -Path $script:FixedOutputDir -Force | Out-Null
+        }
+        $ts   = Get-Date -Format 'yyyyMMdd_HHmmss'
+        $dest = Join-Path $script:FixedOutputDir ("Prompt_Inteligente_{0}.txt" -f $ts)
+        Set-Content -Path $dest -Value $Text -Encoding UTF8 -Force
+        return $dest
+    } catch {
+        return $null
+    }
+}
+
+# =========================
+# Estado do Prompt (para fallback/visualização)
 # =========================
 $script:LastPrompt      = $null
 $script:LastPromptPath  = $null
@@ -41,7 +61,7 @@ $script:LastPromptPath  = $null
 # Helpers Sessão/Entrada
 # =========================
 function Test-InteractiveSession {
-    # True quando há desktop interativo (PowerShell local). False no System Shell/N-central.
+    # True quando há desktop interativo (PowerShell local). False no System Shell/Command Prompt do N-central.
     try {
         return [Environment]::UserInteractive -and ($Host.UI.RawUI.KeyAvailable -or $Host.Name -notlike "*ServerRemoteHost*")
     } catch { return $false }
@@ -62,7 +82,7 @@ function Get-UserSymptom {
         }
     }
 
-    # 2) Fallback: solicita no terminal (compatível com System Shell)
+    # 2) Fallback: solicita no terminal (compatível com System Shell/Command Prompt)
     Write-Host ""
     Write-Host "[IA] Digite o sintoma do usuário e pressione ENTER:" -ForegroundColor Cyan
     $v = Read-Host "Sintoma"
@@ -71,7 +91,7 @@ function Get-UserSymptom {
 }
 
 # =========================
-# Clipboard com múltiplas tentativas
+# Clipboard resiliente (Approved Verb)
 # =========================
 function Set-ClipboardSafe {
     param([Parameter(Mandatory=$true)][string]$Text)
@@ -124,6 +144,18 @@ function Invoke-IntelligentPrompt {
 
     Write-Host "Gerando Prompt Inteligente..." -ForegroundColor Cyan
 
+    # Mensagem de cenário
+    $isInteractive = Test-InteractiveSession
+    if ($isInteractive) {
+        Write-Host "[Cenário detectado] PowerShell com acesso à área de trabalho do usuário." -ForegroundColor Green
+    } else {
+        Write-Host "[Cenário detectado] Sessão sem desktop interativo (System Shell/Command Prompt)." -ForegroundColor Yellow
+        Write-Host "  - Clipboard e abertura automática do navegador podem não funcionar aqui." -ForegroundColor DarkYellow
+        Write-Host "  - O prompt SERÁ salvo em TXT no caminho persistente para você copiar manualmente." -ForegroundColor DarkYellow
+        Write-Host "    Caminho: $script:FixedOutputDir" -ForegroundColor DarkYellow
+        Write-Host ""
+    }
+
     if (-not (Test-Path $JsonPath)) {
         Write-Host "[ERRO] Arquivo JSON não encontrado em: $JsonPath" -ForegroundColor Red
         return
@@ -153,24 +185,48 @@ function Invoke-IntelligentPrompt {
         $script:LastPrompt = $prompt
         $script:LastPromptPath = $null
 
-        # Tenta copiar para clipboard
-        $copy = Set-ClipboardSafe -Text $prompt
-        if ($copy.Copied) {
-            Write-Host "✅ Prompt copiado para a área de transferência! ($($copy.Method))" -ForegroundColor Green
-        } else {
-            Write-Host "⚠️ Não foi possível copiar automaticamente para o clipboard." -ForegroundColor Yellow
-            if ($copy.Path) {
-                $script:LastPromptPath = $copy.Path
-                Write-Host "O prompt foi salvo em:" -ForegroundColor Yellow
-                Write-Host "  $($copy.Path)" -ForegroundColor Cyan
+        # Cenário 1/2 (não interativo): SEMPRE salvar TXT persistente
+        $fixedPath = $null
+        if (-not $isInteractive) {
+            $fixedPath = Save-PromptToFixedPath -Text $prompt
+            if ($fixedPath) {
+                $script:LastPromptPath = $fixedPath
+                Write-Host "📄 Prompt salvo para cópia manual:" -ForegroundColor Yellow
+                Write-Host "  $fixedPath" -ForegroundColor Cyan
+            } else {
+                Write-Host "Falha ao salvar no caminho persistente." -ForegroundColor Red
             }
         }
 
-        # Abre ChatGPT quando possível (no System Shell normalmente não abre; tudo bem)
+        # Tenta copiar para clipboard (com todos os fallbacks) — útil no cenário 3
+        $copy = Set-ClipboardSafe -Text $prompt
+
+        if ($copy.Copied -and $isInteractive) {
+            Write-Host "✅ Prompt copiado para a área de transferência! ($($copy.Method))" -ForegroundColor Green
+        } elseif ($isInteractive -and -not $copy.Copied) {
+            Write-Host "⚠️ Não foi possível copiar automaticamente para o clipboard." -ForegroundColor Yellow
+
+            if ($copy.Path) {
+                $script:LastPromptPath = $copy.Path
+                Write-Host "O prompt foi salvo temporariamente em:" -ForegroundColor Yellow
+                Write-Host "  $($copy.Path)" -ForegroundColor Cyan
+            }
+
+            if (-not $fixedPath) {
+                $fixedPath = Save-PromptToFixedPath -Text $prompt
+                if ($fixedPath) {
+                    $script:LastPromptPath = $fixedPath
+                    Write-Host "Cópia persistente gravada em:" -ForegroundColor Yellow
+                    Write-Host "  $fixedPath" -ForegroundColor Cyan
+                }
+            }
+        }
+
+        # Link do ChatGPT
         $url = "https://chat.openai.com/?model=gpt-5"
         $opened = $false
 
-        if (Test-InteractiveSession) {
+        if ($isInteractive) {
             try {
                 Start-Process $url -ErrorAction Stop
                 $opened = $true
@@ -183,10 +239,13 @@ function Invoke-IntelligentPrompt {
 
         if (-not $opened) {
             Write-Host ""
-            if ($copy.Copied) {
+            if ($isInteractive -and $copy.Copied) {
                 Write-Host "Abra o link no navegador e cole o conteúdo do seu clipboard (CTRL+V):" -ForegroundColor Yellow
+            } elseif (-not $isInteractive) {
+                Write-Host "Abra o link no navegador e cole o conteúdo do arquivo TXT salvo no caminho indicado acima." -ForegroundColor Yellow
+                Write-Host "Ex.: Abra o arquivo, CTRL+A / CTRL+C, e cole no ChatGPT." -ForegroundColor DarkYellow
             } else {
-                Write-Host "Abra o link no navegador e cole o conteúdo do arquivo/prompt acima:" -ForegroundColor Yellow
+                Write-Host "Abra o link no navegador e cole o conteúdo do arquivo/prompt indicado acima." -ForegroundColor Yellow
             }
             Write-Host "  $url" -ForegroundColor Cyan
             Write-Host ""
@@ -240,17 +299,25 @@ function Show-LastPromptText {
     Write-Host ""
 
     if ($script:LastPrompt) {
-        # Paginação amigável pro terminal
         $script:LastPrompt | Out-Host -Paging
     }
     elseif (Test-Path $script:LastPromptPath) {
         Get-Content -Path $script:LastPromptPath -Raw | Out-Host -Paging
     } else {
-        Write-Host "(O arquivo de prompt temporário não está mais disponível.)" -ForegroundColor Yellow
+        Write-Host "(O arquivo de prompt temporário/persistente não está mais disponível.)" -ForegroundColor Yellow
+    }
+
+    if ($script:LastPromptPath -and $script:LastPromptPath -like "$script:FixedOutputDir*") {
+        Write-Host ""
+        Write-Host "Cópia persistente do prompt salva em:" -ForegroundColor DarkGray
+        Write-Host "  $script:LastPromptPath" -ForegroundColor DarkGray
     }
 
     Write-Host ""
-    Write-Host "Abra o link no navegador e cole o conteúdo exibido acima (CTRL+A, CTRL+C, depois CTRL+V no ChatGPT):" -ForegroundColor Yellow
+    Write-Host "Para enviar ao ChatGPT:" -ForegroundColor Yellow
+    Write-Host "  1) Abra o link abaixo;" -ForegroundColor DarkYellow
+    Write-Host "  2) CTRL+A, CTRL+C no texto exibido aqui (ou no TXT salvo);" -ForegroundColor DarkYellow
+    Write-Host "  3) CTRL+V no ChatGPT." -ForegroundColor DarkYellow
     Write-Host "  https://chat.openai.com/?model=gpt-5" -ForegroundColor Cyan
 }
 
@@ -307,7 +374,7 @@ while ($true) {
             }
         }
         "3" {
-            # Submenu de correções (mantém as opções atuais; unificação fica para depois)
+            # Submenu de correções (mantém as opções atuais; unificação pode vir depois)
             $inSubmenuCorrecoes = $true
             while ($inSubmenuCorrecoes) {
                 Clear-Host
