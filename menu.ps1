@@ -1,36 +1,76 @@
 ﻿# menu.ps1
 # Assistente de Diagnóstico - Jarvis
 
+# =========================
 # Configuração do console
+# =========================
 $Host.UI.RawUI.WindowTitle = "Assistente de Diagnóstico - Jarvis"
-$Host.UI.RawUI.BufferSize = New-Object System.Management.Automation.Host.Size(120, 9999)
-$Host.UI.RawUI.WindowSize = New-Object System.Management.Automation.Host.Size(120, 40)
+$Host.UI.RawUI.BufferSize  = New-Object System.Management.Automation.Host.Size(120, 9999)
+$Host.UI.RawUI.WindowSize  = New-Object System.Management.Automation.Host.Size(120, 40)
 
+# =========================
 # Caminhos
-$currentScriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
+# =========================
+$currentScriptPath    = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 $diagnosticScriptPath = Join-Path -Path $currentScriptPath -ChildPath "diagnostic-v2.ps1"
-$logPath = Join-Path -Path $currentScriptPath -ChildPath "output\status-maquina.json"
+$logPath              = Join-Path -Path $currentScriptPath -ChildPath "output\status-maquina.json"
 $interpretationModulePath = Join-Path -Path $currentScriptPath -ChildPath "modulos\interpretation.psm1"
-$maintenanceModulePath = Join-Path -Path $currentScriptPath -ChildPath "modulos\maintenance.psm1"
-$promptModulePath = Join-Path -Path $currentScriptPath -ChildPath "modulos\promptbuilder.psm1"
+$maintenanceModulePath    = Join-Path -Path $currentScriptPath -ChildPath "modulos\maintenance.psm1"
+$promptModulePath         = Join-Path -Path $currentScriptPath -ChildPath "modulos\promptbuilder.psm1"
 
-
+# =========================
 # Importa módulos
+# =========================
 try {
     Import-Module -Name $interpretationModulePath -Force
-    Import-Module -Name $maintenanceModulePath -Force
-    Import-Module -Name $promptModulePath -Force
+    Import-Module -Name $maintenanceModulePath   -Force
+    Import-Module -Name $promptModulePath        -Force
 }
 catch {
     Write-Error "Falha ao carregar os módulos: $_" -ForegroundColor Red
     exit
 }
 
+# =========================
+# Helpers Sessão/Entrada
+# =========================
+function Test-InteractiveSession {
+    # True quando há desktop interativo (PowerShell local). False no System Shell/N-central.
+    try {
+        return [Environment]::UserInteractive -and ($Host.UI.RawUI.KeyAvailable -or $Host.Name -notlike "*ServerRemoteHost*")
+    } catch { return $false }
+}
+
+function Get-UserSymptom {
+    param([string]$Title = "Jarvis - Sintoma do Usuário")
+
+    # 1) Tenta popup se houver desktop interativo
+    if (Test-InteractiveSession) {
+        try {
+            Add-Type -AssemblyName Microsoft.VisualBasic -ErrorAction Stop
+            $message = "Informe brevemente o sintoma (ex.: lentidão ao iniciar, falha na internet, travamentos...)."
+            $val = [Microsoft.VisualBasic.Interaction]::InputBox($message, $Title, "")
+            if ($null -ne $val -and $val.Trim().Length -gt 0) { return $val }
+        } catch {
+            # cai pro modo terminal
+        }
+    }
+
+    # 2) Fallback: solicita no terminal (compatível com System Shell)
+    Write-Host ""
+    Write-Host "[IA] Digite o sintoma do usuário e pressione ENTER:" -ForegroundColor Cyan
+    $v = Read-Host "Sintoma"
+    if ([string]::IsNullOrWhiteSpace($v)) { return $null }
+    return $v.Trim()
+}
+
+# =========================
+# Prompt Inteligente
+# =========================
 function Invoke-IntelligentPrompt {
     param([string]$JsonPath)
 
-    Add-Type -AssemblyName Microsoft.VisualBasic
-    Write-Host "🧠 Gerando Prompt Inteligente..." -ForegroundColor Cyan
+    Write-Host "Gerando Prompt Inteligente..." -ForegroundColor Cyan
 
     if (-not (Test-Path $JsonPath)) {
         Write-Host "[ERRO] Arquivo JSON não encontrado em: $JsonPath" -ForegroundColor Red
@@ -38,55 +78,57 @@ function Invoke-IntelligentPrompt {
     }
 
     try {
-        $message = "Informe o sintoma indicado pelo usuário." + [Environment]::NewLine +
-                    "Exemplo: Lentidão ao iniciar, falha na internet, travamentos..."
-        $UserSymptom = [Microsoft.VisualBasic.Interaction]::InputBox(
-            $message,
-            "Jarvis - Sintoma do Usuário",
-            ""
-        )
+        $UserSymptom = Get-UserSymptom -Title "Jarvis - Sintoma do Usuário"
         if ([string]::IsNullOrWhiteSpace($UserSymptom)) {
-            Write-Host "`n❌ Operação cancelada pelo usuário. Nenhum prompt gerado." -ForegroundColor Yellow
+            Write-Host "❌ Operação cancelada. Nenhum sintoma informado." -ForegroundColor Yellow
             return
         }
 
         $data = Get-Content $JsonPath -Raw | ConvertFrom-Json
 
-        # SEMPRE array (nunca null)
+        # Seleciona poucos logs (amostra). Nunca deixe $logs = $null.
         $logs = @()
         if ($null -ne $data.EventosCriticos) {
-            if ($data.EventosCriticos.Events) {
-                $logs = @($data.EventosCriticos.Events)
-            } elseif ($data.EventosCriticos.EventosRelevantes) {
-                $logs = @($data.EventosCriticos.EventosRelevantes)
-            } elseif ($data.EventosCriticos.EventosCriticos) {
-                $logs = @($data.EventosCriticos.EventosCriticos)
-            }
+            if     ($data.EventosCriticos.Events)            { $logs = @($data.EventosCriticos.Events) }
+            elseif ($data.EventosCriticos.EventosRelevantes) { $logs = @($data.EventosCriticos.EventosRelevantes) }
+            elseif ($data.EventosCriticos.EventosCriticos)   { $logs = @($data.EventosCriticos.EventosCriticos) }
         }
 
-        # compatibilidade: aceita -AllLogs (preferido) ou -Logs (alias)
+        # Usa o módulo promptbuilder
         $prompt = Build-IntelligentPrompt -AllLogs $logs -UserSymptom $UserSymptom -TargetTokenBudget 2200
-
         Set-Clipboard -Value $prompt
         Write-Host "✅ Prompt copiado para a área de transferência!" -ForegroundColor Green
 
         $url = "https://chat.openai.com/?model=gpt-5"
-        try { Start-Process $url -ErrorAction Stop }
-        catch {
-            if (Get-Command "msedge.exe"   -ErrorAction SilentlyContinue) { Start-Process "msedge.exe" $url }
-            elseif (Get-Command "chrome.exe"  -ErrorAction SilentlyContinue) { Start-Process "chrome.exe" $url }
-            elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) { Start-Process "firefox.exe" $url }
-            else { Write-Host "⚠️ Abra manualmente: $url" -ForegroundColor Yellow }
+        $opened = $false
+
+        if (Test-InteractiveSession) {
+            try {
+                Start-Process $url -ErrorAction Stop
+                $opened = $true
+            } catch {
+                if     (Get-Command "msedge.exe"  -ErrorAction SilentlyContinue) { Start-Process "msedge.exe"  $url; $opened = $true }
+                elseif (Get-Command "chrome.exe"  -ErrorAction SilentlyContinue) { Start-Process "chrome.exe"  $url; $opened = $true }
+                elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) { Start-Process "firefox.exe" $url; $opened = $true }
+            }
         }
 
-        Write-Host "`n🌐 ChatGPT aberto. Cole o prompt e gere o relatório técnico." -ForegroundColor Cyan
+        if (-not $opened) {
+            Write-Host ""
+            Write-Host "Abra o link no navegador e cole o conteúdo do seu clipboard (CTRL+V):" -ForegroundColor Yellow
+            Write-Host "  $url" -ForegroundColor Cyan
+        } else {
+            Write-Host "`nCole (CTRL+V) no ChatGPT e gere o relatório técnico." -ForegroundColor Cyan
+        }
     }
     catch {
         Write-Host "[ERRO] Falha ao gerar o prompt inteligente: $($_.Exception.Message)" -ForegroundColor Red
     }
 }
 
-# Função para mostrar sugestão do Jarvis
+# =========================
+# Sugestão final (fabricante)
+# =========================
 function Show-JarvisFinalSuggestion {
     param([string]$JsonPath)
     if (-not (Test-Path $JsonPath)) { return }
@@ -109,19 +151,20 @@ function Show-JarvisFinalSuggestion {
     catch { Write-Host "[ERRO] Falha ao exibir a sugestão do Jarvis: $($_.Exception.Message)" -ForegroundColor Red }
 }
 
-# --- MENU PRINCIPAL ---
+# =========================
+# MENU PRINCIPAL
+# =========================
 while ($true) {
     Clear-Host
     Write-Host "=================================================" -ForegroundColor Cyan
-    Write-Host "      Assistente de Diagnóstico " -NoNewline -ForegroundColor White
-    Write-Host "Jarvis" -ForegroundColor Blue
+    Write-Host "      Assistente de Diagnóstico Jarvis" -ForegroundColor White
     Write-Host "      Data: $(Get-Date -Format 'dd/MM/yyyy HH:mm')" -ForegroundColor DarkGray
     Write-Host "=================================================" -ForegroundColor Cyan
     Write-Host "`n"
     Write-Host "[1] Executar Diagnóstico Completo" -ForegroundColor White
     Write-Host "[2] Visualizar Relatórios" -ForegroundColor White
     Write-Host "[3] Menu de Correções" -ForegroundColor White
-    Write-Host "[4] 🧠 Gerar Prompt Inteligente (IA)" -ForegroundColor White
+    Write-Host "[4] Gerar Prompt Inteligente (IA)" -ForegroundColor White
     Write-Host "[5] Sair" -ForegroundColor White
     Write-Host "`n=================================================" -ForegroundColor Cyan
 
@@ -138,7 +181,7 @@ while ($true) {
             Read-Host "`nPressione ENTER para voltar ao menu"
         }
         "2" {
-            # submenu de relatórios
+            # Submenu de relatórios
             $inSubmenuRelatorios = $true
             while ($inSubmenuRelatorios) {
                 Clear-Host
@@ -159,7 +202,7 @@ while ($true) {
             }
         }
         "3" {
-            # submenu de correções
+            # Submenu de correções (mantém as opções atuais; unificação fica para depois)
             $inSubmenuCorrecoes = $true
             while ($inSubmenuCorrecoes) {
                 Clear-Host

@@ -1,93 +1,99 @@
-# promptbuilder.psm1
-# Construtor de prompt inteligente (robusto a nulos e com orçamento)
+﻿# promptbuilder.psm1
+# Constrói prompt compacto e técnico a partir de uma amostra de logs + sintoma do usuário.
 
-function Write-PromptLog {
-    param([string]$Message)
-    try { Write-Host "[PROMPT] $Message" -ForegroundColor DarkGray } catch {}
+function ConvertTo-FlatJson {
+    param(
+        [Parameter(ValueFromPipeline=$true)]
+        $InputObject,
+        [int]$Depth = 4
+    )
+    process {
+        try { return ($InputObject | ConvertTo-Json -Depth $Depth -Compress) }
+        catch { return ($InputObject | Out-String) }
+    }
 }
 
-function New-SystemPrompt {
+function Select-LogSample {
     param(
-        [string]$Role = "Você é um assistente especialista em Windows, redes e análise de logs."
+        [array]$AllLogs,
+        [int]$MaxItems = 30
     )
-@"
-$Role
-Siga boas práticas de diagnóstico e seja objetivo.
-"@
+    if (-not $AllLogs) { return @() }
+
+    # Deduplica por (Id + Source + Message reduzida)
+    $seen = [System.Collections.Generic.HashSet[string]]::new()
+    $out  = New-Object System.Collections.Generic.List[object]
+
+    foreach ($e in $AllLogs) {
+        try {
+            $id = ""
+            if ($e.PSObject.Properties.Match('Id').Count -gt 0) { $id = [string]$e.Id }
+            elseif ($e.PSObject.Properties.Match('EventID').Count -gt 0) { $id = [string]$e.EventID }
+
+            $src = ""
+            if ($e.PSObject.Properties.Match('Source').Count -gt 0) { $src = [string]$e.Source }
+            elseif ($e.PSObject.Properties.Match('ProviderName').Count -gt 0) { $src = [string]$e.ProviderName }
+
+            $msg = ""
+            if ($e.PSObject.Properties.Match('Message').Count -gt 0) { $msg = [string]$e.Message }
+            elseif ($e.PSObject.Properties.Match('Descricao').Count -gt 0) { $msg = [string]$e.Descricao }
+
+            $finger = ("{0}|{1}|{2}" -f $id,$src,($msg.Substring(0,[Math]::Min(64,[Math]::Max(0,$msg.Length)))))
+            if ($seen.Add($finger)) {
+                $out.Add([pscustomobject]@{
+                    Id=$id; Source=$src; Time=$e.TimeCreated; Message=$msg
+                })
+                if ($out.Count -ge $MaxItems) { break }
+            }
+        } catch { continue }
+    }
+
+    return $out
 }
 
 function Build-IntelligentPrompt {
     [CmdletBinding()]
     param(
-        [Alias('Logs')]
-        [array]$AllLogs = @(),            # tolera $null
-        [string]$UserSymptom = "",
-        [int]$TargetTokenBudget = 2500,
-        [int]$MaxItemsInitial   = 160
+        [Parameter(Mandatory=$false)] [array]$AllLogs,
+        [Parameter(Mandatory=$true)]  [string]$UserSymptom,
+        [int]$TargetTokenBudget = 2200
     )
 
-    # garantia: sempre array
-    $AllLogs = @($AllLogs) | Where-Object { $_ -ne $null }
+    # Fallbacks
+    if ([string]::IsNullOrWhiteSpace($UserSymptom)) { $UserSymptom = "Não informado" }
+    if (-not $AllLogs) { $AllLogs = @() }
 
-    # heurística simples de orçamento: 1 item ~ 30 tokens (grosseiro)
-    $approxTokensPerItem = 30
-    $maxItems = [math]::Max(20, [math]::Floor($TargetTokenBudget / $approxTokensPerItem))
+    # Amostra enxuta
+    $sample = Select-LogSample -AllLogs $AllLogs -MaxItems 30
+    $logsJson = if ($sample.Count -gt 0) { $sample | ConvertTo-FlatJson -Depth 4 } else { "[]" }
 
-    # preferir erros/criticos e recentes (se tiver campos)
-    $logsRanked =
-        ($AllLogs | Where-Object { $_.Level -match 'Error|Critical' }) +
-        ($AllLogs | Where-Object { $_.Level -notmatch 'Error|Critical' })
+    # Prompt técnico
+    $prompt = @"
+🧠 **Contexto**
+Você é um analista sênior de Windows e precisa gerar um relatório técnico a partir de um resumo de logs e de um sintoma do usuário.
 
-    # ordenar por Data/Time se houver
-    $logsRanked = $logsRanked | Sort-Object {
-        if ($_.TimeCreated) { try { [datetime]$_.TimeCreated } catch { Get-Date 0 } }
-        elseif ($_.TimeGenerated) { try { [datetime]$_.TimeGenerated } catch { Get-Date 0 } }
-        else { Get-Date 0 }
-    } -Descending
+🗣️ **Sintoma reportado pelo usuário**
+$UserSymptom
 
-    if (-not $logsRanked -or $logsRanked.Count -eq 0) {
-        Write-PromptLog "Nenhum log fornecido; usarei placeholders mínimos."
-        $logsRanked = @()
-    }
-
-    $sample = $logsRanked | Select-Object -First ([math]::Min($maxItems, $MaxItemsInitial))
-
-    # compactar cada item para evitar JSON gigante (somente campos-chave)
-    $compact = foreach ($e in $sample) {
-        [ordered]@{
-            Time   = ($e.TimeCreated, $e.TimeGenerated, $e.Time)[0]
-            Id     = $e.Id
-            Source = $e.ProviderName ?? $e.Source
-            Level  = $e.LevelDisplayName ?? $e.Level
-            Msg    = $e.Message
-        }
-    }
-
-    $logsJson = ($compact | ConvertTo-Json -Depth 3)
-
-    $sym = if ([string]::IsNullOrWhiteSpace($UserSymptom)) { "Não informado" } else { $UserSymptom }
-
-@"
-🧠 CONTEXTO (sistema/diagnóstico)
-$(New-SystemPrompt)
-
-🗣️ Sintoma relatado pelo usuário
-$sym
-
-📁 Amostra de eventos (recente/erro primeiro, compactados)
+📁 **Amostra de logs (resumida)**
 $logsJson
 
-🎯 Objetivo
-1) Resumo do estado provável e possíveis causas alinhadas ao sintoma.
-2) Sinais em serviços, rede, armazenamento, updates, drivers.
-3) Ações priorizadas: rápidas, seguras e com comandos (PowerShell/CMD).
-4) Itens de monitoramento (o que acompanhar nas próximas 24–48h).
+🎯 **Objetivo do relatório (responda em PT-BR técnico)**
+1) Resumo do estado do equipamento (CPU/RAM/Disco/Rede) com base no que os logs sugerem.
+2) Serviços críticos com falha/instabilidade e possíveis dependências.
+3) Eventos relevantes (IDs, origem, quantidade/recorrência se aplicável).
+4) Hipóteses principais do diagnóstico, com probabilidade (Alta/Média/Baixa).
+5) Ações recomendadas imediatas e de médio prazo (comandos, ferramentas, rotinas).
+6) Se necessário, incluir um plano de verificação (passo-a-passo) para o analista.
 
-⚠️ Regras
-- Seja conciso; agrupe eventos repetidos (cite contagem).
-- Destaque [ALERTA] e [CRÍTICO] onde fizer sentido.
-- Inclua comandos prontos quando houver correção sugerida.
+⚠️ **Regras de saída**
+- Seja conciso, objetivo e priorize clareza.
+- Deduzir a partir dos logs; evite suposições não fundamentadas.
+- Agrupe eventos repetidos; cite apenas uma amostra de mensagens longas.
+- Use marcadores e subtítulos para facilitar leitura.
 "@
+
+    return $prompt
 }
 
-Export-ModuleMember -Function Write-PromptLog, New-SystemPrompt, Build-IntelligentPrompt
+Export-ModuleMember -Function Build-IntelligentPrompt
