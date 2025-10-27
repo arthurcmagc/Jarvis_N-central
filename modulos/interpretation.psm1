@@ -352,47 +352,51 @@ function Start-DiagnosticAnalysis {
         }
     }
     
-    # --- REDE ---
-    Write-Host "`n"
-    Write-Host "[REDE]" -ForegroundColor White
-    if ($null -ne $data.Rede -and $null -ne $data.Rede.Error) {
-        Write-Host "Falha na coleta de Rede: $($data.Rede.Error)" -ForegroundColor Red
+# --- REDE ---
+Write-Host "`n"
+Write-Host "[REDE]" -ForegroundColor White
+if ($null -ne $data.Rede -and $null -ne $data.Rede.Error) {
+    Write-Host "Falha na coleta de Rede: $($data.Rede.Error)" -ForegroundColor Red
+} else {
+    if ($null -ne $data.Rede -and $null -ne $data.Rede.HasInternetConnection) {
+        $networkColor = if ($data.Rede.HasInternetConnection) { "Green" } else { "Red" }
+        $networkStatusText = if ($data.Rede.HasInternetConnection) { 'Conectado' } else { 'Desconectado' }
+        Write-FormattedColoredString -Text "Status da Internet: $networkStatusText" -LineWidth $reportWidth -Indent "" -ForegroundColor $networkColor
     } else {
-        # Status de Internet (se fornecido pelo módulo)
-        if ($null -ne $data.Rede -and $null -ne $data.Rede.HasInternetConnection) {
-            $networkColor = if ($data.Rede.HasInternetConnection) { "Green" } else { "Red" }
-            $networkStatusText = if ($data.Rede.HasInternetConnection) { 'Conectado' } else { 'Desconectado' }
-            Write-FormattedColoredString -Text "Status da Internet: $networkStatusText" -LineWidth $reportWidth -Indent "" -ForegroundColor $networkColor
-        } else {
-            Write-FormattedColoredString -Text "Status da Internet: Indisponível" -LineWidth $reportWidth -Indent "" -ForegroundColor Yellow
-        }
-
-        # Snapshot da interface (quando disponível)
-        if ($data.Rede -and $data.Rede.Snapshot) {
-            $snap = $data.Rede.Snapshot
-            $iface = Get-Safe $snap 'InterfaceName'
-            $ipv4  = Get-Safe $snap 'IPv4'
-            $gw    = Get-Safe $snap 'Gateway'
-            $dns   = Get-Safe $snap 'DNSServers'
-            $status = Get-Safe $snap 'Status'
-
-            Write-Host "Interface: $iface ($status)" -ForegroundColor DarkGray
-            Write-Host "IPv4: $ipv4  |  Gateway: $gw" -ForegroundColor DarkGray
-            Write-Host "DNS:  $dns" -ForegroundColor DarkGray
-        }
-
-        # Latência (quando disponível)
-        if ($data.Rede -and $data.Rede.Latency) {
-            Write-Host ""
-            Write-Host "Latência (média/mediana, perda):" -ForegroundColor White
-            foreach ($l in $data.Rede.Latency) {
-                $avg = if ($l.AvgMs) { "$($l.AvgMs) ms" } else { "N/D" }
-                $med = if ($l.MedMs) { "$($l.MedMs) ms" } else { "N/D" }
-                $loss = if ($null -ne $l.LossPct) { "$($l.LossPct)%" } else { "N/D" }
-                Write-Host (" - {0,-8} avg {1,6} | med {2,6} | perda {3,4}" -f $l.Target,$avg,$med,$loss) -ForegroundColor Gray
-            }
-        }
+        Write-FormattedColoredString -Text "Status da Internet: N/A" -LineWidth $reportWidth -Indent "" -ForegroundColor Yellow
     }
+
+    if ($data.Rede.Interfaces -and $data.Rede.Interfaces.Count -gt 0) {
+        $if0 = $data.Rede.Interfaces[0]
+        $ifName   = if ($if0.Name)    { $if0.Name }    else { 'N/A' }
+        $ifStatus = if ($if0.Status)  { $if0.Status }  else { 'N/A' }
+        $ifIPv4   = if ($if0.IPv4)    { $if0.IPv4 }    else { 'N/A' }
+        $ifGw     = if ($if0.Gateway) { $if0.Gateway } else { 'N/A' }
+        Write-FormattedColoredString -Text ("Interface: {0} ({1})" -f $ifName, $ifStatus) -LineWidth $reportWidth -Indent "" -ForegroundColor White
+        Write-FormattedColoredString -Text ("IPv4: {0}  |  Gateway: {1}" -f $ifIPv4, $ifGw) -LineWidth $reportWidth -Indent "" -ForegroundColor White
+    }
+
+    $dnsText = "N/A"
+    if ($data.Rede.DNS) {
+        $dnsFlat = @($data.Rede.DNS) | ForEach-Object { "$_" } | Where-Object { $_ -and $_.Trim().Length -gt 0 }
+        if ($dnsFlat.Count -gt 0) { $dnsText = ($dnsFlat -join ", ") }
+    }
+    Write-FormattedColoredString -Text ("DNS:  {0}" -f $dnsText) -LineWidth $reportWidth -Indent "" -ForegroundColor White
+
+    Write-Host ""
+    Write-Host "Latência (média/mediana, perda):" -ForegroundColor White
+    if ($data.Rede.Latency -and $data.Rede.Latency.Count -gt 0) {
+        foreach ($l in $data.Rede.Latency) {
+            $avg = if ($null -ne $l.AvgMs) { ("{0}" -f $l.AvgMs).PadLeft(5) + " ms" } else { "  N/D" }
+            $med = if ($null -ne $l.MedMs) { ("{0}" -f $l.MedMs).PadLeft(5) + " ms" } else { "  N/D" }
+            $loss = (“{0}" -f $l.LossPct).PadLeft(3) + "%"
+            Write-Host (" - {0}  avg {1} | med {2} | perda {3}" -f $l.Host.PadRight(7), $avg, $med, $loss) -ForegroundColor White
+        }
+    } else {
+        Write-Host " - (sem dados de latência)" -ForegroundColor Yellow
+    }
+}
+
     
     # --- ESTABILIDADE DO SISTEMA ---
     Write-Host "`n"

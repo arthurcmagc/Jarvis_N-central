@@ -54,31 +54,57 @@ function Select-LogSample {
 function Build-IntelligentPrompt {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$false)] [array]$AllLogs,
-        [Parameter(Mandatory=$true)]  [string]$UserSymptom,
+        [Parameter(Mandatory=$false)][object[]]$AllLogs,
+        [Parameter(Mandatory=$true)][string]$UserSymptom,
         [int]$TargetTokenBudget = 2200
     )
 
-    # Fallbacks
-    if ([string]::IsNullOrWhiteSpace($UserSymptom)) { $UserSymptom = "Não informado" }
-    if (-not $AllLogs) { $AllLogs = @() }
+    # Sanitiza e resume logs
+    $lines = @()
+    if ($AllLogs) {
+        foreach ($item in $AllLogs) {
+            try {
+                if ($item -is [string]) {
+                    $lines += $item
+                } else {
+                    $json = $item | ConvertTo-Json -Depth 4 -Compress
+                    # corta jsons gigantes por linha
+                    if ($json.Length -gt 800) { $json = $json.Substring(0,800) + '…' }
+                    $lines += $json
+                }
+            } catch {
+                $lines += ($item | Out-String).Trim()
+            }
+        }
+    }
+    if (-not $lines -or $lines.Count -eq 0) {
+        $lines = @("Sem eventos/entradas relevantes — utilizando resumo técnico mínimo do status coletado.")
+    }
 
-    # Amostra enxuta
-    $sample = Select-LogSample -AllLogs $AllLogs -MaxItems 30
-    $logsJson = if ($sample.Count -gt 0) { $sample | ConvertTo-FlatJson -Depth 4 } else { "[]" }
+    # Enxuga para caber no budget (heurística simples)
+    $acc = @()
+    $len = 0
+    foreach ($l in $lines) {
+        $chunk = $l.Trim()
+        if ([string]::IsNullOrWhiteSpace($chunk)) { continue }
+        $len += $chunk.Length
+        if ($len -gt 3000) { break } # margem para o resto do prompt
+        $acc += $chunk
+    }
 
-    # Prompt técnico
+    $logsJoined = ($acc -join "`r`n- ")
+
     $prompt = @"
-🧠 **Contexto**
-Você é um analista sênior de Windows e precisa gerar um relatório técnico a partir de um resumo de logs e de um sintoma do usuário.
+**Contexto**
+Você é um analista sênior de Windows e precisa gerar um relatório técnico a partir de um resumo de logs e de um sintoma.
 
-🗣️ **Sintoma reportado pelo usuário**
+**Sintoma reportado pelo usuário**
 $UserSymptom
 
-📁 **Amostra de logs (resumida)**
-$logsJson
+**Amostra de logs (resumida)**
+- $logsJoined
 
-🎯 **Objetivo do relatório (responda em PT-BR técnico)**
+**Objetivo do relatório (responda em PT-BR técnico)**
 1) Resumo do estado do equipamento (CPU/RAM/Disco/Rede) com base no que os logs sugerem.
 2) Serviços críticos com falha/instabilidade e possíveis dependências.
 3) Eventos relevantes (IDs, origem, quantidade/recorrência se aplicável).
@@ -86,7 +112,7 @@ $logsJson
 5) Ações recomendadas imediatas e de médio prazo (comandos, ferramentas, rotinas).
 6) Se necessário, incluir um plano de verificação (passo-a-passo) para o analista.
 
-⚠️ **Regras de saída**
+**Regras**
 - Seja conciso, objetivo e priorize clareza.
 - Deduzir a partir dos logs; evite suposições não fundamentadas.
 - Agrupe eventos repetidos; cite apenas uma amostra de mensagens longas.
@@ -95,5 +121,5 @@ $logsJson
 
     return $prompt
 }
-
 Export-ModuleMember -Function Build-IntelligentPrompt
+

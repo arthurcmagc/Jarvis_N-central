@@ -4,9 +4,11 @@
 # =========================
 # Configuração do console
 # =========================
-$Host.UI.RawUI.WindowTitle = "Assistente de Diagnóstico - Jarvis"
-$Host.UI.RawUI.BufferSize  = New-Object System.Management.Automation.Host.Size(120, 9999)
-$Host.UI.RawUI.WindowSize  = New-Object System.Management.Automation.Host.Size(120, 40)
+try {
+    $Host.UI.RawUI.WindowTitle = "Assistente de Diagnóstico - Jarvis"
+    $Host.UI.RawUI.BufferSize  = New-Object System.Management.Automation.Host.Size(120, 9999)
+    $Host.UI.RawUI.WindowSize  = New-Object System.Management.Automation.Host.Size(120, 40)
+} catch {}
 
 # =========================
 # Caminhos
@@ -27,7 +29,7 @@ try {
     Import-Module -Name $promptModulePath        -Force
 }
 catch {
-    Write-Error "Falha ao carregar os módulos: $_" -ForegroundColor Red
+    Write-Host "Falha ao carregar os módulos: $($_.Exception.Message)" -ForegroundColor Red
     exit
 }
 
@@ -158,6 +160,7 @@ function Invoke-IntelligentPrompt {
 
     if (-not (Test-Path $JsonPath)) {
         Write-Host "[ERRO] Arquivo JSON não encontrado em: $JsonPath" -ForegroundColor Red
+        Write-Host "Execute primeiro a opção [1] 'Executar Diagnóstico Completo'." -ForegroundColor Yellow
         return
     }
 
@@ -176,6 +179,85 @@ function Invoke-IntelligentPrompt {
             if     ($data.EventosCriticos.Events)            { $logs = @($data.EventosCriticos.Events) }
             elseif ($data.EventosCriticos.EventosRelevantes) { $logs = @($data.EventosCriticos.EventosRelevantes) }
             elseif ($data.EventosCriticos.EventosCriticos)   { $logs = @($data.EventosCriticos.EventosCriticos) }
+        }
+
+        # --- Fallback quando não há eventos: criar "mini-resumo técnico" ---
+        if (-not $logs -or $logs.Count -eq 0) {
+            $mini = @()
+
+            # Hardware
+            try {
+                if ($data.Hardware) {
+                    if ($data.Hardware.RAM) {
+                        $mini += ("RAM: {0}% de uso (Total {1} GB)" -f $data.Hardware.RAM.UsedPercent, $data.Hardware.RAM.TotalGB)
+                    }
+                    if ($data.Hardware.Disks) {
+                        foreach ($d in $data.Hardware.Disks) {
+                            if ($d.DeviceID -and ($null -ne $d.FreeGB) -and ($null -ne $d.FreePercent)) {
+
+                                $tipo = if ($d.Tipo) { $d.Tipo } else { 'N/A' }
+                                $mini += ("Disco {0}: {1} GB livres ({2}%), Tipo: {3}" -f $d.DeviceID, $d.FreeGB, $d.FreePercent, $tipo)
+                            }
+                        }
+                    }
+                }
+            } catch {}
+
+            # Rede
+            try {
+                if ($data.Rede) {
+                    $net = 'N/A'
+                    if ($data.Rede.HasInternetConnection -eq $true) { $net = 'Conectado' }
+                    elseif ($data.Rede.HasInternetConnection -eq $false) { $net = 'Desconectado' }
+                    $mini += ("Internet: {0}" -f $net)
+
+                    if ($data.Rede.Interfaces -and $data.Rede.Interfaces.Count -gt 0) {
+                        $i = $data.Rede.Interfaces[0]
+                        $iName = if ($i.Name) { $i.Name } else { 'N/A' }
+                        $iStatus = if ($i.Status) { $i.Status } else { 'N/A' }
+                        $iIPv4 = if ($i.IPv4) { $i.IPv4 } else { 'N/A' }
+                        $iGw = if ($i.Gateway) { $i.Gateway } else { 'N/A' }
+                        $mini += ("IF: {0} ({1}) IPv4: {2} GW: {3}" -f $iName, $iStatus, $iIPv4, $iGw)
+                    }
+
+                    if ($data.Rede.DNS) {
+                        $dnsFlat = @($data.Rede.DNS) | ForEach-Object { "$_" } | Where-Object { $_ -and $_.Trim().Length -gt 0 }
+                        if ($dnsFlat.Count -gt 0) { $mini += ("DNS: {0}" -f ($dnsFlat -join ', ')) }
+                    }
+
+                    if ($data.Rede.Latency) {
+                        foreach ($l in $data.Rede.Latency) {
+                            $avg = if ($null -ne $l.AvgMs) { ("{0} ms" -f $l.AvgMs) } else { "N/D" }
+                            $med = if ($null -ne $l.MedMs) { ("{0} ms" -f $l.MedMs) } else { "N/D" }
+                            $loss = if ($null -ne $l.LossPct) { $l.LossPct } else { "N/D" }
+                            $mini += ("Ping {0}: avg {1} | med {2} | perda {3}%" -f $l.Host, $avg, $med, $loss)
+                        }
+                    }
+                }
+            } catch {}
+
+            # Eventos (contagem)
+            try {
+                if ($data.EventosCriticos) {
+                    $tot = $data.EventosCriticos.TotalEventos
+                    $r   = if ($data.EventosCriticos.EventosRelevantes) { $data.EventosCriticos.EventosRelevantes.Count } else { 0 }
+                    $e   = if ($data.EventosCriticos.EventosCriticos)   { $data.EventosCriticos.EventosCriticos.Count } else { 0 }
+                    $mini += ("Eventos: total {0} | relevantes {1} | erros {2}" -f $tot, $r, $e)
+                }
+            } catch {}
+
+            # Serviços críticos
+            try {
+                if ($data.Servicos -and $data.Servicos.CriticalServicesNotRunning -and $data.Servicos.CriticalServicesNotRunning.Count -gt 0) {
+                    $names = $data.Servicos.CriticalServicesNotRunning | ForEach-Object { $_.Name }
+                    if ($names -and $names.Count -gt 0) {
+                        $mini += ("Serviços parados: {0}" -f ($names -join ', '))
+                    }
+                }
+            } catch {}
+
+            if ($mini.Count -eq 0) { $mini += "Sem eventos e sem dados adicionais aproveitáveis no JSON." }
+            $logs = $mini
         }
 
         # Usa o módulo promptbuilder
@@ -346,8 +428,13 @@ while ($true) {
             Write-Host "ANÁLISE DO DIAGNÓSTICO" -ForegroundColor Cyan
             Write-Host "Analisando sistema '$(hostname)' em $(Get-Date -Format 'dd/MM/yyyy HH:mm')" -ForegroundColor White
             Write-Host "`n"
-            try { & $diagnosticScriptPath; Show-JarvisFinalSuggestion -JsonPath $logPath }
-            catch { Write-Error "Falha no diagnóstico: $_" -ForegroundColor Red }
+            try {
+                & $diagnosticScriptPath
+                Show-JarvisFinalSuggestion -JsonPath $logPath
+            }
+            catch {
+                Write-Host "Falha no diagnóstico: $($_.Exception.Message)" -ForegroundColor Red
+            }
             Read-Host "`nPressione ENTER para voltar ao menu"
         }
         "2" {
@@ -365,16 +452,35 @@ while ($true) {
                 Write-Host "`n=================================================" -ForegroundColor Cyan
                 $submenuOpcao = Read-Host "`nEscolha uma opção (1-4)"
                 switch ($submenuOpcao) {
-                    "1" { Start-DiagnosticAnalysis -JsonPath $logPath; Read-Host "`nPressione ENTER para continuar" }
-                    "2" { Clear-Host; Get-Content $logPath -Raw | Write-Host -ForegroundColor Gray; Read-Host "`nPressione ENTER para continuar" }
-                    "3" { Clear-Host; Show-LastPromptText; Read-Host "`nPressione ENTER para continuar" }
+                    "1" {
+                        if (Test-Path $logPath) {
+                            Start-DiagnosticAnalysis -JsonPath $logPath
+                        } else {
+                            Write-Host "Arquivo não encontrado: $logPath" -ForegroundColor Yellow
+                        }
+                        Read-Host "`nPressione ENTER para continuar"
+                    }
+                    "2" {
+                        Clear-Host
+                        if (Test-Path $logPath) {
+                            Get-Content $logPath -Raw | Write-Host -ForegroundColor Gray
+                        } else {
+                            Write-Host "Arquivo não encontrado: $logPath" -ForegroundColor Yellow
+                        }
+                        Read-Host "`nPressione ENTER para continuar"
+                    }
+                    "3" {
+                        Clear-Host
+                        Show-LastPromptText
+                        Read-Host "`nPressione ENTER para continuar"
+                    }
                     "4" { $inSubmenuRelatorios = $false }
                     default { Write-Host "Opção inválida." -ForegroundColor Red; Start-Sleep 2 }
                 }
             }
         }
         "3" {
-            # Submenu de correções (mantém as opções atuais; unificação pode vir depois)
+            # Submenu de correções (unificação futura; por ora mantém as opções)
             $inSubmenuCorrecoes = $true
             while ($inSubmenuCorrecoes) {
                 Clear-Host
