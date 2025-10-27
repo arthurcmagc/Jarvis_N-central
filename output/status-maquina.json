@@ -1,107 +1,792 @@
 {
-  "Timestamp": "2025-10-22T13:11:17",
+  "Timestamp": "2025-10-27T17:28:19",
   "Hostname": "HYPE-0146",
   "Hardware": {
     "CPU": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
     "RAM": {
-      "UsedPercent": 78.87,
-      "TotalGB": 19.73
+      "TotalGB": 19.73,
+      "UsedPercent": 85.87
     },
     "Disks": [
       {
         "DeviceID": "C:",
-        "FreeGB": 69.91,
+        "FreeGB": 70.88,
         "TotalGB": 235.74,
-        "FreePercent": 29.66,
+        "FreePercent": 30.07,
         "Tipo": "Disco Local Físico"
       },
       {
         "DeviceID": "G:",
-        "FreeGB": 66.41,
+        "FreeGB": 67.33,
         "TotalGB": 235.74,
-        "FreePercent": 28.17,
+        "FreePercent": 28.56,
         "Tipo": "Unidade Mapeada (Google Drive)"
       }
     ]
   },
   "Rede": {
-    "Snapshot": {
-      "InterfaceName": "Wi-Fi",
-      "Status": "Up",
-      "MAC": "5C-CD-5B-EE-58-4A",
-      "IPv4": "192.168.1.110",
-      "IPv6": "2804:7c74:1103:df00:7d0e:9e40:993:481f",
-      "Gateway": "192.168.1.1",
-      "DNSServers": "Microsoft.Management.Infrastructure.CimInstance&, Microsoft.Management.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35 Address(int )",
-      "LinkSpeed": "72.2 Mbps",
-      "DHCPEnabled": true
-    },
     "HasInternetConnection": true,
-    "Latency": [
-      {
-        "Target": "1.1.1.1",
-        "Count": 4,
-        "AvgMs": 10.5,
-        "MedMs": 11.0,
-        "MinMs": 10.0,
-        "MaxMs": 11.0,
-        "LossPct": 0.0
+    "Interface": "Wi-Fi (Up)",
+    "IPv4": null,
+    "Gateway": null,
+    "DNS": null,
+    "Latency": {
+      "1.1.1.1": {
+        "Loss": "N/D (HTTP)",
+        "MedianMs": 371.9,
+        "AverageMs": 371.9,
+        "Method": "HTTP"
       },
-      {
-        "Target": "8.8.8.8",
-        "Count": 4,
-        "AvgMs": 10.5,
-        "MedMs": 11.0,
-        "MinMs": 10.0,
-        "MaxMs": 11.0,
-        "LossPct": 0.0
+      "8.8.8.8": {
+        "Loss": "N/D (HTTP)",
+        "MedianMs": 10075.9,
+        "AverageMs": 10075.9,
+        "Method": "HTTP"
       }
-    ]
+    }
   },
   "EventosCriticos": {
-    "TotalEventos": 4,
-    "EventosRelevantes": [],
+    "TotalEventos": 57,
+    "EventosRelevantes": [
+      {
+        "Id": 10010,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-27T07:49:55.2260987-03:00",
+        "Message": "O servidor {8018F647-BF07-55BB-82BE-A2D7049F7CE4} não se registrou no DCOM dentro do tempo limite necessário."
+      },
+      {
+        "Id": 10010,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:33.7324318-03:00",
+        "Message": "O servidor {B91D5831-B1BD-4608-8198-D72E155020F7} não se registrou no DCOM dentro do tempo limite necessário."
+      },
+      {
+        "Id": 10010,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T14:56:03.9334603-03:00",
+        "Message": "O servidor Microsoft.AAD.BrokerPlugin_1000.19580.1000.2_neutral_neutral_cw5n1h2txyewy!Windows.Security.Authentication.Web.Core.BackgroundGetTokenTask.ClassId.WebAccountProvider não se registrou no DCOM dentro do tempo limite necessário."
+      },
+      {
+        "Id": 10010,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-22T17:53:09.3110374-03:00",
+        "Message": "O servidor Microsoft.AAD.BrokerPlugin_1000.19580.1000.2_neutral_neutral_cw5n1h2txyewy!Windows.Security.Authentication.Web.Core.BackgroundGetTokenTask.ClassId.WebAccountProvider não se registrou no DCOM dentro do tempo limite necessário."
+      }
+    ],
     "EventosCriticos": [
       {
-        "TimeCreated": "2025-10-22T12:35:11.1500747-03:00",
         "Id": 21,
-        "LevelDisplayName": "Erro",
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1909161-03:00",
         "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
       },
       {
-        "TimeCreated": "2025-10-22T12:35:11.1500707-03:00",
         "Id": 20,
-        "LevelDisplayName": "Erro",
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1909133-03:00",
         "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
       },
       {
-        "TimeCreated": "2025-10-22T12:34:33.0810098-03:00",
         "Id": 21,
-        "LevelDisplayName": "Erro",
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1897378-03:00",
         "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
       },
       {
-        "TimeCreated": "2025-10-22T12:34:33.0810076-03:00",
         "Id": 20,
-        "LevelDisplayName": "Erro",
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1897347-03:00",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 21,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1885539-03:00",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1885511-03:00",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 35,
+        "ProviderName": "Outlook",
+        "TimeCreated": "2025-10-27T15:14:18.6769746-03:00",
+        "Message": "Falha ao determinar se o repositório está no escopo de rastreamento (erro = 0x80070422)."
+      },
+      {
+        "Id": 34,
+        "ProviderName": "Outlook",
+        "TimeCreated": "2025-10-27T15:14:18.6748473-03:00",
+        "Message": "Falha ao obter o Gerenciador do Escopo de Rastreamento com erro=0x80070422."
+      },
+      {
+        "Id": 1023,
+        "ProviderName": "Microsoft-Windows-Perflib",
+        "TimeCreated": "2025-10-27T08:09:13.6204133-03:00",
+        "Message": "O Windows não pode carregar a DLL de contador extensível \"C:\\WINDOWS\\system32\\sysmain.dll\" (código de erro do Win32 Não foi possível encontrar o módulo especificado.)."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-27T07:47:54.4924478-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 1801,
+        "ProviderName": "Microsoft-Windows-TPM-WMI",
+        "TimeCreated": "2025-10-27T07:35:18.1098635-03:00",
+        "Message": "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca8 ..."
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-27T07:30:18.554897-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-24T17:03:27.2164613-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-24T16:06:52.550208-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 1801,
+        "ProviderName": "Microsoft-Windows-TPM-WMI",
+        "TimeCreated": "2025-10-24T15:38:03.0826035-03:00",
+        "Message": "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca8 ..."
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-24T15:33:02.9441171-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.6594591-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.6407615-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.628098-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.1309503-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.1205591-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.1045809-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.0888832-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:26.3786012-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 7023,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-24T15:31:33.7923039-03:00",
+        "Message": "O serviço Serviço orquestrador de atualizações terminou com o erro: \r\n%%2149884192"
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-24T15:31:15.9108205-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-24T14:56:12.3623798-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 1022,
+        "ProviderName": ".NET Runtime",
+        "TimeCreated": "2025-10-24T10:43:56.8968041-03:00",
+        "Message": ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 4080. ID da Mensagem: [0x2509]."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-WindowsUpdateClient",
+        "TimeCreated": "2025-10-24T10:22:24.9146006-03:00",
+        "Message": "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9NCBCSZSJRSB-SpotifyAB.SpotifyMusic."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-WindowsUpdateClient",
+        "TimeCreated": "2025-10-24T10:22:16.9929523-03:00",
+        "Message": "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9NKSQGP7F2NH-5319275A.WhatsAppDesktop."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-24T08:16:35.0646008-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 1023,
+        "ProviderName": "Microsoft-Windows-Perflib",
+        "TimeCreated": "2025-10-24T08:16:17.6505328-03:00",
+        "Message": "O Windows não pode carregar a DLL de contador extensível \"C:\\WINDOWS\\system32\\sysmain.dll\" (código de erro do Win32 Não foi possível encontrar o módulo especificado.)."
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-24T08:14:32.4249962-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 8193,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-23T17:16:46.3469553-03:00",
+        "Message": "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-23T17:16:46.3461876-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 8193,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-23T17:16:46.3439073-03:00",
+        "Message": "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-23T17:16:46.342734-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-23T16:37:23.9573267-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-23T14:34:59.844012-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 1022,
+        "ProviderName": ".NET Runtime",
+        "TimeCreated": "2025-10-23T10:51:42.7676593-03:00",
+        "Message": ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 35624. ID da Mensagem: [0x2509]."
+      },
+      {
+        "Id": 1023,
+        "ProviderName": "Microsoft-Windows-Perflib",
+        "TimeCreated": "2025-10-23T08:11:21.7418087-03:00",
+        "Message": "O Windows não pode carregar a DLL de contador extensível \"C:\\WINDOWS\\system32\\sysmain.dll\" (código de erro do Win32 Não foi possível encontrar o módulo especificado.)."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-23T08:09:34.3374389-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-23T08:09:01.9456124-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 8193,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-22T17:53:23.2316379-03:00",
+        "Message": "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-22T17:53:23.2308358-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 8193,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-22T17:53:23.2274148-03:00",
+        "Message": "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-22T17:53:23.2262669-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 1000,
+        "ProviderName": "Application Error",
+        "TimeCreated": "2025-10-22T17:53:18.3456254-03:00",
+        "Message": "Nome do aplicativo com falha: Dell.TechHub.Diagnostics.SubAgent.exe, versão: 1.9.1.303, carimbo de data/hora: 0x684a0000\r\nNome do módulo com falha: unknown, versão: 0.0.0.0, carimbo de data/hora: 0x00000000\r\nCódigo de exceção: 0xc0000005\r\nDeslocamento de falha: 0x0000000000000000\r\nID do processo com ..."
+      },
+      {
+        "Id": 1026,
+        "ProviderName": ".NET Runtime",
+        "TimeCreated": "2025-10-22T17:53:18.0840427-03:00",
+        "Message": "Application: Dell.TechHub.Diagnostics.SubAgent.exe\nCoreCLR Version: 8.0.2025.41914\n.NET Version: 8.0.20\nDescription: The process was terminated due to an unhandled exception.\nException Info: exception code c0000005, exception address 0000000000000000\n"
+      },
+      {
+        "Id": 21,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-22T12:35:11.1500747-03:00",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-22T12:35:11.1500707-03:00",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 21,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-22T12:34:33.0810098-03:00",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-22T12:34:33.0810076-03:00",
         "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
       }
-    ]
+    ],
+    "Events": [
+      {
+        "Id": 21,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1909161-03:00",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1909133-03:00",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 21,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1897378-03:00",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1897347-03:00",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 21,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1885539-03:00",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-27T16:53:45.1885511-03:00",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 35,
+        "ProviderName": "Outlook",
+        "TimeCreated": "2025-10-27T15:14:18.6769746-03:00",
+        "Message": "Falha ao determinar se o repositório está no escopo de rastreamento (erro = 0x80070422)."
+      },
+      {
+        "Id": 34,
+        "ProviderName": "Outlook",
+        "TimeCreated": "2025-10-27T15:14:18.6748473-03:00",
+        "Message": "Falha ao obter o Gerenciador do Escopo de Rastreamento com erro=0x80070422."
+      },
+      {
+        "Id": 1023,
+        "ProviderName": "Microsoft-Windows-Perflib",
+        "TimeCreated": "2025-10-27T08:09:13.6204133-03:00",
+        "Message": "O Windows não pode carregar a DLL de contador extensível \"C:\\WINDOWS\\system32\\sysmain.dll\" (código de erro do Win32 Não foi possível encontrar o módulo especificado.)."
+      },
+      {
+        "Id": 10010,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-27T07:49:55.2260987-03:00",
+        "Message": "O servidor {8018F647-BF07-55BB-82BE-A2D7049F7CE4} não se registrou no DCOM dentro do tempo limite necessário."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-27T07:47:54.4924478-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 1801,
+        "ProviderName": "Microsoft-Windows-TPM-WMI",
+        "TimeCreated": "2025-10-27T07:35:18.1098635-03:00",
+        "Message": "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca8 ..."
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-27T07:30:18.554897-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-24T17:03:27.2164613-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-24T16:06:52.550208-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 1801,
+        "ProviderName": "Microsoft-Windows-TPM-WMI",
+        "TimeCreated": "2025-10-24T15:38:03.0826035-03:00",
+        "Message": "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca8 ..."
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-24T15:33:02.9441171-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 10010,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:33.7324318-03:00",
+        "Message": "O servidor {B91D5831-B1BD-4608-8198-D72E155020F7} não se registrou no DCOM dentro do tempo limite necessário."
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.6594591-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.6407615-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.628098-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.1309503-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.1205591-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.1045809-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:27.0888832-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 10005,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T15:32:26.3786012-03:00",
+        "Message": "O DCOM obteve o erro \"1115\" ao tentar iniciar o serviço wuauserv com argumentos \"Não Disponível\" para executar o servidor:\r\n{E60687F7-01A1-40AA-86AC-DB1CBF673334}"
+      },
+      {
+        "Id": 7023,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-24T15:31:33.7923039-03:00",
+        "Message": "O serviço Serviço orquestrador de atualizações terminou com o erro: \r\n%%2149884192"
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-24T15:31:15.9108205-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-24T14:56:12.3623798-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 10010,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-24T14:56:03.9334603-03:00",
+        "Message": "O servidor Microsoft.AAD.BrokerPlugin_1000.19580.1000.2_neutral_neutral_cw5n1h2txyewy!Windows.Security.Authentication.Web.Core.BackgroundGetTokenTask.ClassId.WebAccountProvider não se registrou no DCOM dentro do tempo limite necessário."
+      },
+      {
+        "Id": 1022,
+        "ProviderName": ".NET Runtime",
+        "TimeCreated": "2025-10-24T10:43:56.8968041-03:00",
+        "Message": ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 4080. ID da Mensagem: [0x2509]."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-WindowsUpdateClient",
+        "TimeCreated": "2025-10-24T10:22:24.9146006-03:00",
+        "Message": "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9NCBCSZSJRSB-SpotifyAB.SpotifyMusic."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-WindowsUpdateClient",
+        "TimeCreated": "2025-10-24T10:22:16.9929523-03:00",
+        "Message": "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9NKSQGP7F2NH-5319275A.WhatsAppDesktop."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-24T08:16:35.0646008-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 1023,
+        "ProviderName": "Microsoft-Windows-Perflib",
+        "TimeCreated": "2025-10-24T08:16:17.6505328-03:00",
+        "Message": "O Windows não pode carregar a DLL de contador extensível \"C:\\WINDOWS\\system32\\sysmain.dll\" (código de erro do Win32 Não foi possível encontrar o módulo especificado.)."
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-24T08:14:32.4249962-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 8193,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-23T17:16:46.3469553-03:00",
+        "Message": "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-23T17:16:46.3461876-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 8193,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-23T17:16:46.3439073-03:00",
+        "Message": "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-23T17:16:46.342734-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-23T16:37:23.9573267-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-23T14:34:59.844012-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 1022,
+        "ProviderName": ".NET Runtime",
+        "TimeCreated": "2025-10-23T10:51:42.7676593-03:00",
+        "Message": ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 35624. ID da Mensagem: [0x2509]."
+      },
+      {
+        "Id": 1023,
+        "ProviderName": "Microsoft-Windows-Perflib",
+        "TimeCreated": "2025-10-23T08:11:21.7418087-03:00",
+        "Message": "O Windows não pode carregar a DLL de contador extensível \"C:\\WINDOWS\\system32\\sysmain.dll\" (código de erro do Win32 Não foi possível encontrar o módulo especificado.)."
+      },
+      {
+        "Id": 11,
+        "ProviderName": "Microsoft-Windows-Security-Kerberos",
+        "TimeCreated": "2025-10-23T08:09:34.3374389-03:00",
+        "Message": "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+      },
+      {
+        "Id": 7009,
+        "ProviderName": "Service Control Manager",
+        "TimeCreated": "2025-10-23T08:09:01.9456124-03:00",
+        "Message": "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+      },
+      {
+        "Id": 8193,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-22T17:53:23.2316379-03:00",
+        "Message": "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-22T17:53:23.2308358-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 8193,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-22T17:53:23.2274148-03:00",
+        "Message": "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+      },
+      {
+        "Id": 13,
+        "ProviderName": "VSS",
+        "TimeCreated": "2025-10-22T17:53:23.2262669-03:00",
+        "Message": "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+      },
+      {
+        "Id": 1000,
+        "ProviderName": "Application Error",
+        "TimeCreated": "2025-10-22T17:53:18.3456254-03:00",
+        "Message": "Nome do aplicativo com falha: Dell.TechHub.Diagnostics.SubAgent.exe, versão: 1.9.1.303, carimbo de data/hora: 0x684a0000\r\nNome do módulo com falha: unknown, versão: 0.0.0.0, carimbo de data/hora: 0x00000000\r\nCódigo de exceção: 0xc0000005\r\nDeslocamento de falha: 0x0000000000000000\r\nID do processo com ..."
+      },
+      {
+        "Id": 1026,
+        "ProviderName": ".NET Runtime",
+        "TimeCreated": "2025-10-22T17:53:18.0840427-03:00",
+        "Message": "Application: Dell.TechHub.Diagnostics.SubAgent.exe\nCoreCLR Version: 8.0.2025.41914\n.NET Version: 8.0.20\nDescription: The process was terminated due to an unhandled exception.\nException Info: exception code c0000005, exception address 0000000000000000\n"
+      },
+      {
+        "Id": 10010,
+        "ProviderName": "Microsoft-Windows-DistributedCOM",
+        "TimeCreated": "2025-10-22T17:53:09.3110374-03:00",
+        "Message": "O servidor Microsoft.AAD.BrokerPlugin_1000.19580.1000.2_neutral_neutral_cw5n1h2txyewy!Windows.Security.Authentication.Web.Core.BackgroundGetTokenTask.ClassId.WebAccountProvider não se registrou no DCOM dentro do tempo limite necessário."
+      },
+      {
+        "Id": 21,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-22T12:35:11.1500747-03:00",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-22T12:35:11.1500707-03:00",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 21,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-22T12:34:33.0810098-03:00",
+        "Message": "O relógio em tempo real do hardware não foi definido porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      },
+      {
+        "Id": 20,
+        "ProviderName": "Microsoft-Windows-HAL",
+        "TimeCreated": "2025-10-22T12:34:33.0810076-03:00",
+        "Message": "O relógio em tempo real do hardware não foi consultado porque houve falha na avaliação do método De Hora e Alarme ACPI.  Status: 0xC00000BB."
+      }
+    ],
+    "BugCheck154": []
   },
   "Servicos": {
-    "CriticalServicesNotRunning": [
+    "Services": [
       {
-        "Name": "Serviços de Área de Trabalho Remota",
-        "Status": 1
+        "Name": "wuauserv",
+        "DisplayName": "Windows Update",
+        "Status": "Stopped"
+      },
+      {
+        "Name": "bits",
+        "DisplayName": "Serviço de Transferência Inteligente em Segundo Plano",
+        "Status": "Running"
+      },
+      {
+        "Name": "lanmanworkstation",
+        "DisplayName": "Estação de trabalho",
+        "Status": "Running"
+      },
+      {
+        "Name": "Dnscache",
+        "DisplayName": "Cliente DNS",
+        "Status": "Running"
+      },
+      {
+        "Name": "Winmgmt",
+        "DisplayName": "Testador de instrumentação de gerenciam. do Windows",
+        "Status": "Running"
       }
-    ]
+    ],
+    "CriticalServicesNotRunning": {
+      "Name": "wuauserv",
+      "DisplayName": "Windows Update",
+      "Status": "Stopped"
+    }
   },
   "Fabricante": {
     "Manufacturer": "Dell Inc."
   },
+  "Indexador": {
+    "WSearchStatus": "Running",
+    "StartType": "Automatic",
+    "FeatureEnabled": true,
+    "IsAdmin": true
+  },
   "Analise": {
-    "SaudePontuacao": 85,
+    "SaudePontuacao": 79,
     "ProblemasIdentificados": [
+      "[ALERTA] Uso de RAM: 86%.",
+      "[ALERTA] Evento relevante (ID: 10010) detectado 4 vezes.",
       "[CRÍTICO] Um ou mais serviços essenciais não estão em execução."
     ]
   }

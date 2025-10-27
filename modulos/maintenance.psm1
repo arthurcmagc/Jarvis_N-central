@@ -1,20 +1,34 @@
 ﻿# maintenance.psm1
-# Módulo de manutenção e correção do sistema — versão refinada e estável
-# ======================================================================
+# Módulo de manutenção do Jarvis (com Reparo do Indexador de Pesquisa)
+
+Set-StrictMode -Version Latest
 
 # ---------------------------
-# Variáveis / Paths / Log
+# Infra de Log/UI
 # ---------------------------
 $OutputDir = Join-Path $PSScriptRoot "..\output"
 if (-not (Test-Path $OutputDir)) { New-Item -Path $OutputDir -ItemType Directory | Out-Null }
 $Global:JarvisLogPath = Join-Path $OutputDir "JarvisLog.txt"
 
-# ---------------------------
-# Helpers de Terminal
-# ---------------------------
+function Write-LogEntry {
+    param(
+        [string]$LogPath = $Global:JarvisLogPath,
+        [ValidateSet('INFO','WARN','ERROR')][string]$Level = "INFO",
+        [string]$Message
+    )
+    try {
+        $timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+        Add-Content -Path $LogPath -Value "[$timestamp] [$Level] $Message" -Encoding UTF8 -ErrorAction SilentlyContinue
+    } catch {}
+}
+
+function Write-Jarvis {
+    param([string]$Text, [ConsoleColor]$Color = "White")
+    try { Write-Host $Text -ForegroundColor $Color } catch { Write-Host $Text }
+    Write-LogEntry -Level INFO -Message $Text
+}
+
 function Save-TerminalState {
-    [CmdletBinding()]
-    param()
     try {
         return [ordered]@{
             FG = $Host.UI.RawUI.ForegroundColor
@@ -24,9 +38,7 @@ function Save-TerminalState {
         }
     } catch { return $null }
 }
-
 function Restore-TerminalState {
-    [CmdletBinding()]
     param([hashtable]$State)
     try {
         if ($null -ne $State) {
@@ -40,170 +52,88 @@ function Restore-TerminalState {
 }
 
 # ---------------------------
-# Helpers de Log/UI
+# SFC / DISM / Rede / Limpezas / Memória (mantidos)
 # ---------------------------
-function Write-LogEntry {
-    param(
-        [string]$LogPath = $Global:JarvisLogPath,
-        [ValidateSet('INFO','WARN','ERROR')][string]$Level = "INFO",
-        [string]$Message
-    )
-    $timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
-    $entry = "[$timestamp] [$Level] $Message"
-    try { Add-Content -Path $LogPath -Value $entry -ErrorAction SilentlyContinue } catch {}
-}
-
-function Write-Jarvis {
-    param([string]$Text, [ConsoleColor]$Color = "White")
-    Write-Host $Text -ForegroundColor $Color
-    Write-LogEntry -Level INFO -Message $Text
-}
-
-# ===========================
-# FUNÇÕES DE MANUTENÇÃO
-# ===========================
-
-# -----------------
-# SFC
-# -----------------
 function Invoke-SFC {
-    Write-Jarvis "Iniciando SFC (System File Checker)..." Green
-    try {
-        Write-LogEntry -Level INFO -Message "Executando: sfc /scannow"
-        sfc /scannow
-        Write-Jarvis "SFC concluído. Verifique o resultado acima." Yellow
-    } catch {
-        Write-Jarvis "Erro ao executar SFC: $($_.Exception.Message)" Red
-        Write-LogEntry -Level ERROR -Message "SFC error: $($_.Exception.Message)"
-    }
+    Write-Jarvis "Iniciando SFC..." Green
+    try { sfc /scannow } catch { Write-Jarvis "Erro SFC: $($_.Exception.Message)" Red }
 }
 
-# -----------------
-# DISM (RestoreHealth)
-# -----------------
 function Invoke-DISM {
-    Write-Jarvis "Iniciando DISM (Deployment Image Servicing and Management)..." Green
-    Write-Jarvis "Isso pode demorar alguns minutos. Aguarde." DarkGray
-    try {
-        Write-LogEntry -Level INFO -Message "Executando: Dism /Online /Cleanup-Image /RestoreHealth"
-        Dism /Online /Cleanup-Image /RestoreHealth
-        Write-Jarvis "DISM concluído. Verifique o resultado acima." Yellow
-    } catch {
-        Write-Jarvis "Erro ao executar DISM: $($_.Exception.Message)" Red
-        Write-LogEntry -Level ERROR -Message "DISM error: $($_.Exception.Message)"
-    }
+    Write-Jarvis "Iniciando DISM /RestoreHealth..." Green
+    try { Dism /Online /Cleanup-Image /RestoreHealth } catch { Write-Jarvis "Erro DISM: $($_.Exception.Message)" Red }
 }
 
-# -----------------
-# Correções de Rede (com mini-relatório)
-# -----------------
 function Invoke-NetworkCorrections {
     Write-Jarvis "Iniciando correções de rede..." Green
-
     $steps = @(
-        @{ Cmd = 'ipconfig /flushdns'        ; Desc = 'Flush DNS cache' },
-        @{ Cmd = 'netsh int ip reset'        ; Desc = 'Reset pilha TCP/IP' },
-        @{ Cmd = 'netsh winsock reset'       ; Desc = 'Reset Winsock' },
-        @{ Cmd = 'netsh winhttp reset proxy' ; Desc = 'Reset WinHTTP proxy' }
+        @{ Cmd='ipconfig /flushdns'        ; Desc='Flush DNS cache' },
+        @{ Cmd='netsh int ip reset'        ; Desc='Reset pilha TCP/IP' },
+        @{ Cmd='netsh winsock reset'       ; Desc='Reset Winsock' },
+        @{ Cmd='netsh winhttp reset proxy' ; Desc='Reset WinHTTP proxy' }
     )
-
-    $report = @()
     foreach ($s in $steps) {
         try {
-            Write-Host " -> $($s.Desc)  ($($s.Cmd))" -ForegroundColor DarkGray
+            Write-Host " -> $($s.Desc) ($($s.Cmd))" -ForegroundColor DarkGray
             & cmd.exe /c $s.Cmd | Out-Null
-            $report += "[OK] $($s.Desc)"
         } catch {
-            $report += "[ERRO] $($s.Desc): $($_.Exception.Message)"
+            Write-Host " [ERRO] $($s.Desc): $($_.Exception.Message)" -ForegroundColor Yellow
         }
     }
-
-    Write-Host ""
-    Write-Jarvis "Resumo das correções:" Cyan
-    $report | ForEach-Object { Write-Host "   $_" -ForegroundColor Gray }
-
-    Write-Host ""
-    Write-Jarvis "Correções de rede concluídas. Recomenda-se reiniciar o computador." Yellow
+    Write-Jarvis "Correções de rede concluídas. Recomenda-se reiniciar." Yellow
 }
 
-# -----------------
-# Helpers de limpeza
-# -----------------
-function Get-PathStats {
-    param([string]$Path)
-    if (-not (Test-Path $Path)) { return @{ Count = 0; SizeBytes = 0 } }
+function Get-PathStats { param([string]$Path)
+    if (-not (Test-Path $Path)) { return @{ Count=0; SizeBytes=0 } }
     try {
         $items = Get-ChildItem -Path $Path -Recurse -Force -File -ErrorAction SilentlyContinue
         $count = ($items | Measure-Object).Count
-        $size  = if ($count -gt 0) { ($items | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum } else { 0 }
-        return @{ Count = $count; SizeBytes = $size }
-    } catch { return @{ Count = 0; SizeBytes = 0 } }
+        $size  = if ($count -gt 0) { ($items | Measure-Object -Property Length -Sum).Sum } else { 0 }
+        return @{ Count=$count; SizeBytes=$size }
+    } catch { return @{ Count=0; SizeBytes=0 } }
 }
-
-function Remove-PathAndReport {
-    param([string]$Path)
+function Remove-PathAndReport { param([string]$Path)
     $before = Get-PathStats -Path $Path
     try {
         if ($before.Count -gt 0) {
-            $items = Get-ChildItem -Path $Path -Recurse -Force -ErrorAction SilentlyContinue
-            foreach ($i in $items) {
-                try { Remove-Item -LiteralPath $i.FullName -Force -Recurse -ErrorAction SilentlyContinue -Confirm:$false } catch {}
-            }
+            Get-ChildItem -Path $Path -Recurse -Force -ErrorAction SilentlyContinue |
+                ForEach-Object { try { Remove-Item -LiteralPath $_.FullName -Force -Recurse -ErrorAction SilentlyContinue -Confirm:$false } catch {} }
         } else {
             Remove-Item -Path $Path -Recurse -Force -ErrorAction SilentlyContinue -Confirm:$false
         }
     } catch {}
     $after = Get-PathStats -Path $Path
-    $freedBytes   = [math]::Max(0, $before.SizeBytes - $after.SizeBytes)
-    $removedCount = [math]::Max(0, $before.Count - $after.Count)
-    return @{ FreedBytes = $freedBytes; RemovedCount = $removedCount }
+    return @{ FreedBytes=[math]::Max(0,$before.SizeBytes-$after.SizeBytes); RemovedCount=[math]::Max(0,$before.Count-$after.Count) }
 }
 
-# -----------------
-# Limpeza Rápida
-# -----------------
 function Invoke-QuickClean {
     Write-Jarvis "`n[MANUTENÇÃO] Iniciando Limpeza Rápida..." Cyan
-    $paths = @(
-        "$env:TEMP\*",
-        "$env:LOCALAPPDATA\Temp\*",
-        "$env:WINDIR\Temp\*"
-    )
-    $totalFreed = 0; $totalRemoved = 0
-
+    $paths = @("$env:TEMP\*","$env:LOCALAPPDATA\Temp\*","$env:WINDIR\Temp\*")
+    $totalFreed=0; $totalRemoved=0
     foreach ($p in $paths) {
         $res = Remove-PathAndReport -Path $p
-        $totalFreed  += $res.FreedBytes
-        $totalRemoved += $res.RemovedCount
-        Write-Jarvis "  -> Path: $p | Removidos: $($res.RemovedCount) | Liberado: $([math]::Round($res.FreedBytes/1MB,2)) MB" DarkGray
+        $totalFreed += $res.FreedBytes; $totalRemoved += $res.RemovedCount
+        Write-Jarvis "  -> $p | Removidos $($res.RemovedCount) | Liberado $([math]::Round($res.FreedBytes/1MB,2)) MB" DarkGray
     }
-
     try { Clear-RecycleBin -Force -ErrorAction SilentlyContinue } catch {}
-
-    Write-Jarvis "`n[RESULTADO] Limpeza rápida concluída. Itens removidos: $totalRemoved | Espaço liberado: $([math]::Round($totalFreed/1MB,2)) MB" Green
-    return @{ ItemsRemoved = $totalRemoved; FreedMB = [math]::Round($totalFreed/1MB,2) }
+    Write-Jarvis "[RESULTADO] Itens: $totalRemoved | Espaço: $([math]::Round($totalFreed/1MB,2)) MB" Green
+    return @{ ItemsRemoved=$totalRemoved; FreedMB=[math]::Round($totalFreed/1MB,2) }
 }
 
-# -----------------
-# Limpeza Completa (blindada + progresso DISM)
-# -----------------
 function Invoke-FullClean {
     Write-Jarvis "`n[MANUTENÇÃO] Iniciando Limpeza Completa..." Cyan
-    Write-Jarvis "Pode remover caches, logs e temporários do sistema e aplicativos." DarkYellow
+    Write-Jarvis "Pode remover caches, logs e temporários do sistema e apps." DarkYellow
     $confirm = Read-Host "Tem certeza que deseja continuar? (S/N)"
     if ($confirm -notin @('S','s')) { Write-Jarvis "Operação cancelada." Yellow; return }
 
-    # AVISO sobre fechamento de navegadores (não mexe em extensões)
     Write-Host ""
     Write-Jarvis "AVISO: Para limpar caches, alguns navegadores podem ser FECHADOS temporariamente." Yellow
     $closeBrowsers = Read-Host "Deseja permitir fechar navegadores agora? (S/N)"
     $shouldClose   = $closeBrowsers -in @('S','s')
 
-    # Proteções de terminal/erros
     $state = Save-TerminalState
     $oldEA = $ErrorActionPreference
     $ErrorActionPreference = 'Stop'
-
     try {
         $paths = @(
             "$env:TEMP\*",
@@ -219,21 +149,18 @@ function Invoke-FullClean {
         )
 
         if ($shouldClose) {
-            Write-Jarvis "[1/8] Fechando navegadores para liberar cache..." DarkGray
+            Write-Jarvis "[1/8] Fechando navegadores..." DarkGray
             Get-Process -ErrorAction SilentlyContinue |
                 Where-Object { $_.Name -in @('msedge','chrome','firefox','iexplore','acrord32') } |
                 ForEach-Object { try { $_.CloseMainWindow() | Out-Null; Start-Sleep 2; $_.Kill() } catch {} }
-        } else {
-            Write-Jarvis "[1/8] Pulando fechamento de navegadores por opção do analista." DarkGray
-        }
+        } else { Write-Jarvis "[1/8] Sem fechar navegadores (opção do analista)." DarkGray }
 
         Write-Jarvis "[2/8] Limpando temporários e caches..." DarkGray
-        $totalFreed = 0; $totalRemoved = 0
+        $totalFreed=0; $totalRemoved=0
         foreach ($p in $paths) {
             $res = Remove-PathAndReport -Path $p
-            $totalFreed  += $res.FreedBytes
-            $totalRemoved += $res.RemovedCount
-            Write-Jarvis "  -> Path: $p | Removidos: $($res.RemovedCount) | Liberado: $([math]::Round($res.FreedBytes/1MB,2)) MB" DarkGray
+            $totalFreed += $res.FreedBytes; $totalRemoved += $res.RemovedCount
+            Write-Jarvis "  -> $p | Removidos $($res.RemovedCount) | Liberado $([math]::Round($res.FreedBytes/1MB,2)) MB" DarkGray
         }
 
         Write-Jarvis "[3/8] Limpando cache do Windows Update..." DarkGray
@@ -252,8 +179,7 @@ function Invoke-FullClean {
         Write-Jarvis "[5/8] Esvaziando Lixeira..." DarkGray
         try { Clear-RecycleBin -Force -ErrorAction SilentlyContinue } catch {}
 
-        # Limpeza Agressiva opcional (Dell SARemediation, etc.)
-        $aggConfirm = Read-Host "Deseja executar a limpeza agressiva (Dell SARemediation)? (S/N)"
+        $aggConfirm = Read-Host "Deseja executar limpeza agressiva (Dell SARemediation)? (S/N)"
         if ($aggConfirm -in @('S','s')) {
             Write-Jarvis "[6/8] Removendo componentes Remediation..." Red
             $aggPaths = @(
@@ -265,63 +191,33 @@ function Invoke-FullClean {
                 Write-Jarvis "  -> $($item.Description): Removidos $($res.RemovedCount) | Liberado $([math]::Round($res.FreedBytes/1MB,2)) MB" DarkGray
             }
             Write-Jarvis "[AGRESSIVA] Remoção de pacotes Remediation concluída." Red
-        } else {
-            Write-Jarvis "[6/8] Etapa agressiva ignorada por opção do analista." DarkGray
-        }
+        } else { Write-Jarvis "[6/8] Agressiva ignorada." DarkGray }
 
-        Write-Jarvis "[7/8] Consolidando resultados parciais..." DarkGray
-        Write-LogEntry -Level INFO -Message ("Limpeza parcial: Removidos={0} | Liberado={1} MB" -f $totalRemoved, [math]::Round($totalFreed/1MB,2))
-
-        Write-Jarvis "[8/8] (Opcional) DISM StartComponentCleanup..." DarkGray
+        Write-Jarvis "[7/8] DISM StartComponentCleanup (opcional)..." DarkGray
         $runDism = Read-Host "Executar StartComponentCleanup? (S/N)"
         if ($runDism -in @('S','s')) {
             try {
-                # Barra de progresso enquanto o DISM executa
-                $psi = New-Object System.Diagnostics.ProcessStartInfo
-                $psi.FileName  = "dism.exe"
-                $psi.Arguments = "/Online /Cleanup-Image /StartComponentCleanup /Quiet"
-                $psi.UseShellExecute = $false
-                $psi.RedirectStandardOutput = $true
-                $psi.RedirectStandardError  = $true
-
-                $proc = New-Object System.Diagnostics.Process
-                $proc.StartInfo = $psi
-                [void]$proc.Start()
-
-                $pct = 0
-                while (-not $proc.HasExited) {
-                    Write-Progress -Activity "DISM StartComponentCleanup" -Status "Otimizando componentes..." -PercentComplete $pct
-                    Start-Sleep -Milliseconds 300
-                    $pct = ($pct + 3) % 100
-                }
-                Write-Progress -Activity "DISM StartComponentCleanup" -Completed
-                Write-LogEntry -Level INFO -Message "DISM StartComponentCleanup finalizado. ExitCode=$($proc.ExitCode)"
+                Start-Process -FilePath "dism.exe" -ArgumentList "/Online","/Cleanup-Image","/StartComponentCleanup","/Quiet" -Wait -WindowStyle Hidden
+                Write-LogEntry -Level INFO -Message "StartComponentCleanup OK"
             } catch {
-                Write-LogEntry -Level WARN -Message "Falha no DISM StartComponentCleanup: $($_.Exception.Message)"
-                Write-Jarvis "Falha no DISM StartComponentCleanup: $($_.Exception.Message)" Yellow
+                Write-LogEntry -Level WARN -Message "StartComponentCleanup falhou: $($_.Exception.Message)"
             }
-        } else {
-            Write-Jarvis "DISM StartComponentCleanup não executado (opção do analista)." DarkGray
         }
 
-        Write-Jarvis "`n[RESULTADO] Limpeza completa concluída. Itens removidos: $totalRemoved | Espaço liberado: $([math]::Round($totalFreed/1MB,2)) MB" Green
-        return @{ ItemsRemoved = $totalRemoved; FreedMB = [math]::Round($totalFreed/1MB,2) }
-    }
-    catch {
+        Write-Jarvis "[8/8] Final..." DarkGray
+        Write-Jarvis "`n[RESULTADO] Itens removidos: $totalRemoved | Espaço: $([math]::Round($totalFreed/1MB,2)) MB" Green
+        return @{ ItemsRemoved=$totalRemoved; FreedMB=[math]::Round($totalFreed/1MB,2) }
+    } catch {
         Write-Jarvis "❌ Falha na limpeza: $($_.Exception.Message)" Red
-        Write-LogEntry -Level ERROR -Message "Falha na Limpeza Completa: $($_.Exception.Message)"
-        return @{ ItemsRemoved = 0; FreedMB = 0 }
-    }
-    finally {
+        Write-LogEntry -Level ERROR -Message "Falha Limpeza Completa: $($_.Exception.Message)"
+        return @{ ItemsRemoved=0; FreedMB=0 }
+    } finally {
         $ErrorActionPreference = $oldEA
         Restore-TerminalState -State $state
     }
 }
 
-# -----------------
 # Otimização de Memória
-# -----------------
-# Tipo nativo para EmptyWorkingSet (só declara uma vez)
 if (-not ([System.Management.Automation.PSTypeName]'MemApi').Type) {
     $memApi = @"
 using System;
@@ -333,50 +229,119 @@ public static class MemApi {
 "@
     Add-Type -TypeDefinition $memApi -ErrorAction SilentlyContinue
 }
-
-# Processos que não devemos tocar
 $Global:ProtectedProcesses = @(
     'wininit','lsass','csrss','services','winlogon','smss','System','Idle','Registry',
-    'Memory Compression','explorer','dwm','sihost','fontdrvhost','SearchIndexer'
+    'Memory Compression','explorer','dwm','sihost','fontdrvhost','SearchIndexer','SearchUI','SearchApp','SearchHost'
 )
-
 function Invoke-OptimizeMemory {
-    Write-Jarvis "`n[MANUTENÇÃO] Iniciando Otimização de Memória..." Cyan
+    Write-Jarvis "`n[MANUTENÇÃO] Otimização de Memória..." Cyan
     try {
         $beforeMB = [math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1024,2)
-        Write-Jarvis "Memória disponível antes: $beforeMB MB" DarkGray
-
-        $procs = Get-Process -ErrorAction SilentlyContinue | Where-Object {
-            $_.Name -and $Global:ProtectedProcesses -notcontains $_.ProcessName -and $_.Id -ne $PID
-        }
-
+        Write-Jarvis "Memória antes: $beforeMB MB" DarkGray
+        $procs = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Name -and $Global:ProtectedProcesses -notcontains $_.ProcessName -and $_.Id -ne $PID }
         $trimmed = 0
-        foreach ($p in $procs) {
-            try {
-                if (-not $p.HasExited) {
-                    if ([MemApi]::EmptyWorkingSet($p.Handle)) { $trimmed++ }
-                }
-            } catch {}
-        }
-
+        foreach ($p in $procs) { try { if (-not $p.HasExited -and [MemApi]::EmptyWorkingSet($p.Handle)) { $trimmed++ } } catch {} }
         [System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
         Start-Sleep -Milliseconds 400
-
         $afterMB = [math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1024,2)
-        Write-Jarvis "Memória disponível depois: $afterMB MB" DarkGray
-        Write-Jarvis "`n[RESULTADO] Memória liberada: $([math]::Round($afterMB-$beforeMB,2)) MB | Processos ajustados: $trimmed" Green
-
-        return @{ FreedMB = [math]::Round($afterMB-$beforeMB,2); ProcessesTrimmed = $trimmed }
+        Write-Jarvis "Memória depois: $afterMB MB" DarkGray
+        Write-Jarvis "[RESULTADO] Liberado: $([math]::Round($afterMB-$beforeMB,2)) MB | Processos ajustados: $trimmed" Green
+        return @{ FreedMB=[math]::Round($afterMB-$beforeMB,2); ProcessesTrimmed=$trimmed }
     } catch {
         Write-Jarvis "Erro na otimização: $($_.Exception.Message)" Red
-        Write-LogEntry -Level ERROR -Message "OptimizeMemory error: $($_.Exception.Message)"
-        return @{ FreedMB = 0; ProcessesTrimmed = 0 }
+        return @{ FreedMB=0; ProcessesTrimmed=0 }
     }
 }
 
 # ---------------------------
-# Exporta funções
+# Reparo do Indexador (NOVO)
 # ---------------------------
+function Invoke-RepairSearchIndexer {
+    <#
+      - Habilita SearchEngine-Client-Package (Enable-WindowsOptionalFeature -> DISM fallback).
+      - Define WSearch como Automático, zera dependências (sc.exe config depend= ""), reinicia.
+      - (Opcional) Reconstrói catálogo.
+    #>
+    param([switch]$RebuildCatalogOnYesPrompt)
+
+    Write-Jarvis "[PESQUISA] Reparo do Windows Search..." Cyan
+    $notes = New-Object System.Collections.Generic.List[string]
+    $success = $true
+
+    # 1) Habilitar recurso
+    try {
+        Write-Jarvis "Habilitando recurso (Enable-WindowsOptionalFeature)..." DarkGray
+        Enable-WindowsOptionalFeature -Online -FeatureName "SearchEngine-Client-Package" -All -NoRestart -ErrorAction Stop | Out-Null
+        $notes.Add("Enable-WindowsOptionalFeature OK")
+    } catch {
+        $notes.Add("Enable-WindowsOptionalFeature falhou: $($_.Exception.Message)")
+        Write-Jarvis "Fallback para DISM..." Yellow
+        try {
+            & dism.exe /online /enable-feature /featurename:SearchEngine-Client-Package /all
+            if ($LASTEXITCODE -eq 0) { $notes.Add("DISM enable-feature OK") }
+            else { $success=$false; $notes.Add("DISM exit $LASTEXITCODE") }
+        } catch {
+            $success=$false; $notes.Add("DISM exception: $($_.Exception.Message)")
+        }
+    }
+
+    # 2) Serviço WSearch
+    try {
+        Write-Jarvis "Ajustando WSearch (Automatic)..." DarkGray
+        Set-Service -Name WSearch -StartupType Automatic -ErrorAction SilentlyContinue
+        Write-Jarvis "Limpando dependências do WSearch..." DarkGray
+        & sc.exe config WSearch depend= "" | Out-Null
+        Write-Jarvis "Iniciando/ Reiniciando WSearch..." DarkGray
+        try { Restart-Service -Name WSearch -Force -ErrorAction Stop } catch { Start-Service -Name WSearch -ErrorAction SilentlyContinue }
+        Start-Sleep -Seconds 2
+        $svc = Get-Service -Name WSearch -ErrorAction SilentlyContinue
+        if ($svc -and $svc.Status -eq 'Running') { Write-Jarvis "WSearch em execução." Green }
+        else { $notes.Add("WSearch status: $($svc.Status)"); Write-Jarvis "WSearch não está 'Running' (Status: $($svc.Status))." Yellow }
+    } catch {
+        $success = $false; $notes.Add("Serviço WSearch erro: $($_.Exception.Message)")
+        Write-Jarvis "Erro ao ajustar WSearch: $($_.Exception.Message)" Red
+    }
+
+    # 3) Reconstrução de catálogo (opcional)
+    if ($RebuildCatalogOnYesPrompt) {
+        $doRebuild = Read-Host "Deseja reconstruir o catálogo de indexação (pode demorar)? (S/N)"
+        if ($doRebuild -in @('S','s')) {
+            try {
+                Write-Jarvis "Parando WSearch..." DarkGray
+                Stop-Service -Name WSearch -Force -ErrorAction SilentlyContinue
+                Start-Sleep -Seconds 2
+                $catPath = "C:\ProgramData\Microsoft\Search\Data\Applications\Windows"
+                if (Test-Path -LiteralPath $catPath) {
+                    Write-Jarvis "Limpando catálogo: $catPath" DarkGray
+                    Get-ChildItem -LiteralPath $catPath -Recurse -Force -ErrorAction SilentlyContinue |
+                        Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+                }
+                Write-Jarvis "Iniciando WSearch..." DarkGray
+                Start-Service -Name WSearch -ErrorAction SilentlyContinue
+                Start-Sleep -Seconds 2
+                $svc2 = Get-Service -Name WSearch -ErrorAction SilentlyContinue
+                if ($svc2 -and $svc2.Status -eq 'Running') { Write-Jarvis "Reconstrução iniciada." Green }
+                else { $notes.Add("Após rebuild, WSearch: $($svc2.Status)"); Write-Jarvis "WSearch não iniciou após rebuild (Status: $($svc2.Status))." Yellow }
+            } catch {
+                $success=$false; $notes.Add("Rebuild erro: $($_.Exception.Message)")
+                Write-Jarvis "Erro durante reconstrução: $($_.Exception.Message)" Red
+            }
+        } else {
+            Write-Jarvis "Reconstrução ignorada." DarkGray
+        }
+    }
+
+    if ($success) { Write-LogEntry -Level INFO -Message "[PESQUISA] Reparo finalizado com sucesso." }
+    else { Write-LogEntry -Level WARN -Message "[PESQUISA] Reparo finalizado com avisos/erros: $($notes -join ' | ')" }
+
+    [pscustomobject]@{
+        Success = $success
+        Notes   = $notes
+        Service = (Get-Service -Name WSearch -ErrorAction SilentlyContinue | Select-Object -Property Name, Status, StartType)
+    }
+}
+
 Export-ModuleMember -Function `
     Invoke-SFC, Invoke-DISM, Invoke-NetworkCorrections, `
-    Invoke-QuickClean, Invoke-FullClean, Invoke-OptimizeMemory
+    Invoke-QuickClean, Invoke-FullClean, Invoke-OptimizeMemory, `
+    Invoke-RepairSearchIndexer

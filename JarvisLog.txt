@@ -162,3 +162,52 @@ Check the spelling of the name, or if a path was included, verify that the path 
 [2025-10-22 13:11:26] [INFO] - Coleta de dados de services.psm1 concluída.
 [2025-10-22 13:11:27] [INFO] - Coleta de dados de hardware.psm1 concluída.
 [2025-10-22 13:11:27] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-27 12:16:17] [INFO] - Iniciando diagnóstico completo.
+[2025-10-27 12:16:19] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 12:16:35] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-10-27 12:16:36] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-27 12:16:36] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-27 12:16:37] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 12:16:37] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-27 13:19:32] [INFO] - Iniciando diagnóstico completo.
+[2025-10-27 13:19:34] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 13:19:49] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-10-27 13:19:50] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-27 13:19:58] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-27 13:19:59] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 13:20:01] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-27 13:20:01] [ERROR] - Erro fatal no diagnóstico: The property 'BugCheck154' cannot be found on this object. Verify that the property exists.
+[2025-10-27 14:51:58] [INFO] - Iniciando diagnóstico completo.
+[2025-10-27 14:52:01] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 14:52:24] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-10-27 14:52:26] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-27 14:52:38] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-27 14:52:40] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 14:52:43] [ERROR] - Falha na coleta de dados de services.psm1: The term 'Get-SearchIndexerStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-27 14:52:43] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-27 15:01:37] [INFO] - Iniciando diagnóstico completo.
+[2025-10-27 15:01:40] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 15:02:03] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-10-27 15:02:07] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-27 15:02:20] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-27 15:02:21] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 15:02:22] [ERROR] - Falha na coleta de dados de services.psm1: The term 'Get-SearchIndexerStatus' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2025-10-27 15:02:22] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-27 16:57:46] [INFO] - Iniciando diagnóstico completo.
+[2025-10-27 16:57:49] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 16:58:13] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-10-27 16:58:15] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-27 16:58:17] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-27 16:58:18] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 16:58:20] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-27 16:58:20] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-27 17:28:19] [INFO] - Iniciando diagnóstico completo.
+[2025-10-27 17:28:22] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 17:28:45] [INFO] - Coleta de dados de networking.psm1 concluída.
+[2025-10-27 17:28:46] [INFO] - Coleta de dados de events.psm1 concluída.
+[2025-10-27 17:28:47] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-27 17:28:48] [INFO] - Coleta de dados de hardware.psm1 concluída.
+[2025-10-27 17:28:53] [INFO] - Coleta de dados de services.psm1 concluída.
+[2025-10-27 17:28:53] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.

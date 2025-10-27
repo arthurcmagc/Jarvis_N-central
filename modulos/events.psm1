@@ -1,52 +1,93 @@
-﻿# Módulo de Eventos: Coleta e categoriza eventos críticos do sistema.
+﻿# events.psm1
+# Coleta eventos críticos/erros dos últimos 7 dias + bugcheck 154 (seguro) e garante shape estável.
 
-function Get-ExplicacaoPorID($id) {
-    switch ($id) {
-        41      { return "[ID 41] - Desligamento inesperado detectado. Pode indicar queda de energia, travamento ou falha crítica." }
-        55      { return "[ID 55] - Corrupção detectada no sistema de arquivos. Verifique integridade do disco com 'chkdsk'." }
-        1001    { return "[ID 1001] - Aplicativo apresentou erro. Pode afetar softwares específicos em uso." }
-        7031    { return "[ID 7031] - Serviço foi finalizado de forma inesperada. Pode causar falhas recorrentes." }
-        7024    { return "[ID 7024] - Serviço terminou com erro. Verificar dependências e integridade do serviço." }
-        7043    { return "[ID 7043] - Serviço não foi desligado corretamente. Pode indicar travamentos ou delays no sistema." }
-        10010   { return "[ID 10010] - DCOM não respondeu no tempo esperado. Pode impactar comunicação entre aplicativos." }
-        10016   { return "[ID 10016] - Permissões DCOM incorretas. Frequentemente não crítico, mas pode ser ajustado." }
-        7000    { return "[ID 7000] - Serviço não foi iniciado. Pode afetar funcionalidades esperadas pelo usuário." }
-        7001    { return "[ID 7001] - Serviço dependente falhou ao iniciar. Reavaliar serviços encadeados." }
-        Default { return $null }
-    }
+function Convert-TruncateString {
+    param(
+        [Parameter(Mandatory=$true)][string]$Text,
+        [int]$Max = 300
+    )
+    if ([string]::IsNullOrWhiteSpace($Text)) { return "" }
+    if ($Text.Length -le $Max) { return $Text }
+    return ($Text.Substring(0, $Max) + " ...")
 }
 
 function Get-CriticalEvents {
-    # Lista de IDs de eventos que consideramos relevantes para falhas e desempenho
-    $idsRelevantes = @(41, 55, 1001, 7031, 7024, 7043, 10010, 10016, 7000, 7001)
+    try {
+        $since = (Get-Date).AddDays(-7)
 
-    # Coleta todos os eventos de nível 1 (Crítico) e 2 (Erro) dos últimos 7 dias
-    $eventos = Get-WinEvent -FilterHashtable @{ LogName='System'; Level=@(1,2); StartTime=(Get-Date).AddDays(-7) } -ErrorAction SilentlyContinue
-
-    $relevantes = @()
-    $criticos = @()
-
-    foreach ($e in $eventos) {
-        $eventoObj = [pscustomobject]@{
-            TimeCreated = $e.TimeCreated.ToString("o")
-            Id = $e.Id
-            LevelDisplayName = $e.LevelDisplayName
-            Message = ($e.Message -split "`r`n")[0]
+        # Coleta básica (Critical + Error) de System e Application
+        $filter = @{
+            StartTime = $since
+            Level     = 1,2
+            LogName   = 'System','Application'
         }
-        
-        if ($idsRelevantes -contains $e.Id) {
-            $relevantes += $eventoObj
-        } else {
-            $criticos += $eventoObj
+
+        $raw = @()
+        try {
+            $raw = Get-WinEvent -FilterHashtable $filter -ErrorAction SilentlyContinue
+        } catch {}
+
+        # Converte para objetos simples
+        $eventsConverted = @()
+        foreach ($e in $raw) {
+            $eventsConverted += [pscustomobject]@{
+                Id           = $e.Id
+                ProviderName = $e.ProviderName
+                TimeCreated  = $e.TimeCreated
+                Message      = Convert-TruncateString -Text ($e.Message)
+            }
         }
-    }
-    
-    # Retorna um objeto que separa os eventos para análise posterior
-    return [pscustomobject]@{
-        TotalEventos = $eventos.Count
-        EventosRelevantes = $relevantes
-        EventosCriticos = $criticos
+
+        # Relevantes por ID
+        $relevantIDs = @(41,55,7031,7024,7043,7000,7001,1001,10010,10016)
+        $eventosRelevantes = @()
+        if ($eventsConverted) {
+            $eventosRelevantes = $eventsConverted | Where-Object { $relevantIDs -contains $_.Id }
+        }
+
+        # Demais críticos/erros
+        $eventosCriticos = @()
+        if ($eventsConverted) {
+            $eventosCriticos = $eventsConverted | Where-Object { $relevantIDs -notcontains $_.Id }
+        }
+
+        # Bugcheck 154: Event 1001 com "154" na mensagem
+        $bug154 = @()
+        try {
+            $bugFilter = @{ StartTime = $since; Id = 1001; LogName = 'System' }
+            $bugRaw = Get-WinEvent -FilterHashtable $bugFilter -ErrorAction SilentlyContinue
+            if ($bugRaw) {
+                foreach ($e in $bugRaw) {
+                    if ($e.Message -and $e.Message -match '\b154\b') {
+                        $bug154 += [pscustomobject]@{
+                            Id           = 1001
+                            ProviderName = $e.ProviderName
+                            TimeCreated  = $e.TimeCreated
+                            Message      = Convert-TruncateString -Text ($e.Message)
+                        }
+                    }
+                }
+            }
+        } catch {}
+
+        $result = [pscustomobject]@{
+            TotalEventos      = ($eventsConverted | Measure-Object).Count
+            EventosRelevantes = $eventosRelevantes
+            EventosCriticos   = $eventosCriticos
+            Events            = $eventsConverted
+            BugCheck154       = $bug154
+        }
+
+        # Shape estável
+        if (-not $result.PSObject.Properties.Match('BugCheck154'))       { $result | Add-Member -NotePropertyName 'BugCheck154'       -NotePropertyValue @() }
+        if (-not $result.PSObject.Properties.Match('EventosRelevantes')) { $result | Add-Member -NotePropertyName 'EventosRelevantes' -NotePropertyValue @() }
+        if (-not $result.PSObject.Properties.Match('EventosCriticos'))   { $result | Add-Member -NotePropertyName 'EventosCriticos'   -NotePropertyValue @() }
+        if (-not $result.PSObject.Properties.Match('Events'))            { $result | Add-Member -NotePropertyName 'Events'            -NotePropertyValue @() }
+
+        return $result
+    } catch {
+        return [pscustomobject]@{ Error = "Falha na coleta de eventos: $($_.Exception.Message)" }
     }
 }
 
-Export-ModuleMember -Function Get-CriticalEvents, Get-ExplicacaoPorID
+Export-ModuleMember -Function Get-CriticalEvents
