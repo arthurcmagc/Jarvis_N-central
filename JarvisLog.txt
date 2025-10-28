@@ -211,3 +211,5 @@ Check the spelling of the name, or if a path was included, verify that the path 
 [2025-10-27 17:28:48] [INFO] - Coleta de dados de hardware.psm1 concluída.
 [2025-10-27 17:28:53] [INFO] - Coleta de dados de services.psm1 concluída.
 [2025-10-27 17:28:53] [INFO] - Diagnóstico completo concluído com sucesso. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-10-28 17:43:51] [INFO] - Iniciando diagnóstico completo.
+[2025-10-28 17:43:53] [INFO] - Coleta de dados de hardware.psm1 concluída.
