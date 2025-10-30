@@ -1,4 +1,4 @@
-# automation.psm1
+﻿# automation.psm1
 # Módulo de Automação: Envia dados para um webhook.
 
 function Send-ToWebhook {

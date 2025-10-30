@@ -1,44 +1,31 @@
-﻿# menu.ps1
-# Assistente de Diagnóstico - Jarvis
+﻿# menu.ps1 — Assistente de Diagnóstico Jarvis (PS 5.1/7+)
 
 # =========================
 # Configuração do console
 # =========================
-$Host.UI.RawUI.WindowTitle = "Assistente de Diagnóstico - Jarvis"
-$Host.UI.RawUI.BufferSize  = New-Object System.Management.Automation.Host.Size(120, 9999)
-$Host.UI.RawUI.WindowSize  = New-Object System.Management.Automation.Host.Size(120, 40)
-
-# =========================
-# Caminhos
-# =========================
-$currentScriptPath    = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
-$diagnosticScriptPath = Join-Path -Path $currentScriptPath -ChildPath "diagnostic-v2.ps1"
-$logPath              = Join-Path -Path $currentScriptPath -ChildPath "output\status-maquina.json"
-$interpretationModulePath = Join-Path -Path $currentScriptPath -ChildPath "modulos\interpretation.psm1"
-$maintenanceModulePath    = Join-Path -Path $currentScriptPath -ChildPath "modulos\maintenance.psm1"
-$promptModulePath         = Join-Path -Path $currentScriptPath -ChildPath "modulos\promptbuilder.psm1"
-$servicesModulePath       = Join-Path -Path $currentScriptPath -ChildPath "modulos\services.psm1"
-
-# =========================
-# Importa módulos
-# =========================
 try {
-    Import-Module -Name $interpretationModulePath -Force
-    Import-Module -Name $maintenanceModulePath    -Force
-    Import-Module -Name $promptModulePath         -Force
-    Import-Module -Name $servicesModulePath       -Force
-}
-catch {
-    Write-Error "Falha ao carregar os módulos: $_" -ForegroundColor Red
-    exit
-}
+    $Host.UI.RawUI.WindowTitle = "Assistente de Diagnóstico - Jarvis"
+    $Host.UI.RawUI.BufferSize  = New-Object System.Management.Automation.Host.Size(120, 9999)
+    $Host.UI.RawUI.WindowSize  = New-Object System.Management.Automation.Host.Size(120, 40)
+} catch { }
 
 # =========================
-# Saída fixa de fallback (TXT)
+# Caminhos principais
+# =========================
+$ScriptRoot            = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
+$DiagnosticScriptPath  = Join-Path $ScriptRoot "diagnostic-v2.ps1"
+$LogJsonPath           = Join-Path $ScriptRoot "output\status-maquina.json"
+$InterpretationPath    = Join-Path $ScriptRoot "modulos\interpretation.psm1"
+$MaintenancePath       = Join-Path $ScriptRoot "modulos\maintenance.psm1"
+$PromptBuilderPath     = Join-Path $ScriptRoot "modulos\promptbuilder.psm1"
+
+# =========================
+# Pasta fixa (TXT persistente do prompt)
 # =========================
 $script:FixedOutputDir = 'C:\HealthCheck\Assistente Jarvis - Hype\Jarvis_N-central-main\output'
 
 function Save-PromptToFixedPath {
+    [CmdletBinding()]
     param([Parameter(Mandatory=$true)][string]$Text)
     try {
         if (-not (Test-Path -LiteralPath $script:FixedOutputDir)) {
@@ -54,10 +41,62 @@ function Save-PromptToFixedPath {
 }
 
 # =========================
-# Estado do Prompt (para fallback/visualização)
+# Helpers de import (com correção de NBSP)
 # =========================
-$script:LastPrompt      = $null
-$script:LastPromptPath  = $null
+function Convert-FileNbsp {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Path)
+    try {
+        if (-not (Test-Path -LiteralPath $Path)) { return }
+        $raw   = Get-Content -Raw -Path $Path -Encoding Byte
+        if (-not $raw) { return }
+        $fixed = [byte[]]($raw | ForEach-Object { if ($_ -eq 0xA0) { 0x20 } else { $_ } })
+        if ($raw.Length -ne $fixed.Length) { return }
+        for ($i=0; $i -lt $raw.Length; $i++) {
+            if ($raw[$i] -ne $fixed[$i]) { [IO.File]::WriteAllBytes($Path, $fixed); break }
+        }
+    } catch { }
+}
+
+function Import-ModuleSafe {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [switch]$RepairNbspFirst
+    )
+    try {
+        if ($RepairNbspFirst) { Convert-FileNbsp -Path $Path }
+        Import-Module -Name $Path -Force -ErrorAction Stop
+        return $true
+    } catch {
+        Write-Host "Falha ao importar módulo: $Path" -ForegroundColor Red
+        Write-Host "Detalhes: $($_.Exception.Message)" -ForegroundColor DarkYellow
+        return $false
+    }
+}
+
+# =========================
+# Import de módulos
+# =========================
+$okInterp  = Import-ModuleSafe -Path $InterpretationPath -RepairNbspFirst
+$okMaint   = Import-ModuleSafe -Path $MaintenancePath   -RepairNbspFirst
+$okPrompt  = Import-ModuleSafe -Path $PromptBuilderPath -RepairNbspFirst
+
+if (-not $okInterp) {
+    Write-Host "ATENÇÃO: interpretation.psm1 não foi importado. Relatório formatado pode não abrir." -ForegroundColor Yellow
+}
+if (-not $okMaint) {
+    Write-Host "ATENÇÃO: maintenance.psm1 não foi importado. Correções podem não funcionar." -ForegroundColor Yellow
+}
+if (-not $okPrompt) {
+    Write-Host "ATENÇÃO: promptbuilder.psm1 não foi importado. O Prompt Inteligente pode não funcionar." -ForegroundColor Yellow
+}
+
+# =========================
+# Estado do Prompt (memória da sessão)
+# =========================
+$script:LastPrompt     = $null
+$script:LastPromptPath = $null
 
 # =========================
 # Helpers Sessão/Entrada
@@ -69,17 +108,16 @@ function Test-InteractiveSession {
 }
 
 function Get-UserSymptom {
+    [CmdletBinding()]
     param([string]$Title = "Jarvis - Sintoma do Usuário")
-
     if (Test-InteractiveSession) {
         try {
             Add-Type -AssemblyName Microsoft.VisualBasic -ErrorAction Stop
             $message = "Informe brevemente o sintoma (ex.: lentidão ao iniciar, falha na internet, travamentos...)."
             $val = [Microsoft.VisualBasic.Interaction]::InputBox($message, $Title, "")
             if ($null -ne $val -and $val.Trim().Length -gt 0) { return $val }
-        } catch {}
+        } catch { }
     }
-
     Write-Host ""
     Write-Host "[IA] Digite o sintoma do usuário e pressione ENTER:" -ForegroundColor Cyan
     $v = Read-Host "Sintoma"
@@ -88,9 +126,10 @@ function Get-UserSymptom {
 }
 
 # =========================
-# Clipboard resiliente (Approved Verb)
+# Clipboard resiliente
 # =========================
 function Set-ClipboardSafe {
+    [CmdletBinding()]
     param([Parameter(Mandatory=$true)][string]$Text)
 
     try {
@@ -133,21 +172,12 @@ function Set-ClipboardSafe {
 # Prompt Inteligente
 # =========================
 function Invoke-IntelligentPrompt {
+    [CmdletBinding()]
     param([string]$JsonPath)
 
     Write-Host "Gerando Prompt Inteligente..." -ForegroundColor Cyan
 
     $isInteractive = Test-InteractiveSession
-    if ($isInteractive) {
-        Write-Host "[Cenário detectado] PowerShell com acesso à área de trabalho do usuário." -ForegroundColor Green
-    } else {
-        Write-Host "[Cenário detectado] Sessão sem desktop interativo (System Shell/Command Prompt)." -ForegroundColor Yellow
-        Write-Host "  - Clipboard e abertura automática do navegador podem não funcionar aqui." -ForegroundColor DarkYellow
-        Write-Host "  - O prompt SERÁ salvo em TXT no caminho persistente para você copiar manualmente." -ForegroundColor DarkYellow
-        Write-Host "    Caminho: $script:FixedOutputDir" -ForegroundColor DarkYellow
-        Write-Host ""
-    }
-
     if (-not (Test-Path $JsonPath)) {
         Write-Host "[ERRO] Arquivo JSON não encontrado em: $JsonPath" -ForegroundColor Red
         return
@@ -162,83 +192,78 @@ function Invoke-IntelligentPrompt {
 
         $data = Get-Content $JsonPath -Raw | ConvertFrom-Json
 
+        # Amostra de logs — tenta campos comuns do JSON gerado
         $logs = @()
         if ($null -ne $data.EventosCriticos) {
             if     ($data.EventosCriticos.Events)            { $logs = @($data.EventosCriticos.Events) }
             elseif ($data.EventosCriticos.EventosRelevantes) { $logs = @($data.EventosCriticos.EventosRelevantes) }
             elseif ($data.EventosCriticos.EventosCriticos)   { $logs = @($data.EventosCriticos.EventosCriticos) }
+        } elseif ($null -ne $data.Dados -and $null -ne $data.Dados.Eventos) {
+            # Se o formato “novo” tiver uma área consolidada
+            $logs = @($data.Dados.Eventos.RelevantesSugeridos)
+        }
+
+        if (-not (Get-Command Build-IntelligentPrompt -ErrorAction SilentlyContinue)) {
+            Write-Host "❌ Função 'Build-IntelligentPrompt' não disponível (promptbuilder.psm1?)." -ForegroundColor Red
+            return
         }
 
         $prompt = Build-IntelligentPrompt -AllLogs $logs -UserSymptom $UserSymptom -TargetTokenBudget 2200
 
-        $script:LastPrompt = $prompt
+        # Guarda na sessão
+        $script:LastPrompt     = $prompt
         $script:LastPromptPath = $null
 
-        $fixedPath = $null
-        if (-not $isInteractive) {
-            $fixedPath = Save-PromptToFixedPath -Text $prompt
-            if ($fixedPath) {
-                $script:LastPromptPath = $fixedPath
-                Write-Host "📄 Prompt salvo para cópia manual:" -ForegroundColor Yellow
-                Write-Host "  $fixedPath" -ForegroundColor Cyan
+        # SEMPRE salva cópia persistente (System Shell / auditoria)
+        $fixedPath = Save-PromptToFixedPath -Text $prompt
+        if ($fixedPath) {
+            $script:LastPromptPath = $fixedPath
+            Write-Host "📄 Prompt salvo em:" -ForegroundColor Yellow
+            Write-Host "  $fixedPath" -ForegroundColor Cyan
+        } else {
+            Write-Host "⚠️ Falha ao salvar cópia persistente em $($script:FixedOutputDir)" -ForegroundColor Yellow
+        }
+
+        # Tenta copiar clipboard (interativo)
+        $copied = $false
+        if ($isInteractive) {
+            $copy = Set-ClipboardSafe -Text $prompt
+            if ($copy.Copied) {
+                $copied = $true
+                Write-Host "✅ Prompt copiado para a área de transferência! ($($copy.Method))" -ForegroundColor Green
             } else {
-                Write-Host "Falha ao salvar no caminho persistente." -ForegroundColor Red
+                Write-Host "⚠️ Não foi possível copiar automaticamente para o clipboard." -ForegroundColor Yellow
             }
+        } else {
+            Write-Host "[Aviso] Sessão não interativa: clipboard e abertura automática do navegador podem falhar." -ForegroundColor DarkYellow
         }
 
-        $copy = Set-ClipboardSafe -Text $prompt
-
-        if ($copy.Copied -and $isInteractive) {
-            Write-Host "✅ Prompt copiado para a área de transferência! ($($copy.Method))" -ForegroundColor Green
-        } elseif ($isInteractive -and -not $copy.Copied) {
-            Write-Host "⚠️ Não foi possível copiar automaticamente para o clipboard." -ForegroundColor Yellow
-
-            if ($copy.Path) {
-                $script:LastPromptPath = $copy.Path
-                Write-Host "O prompt foi salvo temporariamente em:" -ForegroundColor Yellow
-                Write-Host "  $($copy.Path)" -ForegroundColor Cyan
-            }
-
-            if (-not $fixedPath) {
-                $fixedPath = Save-PromptToFixedPath -Text $prompt
-                if ($fixedPath) {
-                    $script:LastPromptPath = $fixedPath
-                    Write-Host "Cópia persistente gravada em:" -ForegroundColor Yellow
-                    Write-Host "  $fixedPath" -ForegroundColor Cyan
-                }
-            }
-        }
-
+        # Tenta abrir o ChatGPT (interativo)
         $url = "https://chat.openai.com/?model=gpt-5"
         $opened = $false
-
         if ($isInteractive) {
-            try {
-                Start-Process $url -ErrorAction Stop
-                $opened = $true
-            } catch {
+            try { Start-Process $url -ErrorAction Stop; $opened = $true }
+            catch {
                 if     (Get-Command "msedge.exe"  -ErrorAction SilentlyContinue) { Start-Process "msedge.exe"  $url; $opened = $true }
                 elseif (Get-Command "chrome.exe"  -ErrorAction SilentlyContinue) { Start-Process "chrome.exe"  $url; $opened = $true }
                 elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) { Start-Process "firefox.exe" $url; $opened = $true }
             }
         }
 
-        if (-not $opened) {
+        if ($opened) {
+            Write-Host "`nCole (CTRL+V) no ChatGPT e gere o relatório técnico." -ForegroundColor Cyan
+        } else {
             Write-Host ""
-            if ($isInteractive -and $copy.Copied) {
-                Write-Host "Abra o link no navegador e cole o conteúdo do seu clipboard (CTRL+V):" -ForegroundColor Yellow
-            } elseif (-not $isInteractive) {
-                Write-Host "Abra o link no navegador e cole o conteúdo do arquivo TXT salvo no caminho indicado acima." -ForegroundColor Yellow
-                Write-Host "Ex.: Abra o arquivo, CTRL+A / CTRL+C, e cole no ChatGPT." -ForegroundColor DarkYellow
+            Write-Host "Abra o link no navegador e cole o conteúdo:" -ForegroundColor Yellow
+            if ($copied) {
+                Write-Host " - Do seu clipboard (CTRL+V)" -ForegroundColor DarkYellow
             } else {
-                Write-Host "Abra o link no navegador e cole o conteúdo do arquivo/prompt indicado acima." -ForegroundColor Yellow
+                Write-Host " - Do arquivo salvo em: $script:LastPromptPath" -ForegroundColor DarkYellow
             }
             Write-Host "  $url" -ForegroundColor Cyan
             Write-Host ""
             Write-Host "Dica: Você também pode visualizar o texto do prompt em:" -ForegroundColor DarkGray
             Write-Host "  Menu [2] > Ver Prompt Inteligente (texto)" -ForegroundColor DarkGray
-        } else {
-            Write-Host "`nCole (CTRL+V) no ChatGPT e gere o relatório técnico." -ForegroundColor Cyan
         }
     }
     catch {
@@ -250,25 +275,37 @@ function Invoke-IntelligentPrompt {
 # Sugestão final (fabricante)
 # =========================
 function Show-JarvisFinalSuggestion {
+    [CmdletBinding()]
     param([string]$JsonPath)
     if (-not (Test-Path $JsonPath)) { return }
     try {
         $data = Get-Content $JsonPath -Raw | ConvertFrom-Json
         $windowWidth = $Host.UI.RawUI.WindowSize.Width
         Write-Host "`n" + ("=" * $windowWidth) -ForegroundColor Cyan
-        $manufacturer = $data.Fabricante.Manufacturer
-        if ($manufacturer) {
-            Write-Host "[JARVIS] " -NoNewline -ForegroundColor Blue
+        $manufacturer = $null
+        if ($data.Fabricante -and $data.Fabricante.Manufacturer) { $manufacturer = $data.Fabricante.Manufacturer }
+        elseif ($data.Dados -and $data.Dados.Fabricante -and $data.Dados.Fabricante.Manufacturer) { $manufacturer = $data.Dados.Fabricante.Manufacturer }
+
+        Write-Host "[JARVIS] " -NoNewline -ForegroundColor Blue
+        if ($manufacturer -and (Get-Command Get-ManufacturerSoftwareSuggestion -ErrorAction SilentlyContinue)) {
             $suggestion = Get-ManufacturerSoftwareSuggestion -Manufacturer $manufacturer
-            Write-TypingFormattedText -Text $suggestion -Delay 10 -ForegroundColor White -LineWidth ($windowWidth-4) -Indent "          "
-        }
-        else {
-            Write-Host "[JARVIS] Sugestão de Software do Fabricante:" -ForegroundColor Blue
-            Write-Host "Não foi possível identificar o fabricante." -ForegroundColor Yellow
+            if ($suggestion) {
+                if (Get-Command Write-TypingFormattedText -ErrorAction SilentlyContinue) {
+                    Write-TypingFormattedText -Text $suggestion -Delay 10 -ForegroundColor White -LineWidth ($windowWidth-4) -Indent "          "
+                } else {
+                    Write-Host $suggestion -ForegroundColor White
+                }
+            } else {
+                Write-Host "Sugestão de Software do Fabricante: Não foi possível identificar o fabricante." -ForegroundColor Yellow
+            }
+        } else {
+            Write-Host "Sugestão de Software do Fabricante: Não foi possível identificar o fabricante." -ForegroundColor Yellow
         }
         Write-Host ("=" * $windowWidth) -ForegroundColor Cyan
     }
-    catch { Write-Host "[ERRO] Falha ao exibir a sugestão do Jarvis: $($_.Exception.Message)" -ForegroundColor Red }
+    catch {
+        Write-Host "[ERRO] Falha ao exibir a sugestão do Jarvis: $($_.Exception.Message)" -ForegroundColor Red
+    }
 }
 
 # =========================
@@ -308,15 +345,104 @@ function Show-LastPromptText {
 }
 
 # =========================
+# Menu de relatórios
+# =========================
+function Show-ReportsMenu {
+    $inReports = $true
+    while ($inReports) {
+        Clear-Host
+        Write-Host "=================================================" -ForegroundColor Cyan
+        Write-Host "      Visualizar Relatórios" -ForegroundColor Cyan
+        Write-Host "=================================================" -ForegroundColor Cyan
+        Write-Host ""
+        Write-Host "[1] Ver Relatório Formatado" -ForegroundColor White
+        Write-Host "[2] Ver JSON Completo" -ForegroundColor White
+        Write-Host "[3] Ver Prompt Inteligente (texto)" -ForegroundColor White
+        Write-Host "[4] Voltar" -ForegroundColor White
+        Write-Host "`n=================================================" -ForegroundColor Cyan
+
+        $submenu = Read-Host "`nEscolha uma opção (1-4)"
+        switch ($submenu) {
+            "1" {
+                if (Get-Command Start-DiagnosticAnalysis -ErrorAction SilentlyContinue) {
+                    Start-DiagnosticAnalysis -JsonPath $LogJsonPath
+                } else {
+                    Write-Host "Módulo de interpretação não disponível." -ForegroundColor Red
+                }
+                Read-Host "`nPressione ENTER para continuar"
+            }
+            "2" {
+                Clear-Host
+                if (Test-Path -LiteralPath $LogJsonPath) {
+                    try { Get-Content -Raw -Path $LogJsonPath | Write-Host -ForegroundColor Gray }
+                    catch { Write-Host "Falha ao ler JSON: $($_.Exception.Message)" -ForegroundColor Red }
+                } else {
+                    Write-Host "Arquivo não encontrado: $LogJsonPath" -ForegroundColor Yellow
+                }
+                Read-Host "`nPressione ENTER para continuar"
+            }
+            "3" { Clear-Host; Show-LastPromptText; Read-Host "`nPressione ENTER para continuar" }
+            "4" { $inReports = $false }
+            default { Write-Host "Opção inválida." -ForegroundColor Red; Start-Sleep 2 }
+        }
+    }
+}
+
+# =========================
+# Menu de correções
+# =========================
+function Show-FixesMenu {
+    $inFixes = $true
+    while ($inFixes) {
+        Clear-Host
+        Write-Host "=================================================" -ForegroundColor Cyan
+        Write-Host "      Executar Correções Automáticas" -ForegroundColor Cyan
+        Write-Host "=================================================" -ForegroundColor Cyan
+        Write-Host ""
+        Write-Host "[1] Executar SFC" -ForegroundColor White
+        Write-Host "[2] Executar DISM" -ForegroundColor White
+        Write-Host "[3] Correções de Rede" -ForegroundColor White
+        Write-Host "[4] Limpeza Completa" -ForegroundColor White
+        Write-Host "[5] Otimização Inteligente (RAM + Limpeza Rápida)" -ForegroundColor White
+        Write-Host "[6] Limpeza Rápida (TEMP/Lixeira/WU Download)" -ForegroundColor White
+        Write-Host "[7] Reparo do Indexador (WSearch)" -ForegroundColor White
+        Write-Host "[8] Voltar" -ForegroundColor White
+        Write-Host "`n=================================================" -ForegroundColor Cyan
+
+        $fx = Read-Host "`nEscolha uma opção (1-8)"
+        switch ($fx) {
+            "1" { if (Get-Command Invoke-SFC               -ErrorAction SilentlyContinue) { Invoke-SFC } else { Write-Host "Invoke-SFC indisponível."               -ForegroundColor Yellow }; Read-Host "`nPressione ENTER para voltar" }
+            "2" { if (Get-Command Invoke-DISM              -ErrorAction SilentlyContinue) { Invoke-DISM } else { Write-Host "Invoke-DISM indisponível."              -ForegroundColor Yellow }; Read-Host "`nPressione ENTER para voltar" }
+            "3" { if (Get-Command Invoke-NetworkCorrections-ErrorAction SilentlyContinue) { Invoke-NetworkCorrections } else { Write-Host "Invoke-NetworkCorrections indisponível." -ForegroundColor Yellow }; Read-Host "`nPressione ENTER para voltar" }
+            "4" { if (Get-Command Invoke-FullClean         -ErrorAction SilentlyContinue) { Invoke-FullClean } else { Write-Host "Invoke-FullClean indisponível."       -ForegroundColor Yellow }; Read-Host "`nPressione ENTER para voltar" }
+            "5" {
+                if (Get-Command Invoke-OptimizeMemory -ErrorAction SilentlyContinue) { Invoke-OptimizeMemory } else { Write-Host "Invoke-OptimizeMemory indisponível." -ForegroundColor Yellow }
+                if (Get-Command Invoke-QuickClean     -ErrorAction SilentlyContinue) { Invoke-QuickClean     } else { Write-Host "Invoke-QuickClean indisponível."     -ForegroundColor Yellow }
+                Read-Host "`nPressione ENTER para voltar"
+            }
+            "6" { if (Get-Command Invoke-QuickClean -ErrorAction SilentlyContinue) { Invoke-QuickClean } else { Write-Host "Invoke-QuickClean indisponível." -ForegroundColor Yellow }; Read-Host "`nPressione ENTER para voltar" }
+            "7" {
+                if (Get-Command Invoke-RepairSearchIndexer -ErrorAction SilentlyContinue) {
+                    try { Invoke-RepairSearchIndexer -RebuildCatalogOnYesPrompt } catch { Write-Host "❌ Falha no reparo: $($_.Exception.Message)" -ForegroundColor Red }
+                } else { Write-Host "Função Invoke-RepairSearchIndexer indisponível." -ForegroundColor Yellow }
+                Read-Host "`nPressione ENTER para voltar"
+            }
+            "8" { $inFixes = $false }
+            default { Write-Host "Opção inválida." -ForegroundColor Red; Start-Sleep 2 }
+        }
+    }
+}
+
+# =========================
 # MENU PRINCIPAL
 # =========================
 while ($true) {
     Clear-Host
     Write-Host "=================================================" -ForegroundColor Cyan
     Write-Host "      Assistente de Diagnóstico Jarvis" -ForegroundColor White
-    Write-Host "      Data: $(Get-Date -Format 'dd/MM/yyyy HH:mm')" -ForegroundColor DarkGray
+    Write-Host ("      Data: {0}" -f (Get-Date -Format 'dd/MM/yyyy HH:mm')) -ForegroundColor DarkGray
     Write-Host "=================================================" -ForegroundColor Cyan
-    Write-Host "`n"
+    Write-Host ""
     Write-Host "[1] Executar Diagnóstico Completo" -ForegroundColor White
     Write-Host "[2] Visualizar Relatórios" -ForegroundColor White
     Write-Host "[3] Menu de Correções" -ForegroundColor White
@@ -325,109 +451,38 @@ while ($true) {
     Write-Host "`n=================================================" -ForegroundColor Cyan
 
     $opcao = Read-Host "`nEscolha uma opção (1-5)"
-
     switch ($opcao) {
         "1" {
             Clear-Host
             Write-Host "ANÁLISE DO DIAGNÓSTICO" -ForegroundColor Cyan
-            Write-Host "Analisando sistema '$(hostname)' em $(Get-Date -Format 'dd/MM/yyyy HH:mm')" -ForegroundColor White
-            Write-Host "`n"
-            try { & $diagnosticScriptPath; Show-JarvisFinalSuggestion -JsonPath $logPath }
-            catch { Write-Error "Falha no diagnóstico: $_" -ForegroundColor Red }
+            Write-Host ("Analisando sistema '{0}' em {1}" -f (hostname), (Get-Date -Format 'dd/MM/yyyy HH:mm')) -ForegroundColor White
+            Write-Host ""
+            try {
+                & $DiagnosticScriptPath
+                Show-JarvisFinalSuggestion -JsonPath $LogJsonPath
+            } catch {
+                Write-Host ("Falha no diagnóstico: {0}" -f $_) -ForegroundColor Red
+            }
             Read-Host "`nPressione ENTER para voltar ao menu"
         }
-        "2" {
-            $inSubmenuRelatorios = $true
-            while ($inSubmenuRelatorios) {
-                Clear-Host
-                Write-Host "=================================================" -ForegroundColor Cyan
-                Write-Host "      Visualizar Relatórios" -ForegroundColor Cyan
-                Write-Host "=================================================" -ForegroundColor Cyan
-                Write-Host "`n[1] Ver Relatório Formatado" -ForegroundColor White
-                Write-Host "[2] Ver JSON Completo" -ForegroundColor White
-                Write-Host "[3] Ver Prompt Inteligente (texto)" -ForegroundColor White
-                Write-Host "[4] Voltar" -ForegroundColor White
-                Write-Host "`n=================================================" -ForegroundColor Cyan
-                $submenuOpcao = Read-Host "`nEscolha uma opção (1-4)"
-                switch ($submenuOpcao) {
-                    "1" { Start-DiagnosticAnalysis -JsonPath $logPath; Read-Host "`nPressione ENTER para continuar" }
-                    "2" { Clear-Host; Get-Content $logPath -Raw | Write-Host -ForegroundColor Gray; Read-Host "`nPressione ENTER para continuar" }
-                    "3" { Clear-Host; Show-LastPromptText; Read-Host "`nPressione ENTER para continuar" }
-                    "4" { $inSubmenuRelatorios = $false }
-                    default { Write-Host "Opção inválida." -ForegroundColor Red; Start-Sleep 2 }
-                }
-            }
+        "2" { Show-ReportsMenu }
+        "3" { Show-FixesMenu }
+        "4" {
+            Invoke-IntelligentPrompt -JsonPath $LogJsonPath
+            Read-Host "`nPressione ENTER para voltar ao menu"
         }
-        "3" {
-            # Submenu de correções (Limpeza Rápida removida; incorporada na opção 5)
-            $inSubmenuCorrecoes = $true
-            while ($inSubmenuCorrecoes) {
-                Clear-Host
-                Write-Host "=================================================" -ForegroundColor Cyan
-                Write-Host "      Executar Correções Automáticas" -ForegroundColor Cyan
-                Write-Host "=================================================" -ForegroundColor Cyan
-                Write-Host "`n[1] Executar SFC" -ForegroundColor White
-                Write-Host "[2] Executar DISM" -ForegroundColor White
-                Write-Host "[3] Correções de Rede" -ForegroundColor White
-                Write-Host "[4] Limpeza Completa" -ForegroundColor White
-                Write-Host "[5] Otimização Inteligente (RAM + Limpeza Rápida)" -ForegroundColor White
-                Write-Host "[6] Corrigir Indexador de Pesquisa (WSearch)" -ForegroundColor White
-                Write-Host "[7] Voltar" -ForegroundColor White
-                Write-Host "`n=================================================" -ForegroundColor Cyan
-
-                $correcoesOpcao = Read-Host "`nEscolha uma opção (1-7)"
-                switch ($correcoesOpcao) {
-                    "1" { Invoke-SFC; Read-Host "`nPressione ENTER para voltar" }
-                    "2" { Invoke-DISM; Read-Host "`nPressione ENTER para voltar" }
-                    "3" { Invoke-NetworkCorrections; Read-Host "`nPressione ENTER para voltar" }
-                    "4" { Invoke-FullClean; Read-Host "`nPressione ENTER para voltar" }
-                    "5" {
-                        # Otimização de RAM + Limpeza Rápida (incorporada)
-                        Invoke-OptimizeMemory
-                        Invoke-QuickClean
-                        Read-Host "`nPressione ENTER para voltar"
-                    }
-                    "6" {
-                        # Garante a função presente (import on-demand, se necessário)
-                        if (-not (Get-Command Repair-SearchIndexer -ErrorAction SilentlyContinue)) {
-                            try { Import-Module -Name $servicesModulePath -Force -ErrorAction Stop } catch {}
-                        }
-                        if (-not (Get-Command Repair-SearchIndexer -ErrorAction SilentlyContinue)) {
-                            Write-Host "❌ O módulo 'services.psm1' não está disponível ou a função 'Repair-SearchIndexer' não foi exportada." -ForegroundColor Red
-                            Write-Host "Verifique se o arquivo existe em: $servicesModulePath" -ForegroundColor Yellow
-                            Read-Host "`nPressione ENTER para voltar"
-                            break
-                        }
-
-                        Write-Host "Corrigindo Indexador de Pesquisa (WSearch)..." -ForegroundColor Cyan
-                        try {
-                            $rep = Repair-SearchIndexer
-                            if ($rep.Report) { $rep.Report | ForEach-Object { Write-Host "  $_" -ForegroundColor DarkGray } }
-
-                            if ($rep.Skipped) {
-                                Write-Host "✅ Indexador já está saudável. Nenhuma ação aplicada." -ForegroundColor Green
-                            } elseif ($rep.Success) {
-                                Write-Host "✅ Indexador OK (serviço em execução e recurso habilitado)" -ForegroundColor Green
-                            } else {
-                                Write-Host "⚠️ Não foi possível validar 100%. Status:" -ForegroundColor Yellow
-                                ($rep.Status | Format-List | Out-String).Trim() | Write-Host -ForegroundColor Yellow
-                            }
-                        } catch {
-                            Write-Host "❌ Falha ao executar a correção: $($_.Exception.Message)" -ForegroundColor Red
-                        }
-                        Read-Host "`nPressione ENTER para voltar"
-                    }
-                    "7" { $inSubmenuCorrecoes = $false }
-                    default { Write-Host "Opção inválida." -ForegroundColor Red; Start-Sleep 2 }
-                }
-            }
-        }
-        "4" { Invoke-IntelligentPrompt -JsonPath $logPath; Read-Host "`nPressione ENTER para voltar ao menu" }
         "5" {
-            Write-Host "`n[JARVIS]" -ForegroundColor Blue
-            Write-TypingFormattedText -Text "Encerrando operações..." -Delay 10 -ForegroundColor White -LineWidth 120
-            Start-Sleep 1
-            Write-TypingFormattedText -Text "Procedimentos finalizados. Permanecerei em standby até a próxima missão." -Delay 10 -ForegroundColor White -LineWidth 120
+            Write-Host ""
+            Write-Host "[JARVIS]" -ForegroundColor Blue
+            if (Get-Command Write-TypingFormattedText -ErrorAction SilentlyContinue) {
+                Write-TypingFormattedText -Text "Encerrando operações..." -Delay 10 -ForegroundColor White -LineWidth 120
+                Start-Sleep 1
+                Write-TypingFormattedText -Text "Procedimentos finalizados. Permanecerei em standby até a próxima missão." -Delay 10 -ForegroundColor White -LineWidth 120
+            } else {
+                Write-Host "Encerrando operações..." -ForegroundColor White
+                Start-Sleep 1
+                Write-Host "Procedimentos finalizados. Permanecerei em standby até a próxima missão." -ForegroundColor White
+            }
             Start-Sleep 1
             exit
         }

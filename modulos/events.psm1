@@ -1,92 +1,100 @@
 ﻿# events.psm1
-# Coleta eventos críticos/erros dos últimos 7 dias + bugcheck 154 (seguro) e garante shape estável.
+# -----------------------------------------------------------------------------
+# Get-CriticalEvents
+#   - Compatível PS 5.1/7+
+#   - Shape idêntico ao "backup":
+#     {
+#       "TotalEventos":  <int>,
+#       "EventosRelevantes": [ {TimeCreated, Id, LevelDisplayName, Message}, ... ],
+#       "EventosCriticos":   [ {TimeCreated, Id, LevelDisplayName, Message}, ... ]
+#     }
+# -----------------------------------------------------------------------------
 
-function Convert-TruncateString {
+function Get-SafeWinEvents {
+    [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)][string]$Text,
-        [int]$Max = 300
+        [Parameter(Mandatory=$true)][datetime]$StartTime,
+        [Parameter(Mandatory=$true)][int[]]$Levels,          # 1=Critical, 2=Error
+        [Parameter(Mandatory=$true)][string[]]$Logs,
+        [int]$MaxToFetch = 2000
     )
-    if ([string]::IsNullOrWhiteSpace($Text)) { return "" }
-    if ($Text.Length -le $Max) { return $Text }
-    return ($Text.Substring(0, $Max) + " ...")
+    try {
+        $filter = @{
+            LogName   = $Logs
+            Level     = $Levels
+            StartTime = $StartTime
+        }
+        $ev = Get-WinEvent -FilterHashtable $filter -ErrorAction Stop |
+              Select-Object -First $MaxToFetch -Property Id, LevelDisplayName, TimeCreated, Message
+        return @($ev)
+    } catch {
+        return @()
+    }
+}
+
+function Convert-ToSimpleEvent {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true)]$InputEvent
+    )
+    [pscustomobject]@{
+        TimeCreated      = $InputEvent.TimeCreated
+        Id               = $InputEvent.Id
+        LevelDisplayName = $InputEvent.LevelDisplayName
+        Message          = $InputEvent.Message
+    }
 }
 
 function Get-CriticalEvents {
-    try {
-        $since = (Get-Date).AddDays(-7)
+    [CmdletBinding()]
+    param(
+        [int]$Days = 7,
+        [int]$MaxEventosLista = 30,       # limite para EventosCriticos
+        [int]$MaxRelevantesLista = 30     # limite para EventosRelevantes
+    )
 
-        # Coleta básica (Critical + Error) de System e Application
-        $filter = @{
-            StartTime = $since
-            Level     = 1,2
-            LogName   = 'System','Application'
+    $since = (Get-Date).AddDays(-[math]::Abs($Days))
+    $logs  = @('System','Application')
+    $lvls  = @(1,2)   # Critical (1) e Error (2)
+
+    $events = Get-SafeWinEvents -StartTime $since -Levels $lvls -Logs $logs -MaxToFetch 5000
+    $totalEventos = @($events).Count
+
+    # Ordena do mais novo para o mais antigo
+    $ordered = $events | Sort-Object -Property TimeCreated -Descending
+
+    # IDs “relevantes” para destacar
+    $relevantIds = @(
+        10010, # DCOM timeout/permissões
+        10016, # DCOM permissions
+        7009,  # Timeout de serviço
+        7023,  # Serviço terminou com erro
+        10005, # DCOM failed to start service
+        11,    # erros diversos (conforme origem)
+        20,    # Windows Update/Setup
+        21,    # Windows Update/Setup
+        1801   # Secure Boot/keys
+    )
+
+    # Monta listas com limites
+    $eventosRelevantes = @()
+    foreach ($e in $ordered) {
+        if ($eventosRelevantes.Count -ge $MaxRelevantesLista) { break }
+        foreach ($rid in $relevantIds) {
+            if ($e.Id -eq $rid) { $eventosRelevantes += (Convert-ToSimpleEvent -InputEvent $e); break }
         }
+    }
 
-        $raw = @()
-        try {
-            $raw = Get-WinEvent -FilterHashtable $filter -ErrorAction SilentlyContinue
-        } catch {}
+    $eventosCriticos = @()
+    foreach ($e in $ordered) {
+        if ($eventosCriticos.Count -ge $MaxEventosLista) { break }
+        $eventosCriticos += (Convert-ToSimpleEvent -InputEvent $e)
+    }
 
-        # Converte para objetos simples
-        $eventsConverted = @()
-        foreach ($e in $raw) {
-            $eventsConverted += [pscustomobject]@{
-                Id           = $e.Id
-                ProviderName = $e.ProviderName
-                TimeCreated  = $e.TimeCreated
-                Message      = Convert-TruncateString -Text ($e.Message)
-            }
-        }
-
-        # Relevantes por ID
-        $relevantIDs = @(41,55,7031,7024,7043,7000,7001,1001,10010,10016)
-        $eventosRelevantes = @()
-        if ($eventsConverted) {
-            $eventosRelevantes = $eventsConverted | Where-Object { $relevantIDs -contains $_.Id }
-        }
-
-        # Demais críticos/erros
-        $eventosCriticos = @()
-        if ($eventsConverted) {
-            $eventosCriticos = $eventsConverted | Where-Object { $relevantIDs -notcontains $_.Id }
-        }
-
-        # Bugcheck 154: Event 1001 com "154" na mensagem
-        $bug154 = @()
-        try {
-            $bugFilter = @{ StartTime = $since; Id = 1001; LogName = 'System' }
-            $bugRaw = Get-WinEvent -FilterHashtable $bugFilter -ErrorAction SilentlyContinue
-            if ($bugRaw) {
-                foreach ($e in $bugRaw) {
-                    if ($e.Message -and $e.Message -match '\b154\b') {
-                        $bug154 += [pscustomobject]@{
-                            Id           = 1001
-                            ProviderName = $e.ProviderName
-                            TimeCreated  = $e.TimeCreated
-                            Message      = Convert-TruncateString -Text ($e.Message)
-                        }
-                    }
-                }
-            }
-        } catch {}
-
-        $result = [pscustomobject]@{
-            TotalEventos      = ($eventsConverted | Measure-Object).Count
-            EventosRelevantes = $eventosRelevantes
-            EventosCriticos   = $eventosCriticos
-            Events            = $eventsConverted
-            BugCheck154       = $bug154
-        }
-
-        # Shape estável
-        if (-not $result.PSObject.Properties.Match('BugCheck154'))       { $result | Add-Member -NotePropertyName 'BugCheck154'       -NotePropertyValue @() }
-        if (-not $result.PSObject.Properties.Match('EventosRelevantes')) { $result | Add-Member -NotePropertyName 'EventosRelevantes' -NotePropertyValue @() }
-        if (-not $result.PSObject.Properties.Match('EventosCriticos'))   { $result | Add-Member -NotePropertyName 'EventosCriticos'   -NotePropertyValue @() }
-        if (-not $result.PSObject.Properties.Match('Events'))            { $result | Add-Member -NotePropertyName 'Events'            -NotePropertyValue @() }
-
-        return $result
-    } catch {
-        return [pscustomobject]@{ Error = "Falha na coleta de eventos: $($_.Exception.Message)" }
+    [pscustomobject]@{
+        TotalEventos      = $totalEventos
+        EventosRelevantes = $eventosRelevantes
+        EventosCriticos   = $eventosCriticos
     }
 }
 

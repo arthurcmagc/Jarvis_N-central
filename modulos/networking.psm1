@@ -1,130 +1,116 @@
 ﻿# networking.psm1
-# Coleta de status de rede com fallback de latência (ICMP -> HTTP) e DNS formatado.
+# Compatível com PS 5.1 e 7+. Sem uso de ?. ou ??.
 
-function Get-PrimaryInterfaceInfo {
+function Get-ActiveAdapterInfo {
+    [CmdletBinding()]
+    param()
+
+    # 1) Tenta Get-NetIPConfiguration / Get-NetAdapter (Win10+)
     try {
-        $adapters = Get-NetAdapter -Physical -ErrorAction SilentlyContinue | Where-Object { $_.Status -eq 'Up' }
-        if (-not $adapters) { $adapters = Get-NetAdapter -ErrorAction SilentlyContinue | Where-Object { $_.Status -eq 'Up' } }
-        $primary = $adapters | Sort-Object -Property ifIndex | Select-Object -First 1
-        if (-not $primary) { return $null }
+        $ipcfg = Get-NetIPConfiguration -Detailed -ErrorAction Stop |
+                 Where-Object { $_.IPv4Address -and $_.NetAdapter.Status -eq 'Up' } |
+                 Select-Object -First 1
+        if ($null -ne $ipcfg) {
+            $iface  = if ($ipcfg.NetAdapter.InterfaceDescription) { $ipcfg.NetAdapter.InterfaceDescription } else { $ipcfg.InterfaceAlias }
+            $ipv4   = if ($ipcfg.IPv4Address.IPAddress) { $ipcfg.IPv4Address.IPAddress } else { $null }
+            $gw     = $null
+            if ($ipcfg.IPv4DefaultGateway -and $ipcfg.IPv4DefaultGateway.NextHop) { $gw = $ipcfg.IPv4DefaultGateway.NextHop }
 
-        $ipcfg = Get-NetIPConfiguration -InterfaceIndex $primary.ifIndex -ErrorAction SilentlyContinue
-        if (-not $ipcfg) { return $null }
+            $dnsArr = @()
+            if ($ipcfg.DnsServer -and $ipcfg.DnsServer.ServerAddresses) { $dnsArr = $ipcfg.DnsServer.ServerAddresses }
+            elseif ($ipcfg.DnsServer) { $dnsArr = @($ipcfg.DnsServer) }
+            $dns = if ($dnsArr -and $dnsArr.Count -gt 0) { ($dnsArr -join ', ') } else { $null }
 
-        $ipv4   = $ipcfg.IPv4Address.IPAddress | Select-Object -First 1
-        $gw     = $ipcfg.IPv4DefaultGateway.NextHop | Select-Object -First 1
-
-        # DNS (apenas strings)
-        $dnsSrv = (Get-DnsClientServerAddress -InterfaceIndex $primary.ifIndex -AddressFamily IPv4 -ErrorAction SilentlyContinue).ServerAddresses
-        $dnsArr = @()
-        if ($dnsSrv) { $dnsArr = $dnsSrv | ForEach-Object { "$_" } }
-
-        [pscustomobject]@{
-            Name           = $primary.Name
-            InterfaceAlias = $ipcfg.InterfaceAlias
-            IPv4           = $ipv4
-            Gateway        = $gw
-            DNS            = $dnsArr
+            return [pscustomobject]@{
+                Interface = $iface
+                IPv4      = $ipv4
+                Gateway   = $gw
+                DNS       = $dns
+            }
         }
-    } catch {
-        return $null
-    }
+    } catch {}
+
+    # 2) Fallback WMI (PS 5.1/legacy)
+    try {
+        $nics = Get-CimInstance -ClassName Win32_NetworkAdapterConfiguration -Filter "IPEnabled=TRUE" -ErrorAction Stop
+        foreach ($n in $nics) {
+            # Pega o primeiro com IPv4
+            $ipv4 = $null
+            if ($n.IPAddress) {
+                foreach ($ip in $n.IPAddress) {
+                    if ($ip -match '^\d{1,3}(\.\d{1,3}){3}$') { $ipv4 = $ip; break }
+                }
+            }
+            if ($null -ne $ipv4) {
+                $dns = $null
+                if ($n.DNSServerSearchOrder) { $dns = ($n.DNSServerSearchOrder -join ', ') }
+
+                $iface = $n.Description
+                $gw    = $null
+                if ($n.DefaultIPGateway -and $n.DefaultIPGateway.Length -gt 0) { $gw = $n.DefaultIPGateway[0] }
+
+                return [pscustomobject]@{
+                    Interface = $iface
+                    IPv4      = $ipv4
+                    Gateway   = $gw
+                    DNS       = $dns
+                }
+            }
+        }
+    } catch {}
+
+    return $null
 }
 
-function Test-TargetLatencyICMP {
+function Test-LatencyMs {
+    [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)][string]$Target,
-        [int]$Count = 4
+        [string]$Target = "8.8.8.8",
+        [int]$Count = 3,
+        [int]$TimeoutMs = 1500
     )
     try {
-        $pings = Test-Connection -ComputerName $Target -Count $Count -ErrorAction SilentlyContinue
-        if (-not $pings) { return $null }
-        $rtts = $pings | Where-Object { $_.ResponseTime -ge 0 } | ForEach-Object { [double]$_.ResponseTime }
-        if (-not $rtts -or $rtts.Count -eq 0) { return $null }
-        $avg = [math]::Round(($rtts | Measure-Object -Average).Average, 1)
-        $sorted = $rtts | Sort-Object
-        $med = [math]::Round($sorted[[Math]::Floor(($sorted.Count-1)/2)], 1)
-        $loss = [math]::Round(100 * (1 - ($rtts.Count / $Count)),0)
-        return @{ AverageMs = $avg; MedianMs = $med; Loss = ("{0}%" -f $loss); Method = "ICMP" }
-    } catch { return $null }
-}
-
-function Test-TargetLatencyHTTP {
-    param([Parameter(Mandatory=$true)][string]$TargetUrl)
-    try {
-        $elapsed = (Measure-Command {
-            try {
-                try {
-                    Invoke-WebRequest -Uri $TargetUrl -Method Head -TimeoutSec 5 -UseBasicParsing -ErrorAction Stop | Out-Null
-                } catch {
-                    Invoke-WebRequest -Uri $TargetUrl -Method Get  -TimeoutSec 5 -UseBasicParsing -ErrorAction Stop | Out-Null
-                }
-            } catch {}
-        }).TotalMilliseconds
-        $ms = [math]::Round([double]$elapsed, 1)
-        return @{ AverageMs = $ms; MedianMs = $ms; Loss = "N/D (HTTP)"; Method = "HTTP" }
-    } catch { return $null }
-}
-
-function Get-InternetReachability {
-    $targetsIcmp = @('1.1.1.1','8.8.8.8')
-    foreach ($t in $targetsIcmp) {
+        # PS 7+: objetos têm propriedade .Latency
+        $tc = Test-Connection -TargetName $Target -Count $Count -TimeoutMilliseconds $TimeoutMs -ErrorAction Stop
+        $lat = $null
         try {
-            $ok = Test-Connection -ComputerName $t -Count 1 -Quiet -ErrorAction SilentlyContinue
-            if ($ok) { return $true }
-        } catch {}
-    }
-    foreach ($u in @('http://1.1.1.1','http://dns.google')) {
-        try {
-            $elapsed = (Measure-Command { Invoke-WebRequest -Uri $u -Method Head -TimeoutSec 5 -UseBasicParsing -ErrorAction Stop | Out-Null }).TotalMilliseconds
-            if ($elapsed -gt 0) { return $true }
-        } catch {}
-    }
-    return $false
-}
-
-function Get-LatencyWithFallback {
-    param([string[]]$Targets = @('1.1.1.1','8.8.8.8'))
-
-    $result = @{}
-    foreach ($t in $Targets) {
-        $icmp = Test-TargetLatencyICMP -Target $t -Count 4
-        if ($icmp) {
-            $result[$t] = $icmp
-            continue
+            $lat = ($tc | Select-Object -ExpandProperty Latency -ErrorAction Stop | Measure-Object -Average).Average
+        } catch {
+            # PS 5.1: usa ResponseTime
+            $lat = ($tc | Select-Object -ExpandProperty ResponseTime -ErrorAction Stop | Measure-Object -Average).Average
         }
-        $url = if ($t -eq '8.8.8.8') { 'http://dns.google' } else { "http://$t" }
-        $http = Test-TargetLatencyHTTP -TargetUrl $url
-        if ($http) { $result[$t] = $http }
-        else { $result[$t] = @{ AverageMs = 'N/D'; MedianMs = 'N/D'; Loss = '100%'; Method = 'N/A' } }
-    }
-    return $result
+        if ($null -ne $lat) { return [int][math]::Round($lat,0) }
+    } catch {}
+    return $null
 }
 
 function Get-NetworkStatus {
-    try {
-        $iface = Get-PrimaryInterfaceInfo
-        $hasInternet = Get-InternetReachability
-        $lat = Get-LatencyWithFallback -Targets @('1.1.1.1','8.8.8.8')
+    [CmdletBinding()]
+    param()
 
-        $interfaceLabel = if ($iface) {
-            $na = Get-NetAdapter -Name $iface.Name -ErrorAction SilentlyContinue
-            $st = if ($na -and $na.Status) { $na.Status } else { "Unknown" }
-            "$($iface.InterfaceAlias) ($st)"
-        } else {
-            "Indefinida"
+    try {
+        $info = Get-ActiveAdapterInfo
+        if ($null -eq $info) {
+            return [pscustomobject]@{ Error = "Nenhuma interface ativa com IPv4 foi encontrada." }
         }
 
-        [pscustomobject]@{
-            HasInternetConnection = $hasInternet
-            Interface             = $interfaceLabel
-            IPv4                  = $iface?.IPv4
-            Gateway               = $iface?.Gateway
-            DNS                   = $iface?.DNS
-            Latency               = $lat
+        $lat = Test-LatencyMs
+        $status = if ($null -ne $lat -or $info.IPv4) { "Conectado" } else { "Desconectado" }
+
+        # Normaliza DNS para string
+        $dnsOut = $info.DNS
+        if ($null -eq $dnsOut -and $info.DNS -is [array]) { $dnsOut = ($info.DNS -join ', ') }
+
+        return [pscustomobject]@{
+            Interface  = $info.Interface
+            IPv4       = if ($info.IPv4) { $info.IPv4 } else { $null }
+            Gateway    = if ($info.Gateway) { $info.Gateway } else { $null }
+            DNS        = $dnsOut
+            Status     = $status
+            LatenciaMs = $lat
         }
     } catch {
-        [pscustomobject]@{ Error = "Falha na coleta de rede: $($_.Exception.Message)" }
+        return [pscustomobject]@{ Error = "Falha na coleta de rede: $($_.Exception.Message)" }
     }
 }
 

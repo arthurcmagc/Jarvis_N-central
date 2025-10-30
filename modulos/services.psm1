@@ -1,5 +1,6 @@
 ﻿# services.psm1
 # Serviços críticos + status e reparo do Windows Search (Indexador), com pré-checagem idempotente.
+# Compatível PS 5.1/7+. Sem ?. ou ??.
 
 # -------------------------------------------------
 # Utilitários
@@ -12,34 +13,81 @@ function Test-IsAdmin {
     } catch { return $false }
 }
 
+function Convert-ServiceStatusToCode {
+    param([System.ServiceProcess.ServiceControllerStatus]$Status)
+    switch ($Status) {
+        'Stopped'         { return 1 }
+        'StartPending'    { return 2 }
+        'StopPending'     { return 3 }
+        'Running'         { return 4 }
+        'ContinuePending' { return 5 }
+        'PausePending'    { return 6 }
+        'Paused'          { return 7 }
+        default           { return 0 }
+    }
+}
+
 # -------------------------------------------------
 # Status de serviços críticos
 # -------------------------------------------------
 function Get-CriticalServiceStatus {
     <#
-        Retorna:
-        - Services: lista (Name, DisplayName, Status)
-        - CriticalServicesNotRunning: subset onde Status != Running
+        Retorna (shape compatível com o backup):
+        {
+          "Services": [ { Name, DisplayName, Status }... ],    # Status string ("Running", ...)
+          "CriticalServicesNotRunning": [ { Name, Status }... ] # Name = DisplayName; Status = código numérico (1=Stopped, 4=Running, ...)
+        }
     #>
     [CmdletBinding()]
     param(
-        [string[]]$CriticalNames = @('wuauserv','bits','lanmanworkstation','Dnscache','Winmgmt')
+        [string[]]$CriticalNames = @(
+            'wuauserv',            # Windows Update
+            'bits',                # BITS
+            'lanmanworkstation',   # Estação de Trabalho
+            'Dnscache',            # Cliente DNS
+            'Winmgmt',             # WMI
+            'TermService',         # Serviços de Área de Trabalho Remota
+            'WSearch'              # Windows Search (útil p/ menu)
+        )
     )
+
     try {
-        $st = foreach ($name in $CriticalNames) {
+        $servicesList = @()
+        $notRunning   = @()
+
+        foreach ($name in $CriticalNames) {
             $svc = Get-Service -Name $name -ErrorAction SilentlyContinue
             if ($null -ne $svc) {
-                [pscustomobject]@{
+                $servicesList += [pscustomobject]@{
                     Name        = $svc.Name
                     DisplayName = $svc.DisplayName
                     Status      = "$($svc.Status)"
                 }
+
+                $code = Convert-ServiceStatusToCode -Status $svc.Status
+                if ($code -ne 4) {
+                    # Para CriticalServicesNotRunning, o backup usa Name = DisplayName e Status = numérico
+                    $notRunning += [pscustomobject]@{
+                        Name   = $svc.DisplayName
+                        Status = $code
+                    }
+                }
+            } else {
+                # Serviço ausente: reporta como parado (compatível com ideia do backup)
+                $servicesList += [pscustomobject]@{
+                    Name        = $name
+                    DisplayName = $name
+                    Status      = "NotFound"
+                }
+                $notRunning += [pscustomobject]@{
+                    Name   = $name
+                    Status = 1
+                }
             }
         }
-        $notRunning = @()
-        if ($st) { $notRunning = $st | Where-Object { $_.Status -ne 'Running' } }
+
         [pscustomobject]@{
-            Services                   = $st
+            Services                   = $servicesList
             CriticalServicesNotRunning = $notRunning
         }
     } catch {
@@ -55,7 +103,7 @@ function Get-SearchIndexerStatus {
         Retorna:
         - WSearchStatus  : Running/Stopped/Paused/NotFound
         - StartType      : Automatic/Manual/Disabled/Unknown
-        - FeatureEnabled : $true/$false/$null (quando Get-WindowsOptionalFeature indisponível)
+        - FeatureEnabled : $true/$false/$null (quando não for possível checar)
         - IsAdmin        : $true/$false
     #>
     [CmdletBinding()]
@@ -63,12 +111,13 @@ function Get-SearchIndexerStatus {
 
     try {
         $svc = Get-Service -Name 'WSearch' -ErrorAction SilentlyContinue
-        $svcStatus = if ($svc) { "$($svc.Status)" } else { "NotFound" }
+        $svcStatus = if ($null -ne $svc) { "$($svc.Status)" } else { "NotFound" }
         $startType = "Unknown"
-        if ($svc) {
+
+        if ($null -ne $svc) {
             try {
                 $wmiSvc = Get-WmiObject -Class Win32_Service -Filter "Name='WSearch'" -ErrorAction SilentlyContinue
-                if ($wmiSvc) {
+                if ($null -ne $wmiSvc) {
                     switch ($wmiSvc.StartMode) {
                         "Auto"     { $startType = "Automatic" }
                         "Manual"   { $startType = "Manual" }
@@ -82,7 +131,7 @@ function Get-SearchIndexerStatus {
         $featureEnabled = $null
         try {
             $feat = Get-WindowsOptionalFeature -Online -FeatureName "SearchEngine-Client-Package" -ErrorAction SilentlyContinue
-            if ($feat) { $featureEnabled = ($feat.State -eq 'Enabled') }
+            if ($null -ne $feat) { $featureEnabled = ($feat.State -eq 'Enabled') }
         } catch {
             $featureEnabled = $null
         }
@@ -108,7 +157,7 @@ function Repair-SearchIndexer {
         - Caso contrário aplica:
           1) Enable-WindowsOptionalFeature (se necessário)
           2) Set-Service WSearch -StartupType Automatic
-          3) sc.exe config WSearch depend= /
+          3) sc.exe config WSearch depend= /   (limpa dependências)
           4) Start-Service WSearch
         Retorna objeto com:
           Skipped, Success, Status, Report (log de etapas)
@@ -116,7 +165,7 @@ function Repair-SearchIndexer {
     [CmdletBinding()]
     param()
 
-    $report = New-Object System.Collections.Generic.List[string]
+    $report  = New-Object System.Collections.Generic.List[string]
     $isAdmin = Test-IsAdmin
     if (-not $isAdmin) {
         $report.Add("Aviso: Execução sem privilégios administrativos. Algumas etapas podem falhar.")
@@ -176,14 +225,14 @@ function Repair-SearchIndexer {
 
         # Validação final
         $final = Get-SearchIndexerStatus
-        $ok = ($final.WSearchStatus -eq 'Running' -and $final.FeatureEnabled -eq $true)
+        $ok    = ($final.WSearchStatus -eq 'Running' -and $final.FeatureEnabled -eq $true)
         if ($ok) {
             $report.Add("Validação final OK: serviço em execução e recurso habilitado.")
         } else {
             $report.Add("Validação final com pendências: verifique manualmente o status exibido em 'Status'.")
         }
 
-        return [pscustomobject]@{
+        [pscustomobject]@{
             Skipped = $false
             Success = $ok
             Status  = $final
@@ -191,7 +240,7 @@ function Repair-SearchIndexer {
         }
     } catch {
         $report.Add("Erro inesperado: $($_.Exception.Message)")
-        return [pscustomobject]@{
+        [pscustomobject]@{
             Skipped = $false
             Success = $false
             Status  = $null

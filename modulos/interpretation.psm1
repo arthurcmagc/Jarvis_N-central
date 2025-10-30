@@ -1,405 +1,402 @@
 ﻿# interpretation.psm1
-# Versão limpa, corrigida e resiliente
+# =======================================================================================
+# Jarvis - Interpretação e exibição formatada do diagnóstico
+# Compatível com PowerShell 5.1 e 7+
+# - Start-DiagnosticAnalysis: exibe relatório formatado a partir do JSON (formato "backup" ou "novo")
+# - Helpers: Get-ManufacturerSoftwareSuggestion, Format-LatencyDisplay, Write-TypingFormattedText
+# =======================================================================================
 
-function Get-Safe {
-    param($obj, [string]$prop, $default = 'N/A')
-    try {
-        $v = $null
-        if ($null -ne $obj) { $v = $obj.$prop }
-        if ($null -eq $v -or [string]::IsNullOrWhiteSpace([string]$v)) { return $default }
-        return $v
-    } catch { return $default }
+#region Fallbacks / Helpers básicos
+function Get-ValueOrDefault {
+    param($Value, $Default = 'N/D')
+    if ($null -eq $Value) { return $Default }
+    if ($Value -is [string] -and [string]::IsNullOrWhiteSpace($Value)) { return $Default }
+    return $Value
 }
 
-function Get-ExplicacaoPorID {
-    param([Parameter(Mandatory=$true)][string]$id)
-    switch ("$id") {
-        "41"      { return "[ID 41] - Desligamento inesperado. Pode indicar queda de energia ou travamento. Sugestão: Verificar no-break e logs de desligamento." }
-        "55"      { return "[ID 55] - Corrupção no sistema de arquivos. Sugestão: Executar 'chkdsk' no volume afetado." }
-        "1001"    { return "[ID 1001] - Aplicativo apresentou erro. Sugestão: Reinstalar/verificar atualizações ou log do app." }
-        "7031"    { return "[ID 7031] - Serviço finalizado inesperadamente. Verificar dependências e iniciar manualmente." }
-        "7024"    { return "[ID 7024] - Serviço terminou com erro. Analisar log, dependências e permissões." }
-        "7043"    { return "[ID 7043] - Serviço não desligou corretamente. Aumentar timeout ou checar travamentos." }
-        "10010"   { return "[ID 10010] - DCOM não respondeu. Frequentemente inofensivo; ajustar permissões se causar impacto." }
-        "10016"   { return "[ID 10016] - Permissões DCOM. Geralmente inofensivo." }
-        "7000"    { return "[ID 7000] - Serviço não iniciou. Iniciar manualmente e checar dependências." }
-        "7001"    { return "[ID 7001] - Serviço dependente falhou. Iniciar dependências/ajustar ordem." }
-        "SERVICO_CRITICO_STOPPED" { return "[SERVIÇO CRÍTICO] - Serviço essencial parado. Iniciar/ajustar inicialização." }
-        Default   { return "[ID $id] - Evento de erro geral. Verificar o Visualizador de Eventos para detalhes." }
-    }
+function ConvertTo-NormalizedString {
+    param([string]$Text)
+    if ($null -eq $Text) { return $null }
+    return ($Text -replace [char]0xA0, ' ')
 }
 
-function Get-ExplicacaoPorBugCheck {
-    param([Parameter(Mandatory=$true)][string]$bugCheckId)
-    switch ("$bugCheckId") {
-        "154" { return "[BUGCHECK 154] - Erro crítico (KERNEL_DATA_INPAGE_ERROR). Possível problema em disco/armazenamento ou RAM. Rodar chkdsk/SMART/memtest." }
-        Default { return "[BUGCHECK $bugCheckId] - Código de parada do Windows. Pesquisar para causa/ação." }
-    }
+function Write-SectionHeader {
+    param([Parameter(Mandatory)][string]$Title)
+    Write-Host ""
+    Write-Host ("=" * 98) -ForegroundColor Cyan
+    Write-Host ("[ {0} ]" -f $Title) -ForegroundColor Green
+    Write-Host ("=" * 98) -ForegroundColor Cyan
 }
 
-function Write-FormattedColoredString {
+function Write-SubHeader {
+    param([Parameter(Mandatory)][string]$Title)
+    Write-Host ""
+    Write-Host ("- {0} -" -f $Title) -ForegroundColor Yellow
+}
+
+function Write-KV {
+    param([Parameter(Mandatory)][string]$Key,[string]$Value="")
+    Write-Host ("{0,-40}: {1}" -f $Key,$Value)
+}
+
+function Write-Ok   { param([string]$Msg) Write-Host $Msg -ForegroundColor Green }
+function Write-Warn { param([string]$Msg) Write-Host $Msg -ForegroundColor Yellow }
+function Write-ErrT { param([string]$Msg) Write-Host $Msg -ForegroundColor Red }
+
+# Mantém a animação usada pelo menu (Delay/LineWidth/Indent)
+function Write-TypingFormattedText {
     param(
-        [Parameter(Mandatory=$true)][string]$Text,
-        [Parameter(Mandatory=$true)][int]$LineWidth,
-        [Parameter(Mandatory=$false)][string]$Indent = "",
-        [Parameter(Mandatory=$false)][string]$ForegroundColor = "White"
+        [Parameter(Mandatory)][string]$Text,
+        [int]$Delay = 8,
+        [string]$ForegroundColor = 'White',
+        [int]$LineWidth = 0,
+        [string]$Indent = ''
     )
+    $t = ConvertTo-NormalizedString $Text
     $lines = @()
-    $words = $Text -split ' '
-    $currentLine = ""
-    $effectiveLineWidth = [math]::Max(20, ($LineWidth - $Indent.Length))
 
-    foreach ($word in $words) {
-        if (($currentLine.Trim().Length + $word.Length + 1) -le $effectiveLineWidth) {
-            $currentLine += " $word"
-        } else {
-            $lines += $currentLine.Trim()
-            $currentLine = "$Indent$word"
+    if ($LineWidth -le 0) {
+        $lines = $t -split "(\r?\n)"
+    } else {
+        $eff = [math]::Max(1, $LineWidth - $Indent.Length)
+        foreach ($rawLine in ($t -split "(\r?\n)")) {
+            if ($rawLine -match "^\r?\n$") { $lines += ''; continue }
+            $line = $rawLine
+            while ($line.Length -gt $eff) {
+                $slice = $line.Substring(0,$eff)
+                $break = $slice.LastIndexOf(' ')
+                if ($break -lt 0) { $break = $eff }
+                $lines += $line.Substring(0,$break)
+                $line  = $line.Substring($break).TrimStart()
+            }
+            $lines += $line
         }
     }
-    $lines += $currentLine.Trim()
 
-    foreach ($line in $lines) {
-        Write-Host $line -ForegroundColor $ForegroundColor
+    foreach ($ln in $lines) {
+        if ($Indent) {
+            try { Write-Host $Indent -NoNewline -ForegroundColor $ForegroundColor } catch { Write-Host $Indent -NoNewline }
+        }
+        foreach ($ch in $ln.ToCharArray()) {
+            try { Write-Host $ch -NoNewline -ForegroundColor $ForegroundColor } catch { Write-Host $ch -NoNewline }
+            if ($Delay -gt 0) { Start-Sleep -Milliseconds $Delay }
+        }
+        Write-Host ''
     }
+}
+#endregion
+
+#region Mapeamentos/Explicações
+function Get-ManufacturerSoftwareSuggestion {
+    param([string]$Manufacturer)
+    if ([string]::IsNullOrWhiteSpace($Manufacturer)) { return $null }
+    if ($Manufacturer -match 'Dell')   { return "Essa máquina é da marca Dell. Utilize o Dell SupportAssist para análise e correções." }
+    if ($Manufacturer -match 'Lenovo') { return "Essa máquina é Lenovo. Utilize o Lenovo Vantage para análise e correções." }
+    if ($Manufacturer -match 'HP')     { return "Essa máquina é HP. Utilize o HP Support Assistant para análise e correções." }
+    return $null
 }
 
 function Format-LatencyDisplay {
-    param(
-        [Parameter(Mandatory=$true)][string]$Target,
-        [Parameter(Mandatory=$true)]$LatencyObj
-    )
-    $avg = $LatencyObj.AverageMs
-    $med = $LatencyObj.MedianMs
-    $loss = $LatencyObj.Loss
-    $method = $LatencyObj.Method
-    $methodTag = if ($method -and $method -ne 'ICMP') { " ($method)" } else { "" }
-    if ([string]::IsNullOrWhiteSpace("$avg")) { $avg = 'N/D' }
-    if ([string]::IsNullOrWhiteSpace("$med")) { $med = 'N/D' }
-    if ([string]::IsNullOrWhiteSpace("$loss")) { $loss = 'N/D' }
-    return " - {0}  avg {1} ms | med {2} ms | perda {3}{4}" -f $Target, $avg, $med, $loss, $methodTag
+    param([nullable[int]]$LatencyMs)
+    if ($null -eq $LatencyMs) { return 'N/D' }
+    if ($LatencyMs -lt 30)  { return "$($LatencyMs) ms (ótima)" }
+    if ($LatencyMs -lt 80)  { return "$($LatencyMs) ms (boa)" }
+    if ($LatencyMs -lt 150) { return "$($LatencyMs) ms (regular)" }
+    return "$($LatencyMs) ms (alta)"
 }
+#endregion
 
-function Get-ManufacturerSoftwareSuggestion {
-    param([Parameter(Mandatory=$true)][string]$Manufacturer)
-    $normalizedManufacturer = $Manufacturer.ToLower()
-    switch -wildcard ($normalizedManufacturer) {
-        "*dell*"   { return "Essa máquina é da marca Dell. Utilize o Dell SupportAssist para análise e correções. No menu [3], SFC/DISM ajudam na base do SO." }
-        "*lenovo*" { return "Essa máquina é da marca Lenovo. Utilize o Lenovo Vantage para drivers/atualizações. No menu [3], SFC/DISM para verificação." }
-        "*hp*"     { return "Essa máquina é da marca HP. Utilize o HP Support Assistant para diagnóstico e drivers. No menu [3], SFC/DISM auxiliam." }
-        "*samsung*"{ return "Essa máquina é da marca Samsung. Utilize o Samsung Update para drivers. No menu [3], SFC/DISM para verificação." }
-        Default    { return "Fabricante: $Manufacturer. Verifique drivers no site oficial e use SFC/DISM no menu [3] para verificação profunda." }
-    }
-}
+#region Normalizador de JSON (aceita o formato BACKUP e o formato NOVO)
+# Saída normalizada (campos usados pela renderização):
+#   Hostname, Timestamp
+#   Hardware.RAM: TotalGB, UsedPercent, UsedGB, FreeGB
+#   Hardware.Disks[]: Name, FreeGB, UsedGB, UsedPct, Root
+#   Rede: Interface, IPv4, Gateway, DNS, Status, LatenciaMs | OU Rede.Error
+#   Eventos: CriticosTotal, ErrosTotal, RelevantesSugeridos[]
+#   Servicos.CriticosParados[]: Name, Status
+#   Indexador (se existir): WSearchStatus, FeatureEnabled
+#   HealthScore (se existir)
+function ConvertTo-NormalizedReport {
+    param([psobject]$Root)
 
-function Get-IntelligentSummary {
-    param([Parameter(Mandatory=$true)] $AnalysisData, [Parameter(Mandatory=$true)] $RawData)
-    $summaryText = "Resumo inteligente gerado: análise simples de saúde do sistema."
-    $recs = @()
-    if ($AnalysisData -and $AnalysisData.SaudePontuacao) {
-        $score = [int]$AnalysisData.SaudePontuacao
-        if ($score -ge 80) {
-            $summaryText = "Sistema com saúde geral boa (pontuação $score/100)."
-            $recs += "Manter rotinas de monitoramento."
-            $recs += "Revisar logs semanalmente."
-        } elseif ($score -ge 50) {
-            $summaryText = "Sistema com sinais moderados de alerta (pontuação $score/100)."
-            $recs += "Fechar apps não essenciais e verificar disco/RAM."
-            $recs += "Agendar análise detalhada de eventos relevantes."
-        } else {
-            $summaryText = "Sistema em estado frágil (pontuação $score/100). Ação imediata recomendada."
-            $recs += "Realizar backup e investigar eventos críticos."
-            $recs += "Executar chkdsk/diagnóstico de estabilidade."
+    $norm = [ordered]@{}
+
+    $hasDados = $false
+    try { if ($Root.PSObject.Properties['Dados']) { $hasDados = $true } } catch {}
+
+    # Host e Timestamp
+    $norm.Hostname  = Get-ValueOrDefault $Root.Hostname 'N/D'
+    $norm.Timestamp = Get-ValueOrDefault $Root.Timestamp 'N/D'
+
+    # ---------------- HARDWARE ----------------
+    $norm.Hardware = [ordered]@{}
+    if ($hasDados) {
+        $h = $Root.Dados.Hardware
+        if ($h) {
+            $norm.Hardware.RAM   = $h.RAM
+            $norm.Hardware.Disks = $h.Disks
         }
     } else {
-        $recs += "Executar análise completa de hardware e logs."
-        $recs += "Garantir que a coleta de eventos/serviços esteja habilitada."
-    }
-    [pscustomobject]@{
-        Summary         = $summaryText
-        Recommendations = $recs
-    }
-}
+        $h = $Root.Hardware
+        if ($h) {
+            $tot  = Get-ValueOrDefault $h.RAM.TotalGB $null
+            $pct  = Get-ValueOrDefault $h.RAM.UsedPercent $null
+            $used = $null; $free = $null
+            if ($null -ne $tot -and $null -ne $pct) {
+                $used = [math]::Round(($tot * $pct / 100), 2)
+                $free = [math]::Round(($tot - $used), 2)
+            }
+            $norm.Hardware.RAM = [ordered]@{
+                TotalGB     = $tot
+                UsedPercent = $pct
+                UsedGB      = $used
+                FreeGB      = $free
+            }
 
-function Invoke-HealthAnalysis {
-    param(
-        [Parameter(Mandatory=$true)] $HardwareStatus,
-        [Parameter(Mandatory=$true)] $Eventos,
-        [Parameter(Mandatory=$false)] $ServiceStatus
-    )
-    $score  = 100
-    $issues = New-Object System.Collections.Generic.List[string]
-    $eventWeights = @{
-        "41" = 10; "55" = 10; "7031" = 5; "1001" = 3; "10010" = 2; "7024" = 5; "7043" = 5; "7000" = 5; "7001" = 5;
-    }
-
-    # RAM
-    if ($HardwareStatus -and $HardwareStatus.PSObject.Properties.Match('RAM')) {
-        $ram = $HardwareStatus.RAM
-        if ($ram -and $null -ne $ram.UsedPercent) {
-            $ramUsed = [int]$ram.UsedPercent
-            if ($ramUsed -ge 95)      { $score -= 15; $issues.Add("[CRÍTICO] Uso de RAM: $ramUsed%.") }
-            elseif ($ramUsed -ge 90)  { $score -= 10; $issues.Add("[ALTO] Uso de RAM: $ramUsed%.") }
-            elseif ($ramUsed -ge 80)  { $score -= 3;  $issues.Add("[ALERTA] Uso de RAM: $ramUsed%.") }
-        }
-    }
-
-    # Discos
-    if ($HardwareStatus -and $HardwareStatus.PSObject.Properties.Match('Disks')) {
-        foreach ($disk in $HardwareStatus.Disks) {
-            if ($disk -and $null -ne $disk.FreePercent) {
-                if ([double]$disk.FreePercent -lt 15) {
-                    $score -= 10
-                    $issues.Add("[ALERTA] Pouco espaço em disco em $($disk.DeviceID): $($disk.FreePercent)% livre.")
+            $norm.Hardware.Disks = @()
+            foreach ($d in ($h.Disks | ForEach-Object { $_ })) {
+                $name  = ($d.DeviceID -replace ':','')
+                $total = Get-ValueOrDefault $d.TotalGB $null
+                $free  = Get-ValueOrDefault $d.FreeGB  $null
+                $usedGB = $null
+                $usedPct = $null
+                $rootp = "$($d.DeviceID)\"
+                try {
+                    if ($null -ne $total -and $null -ne $free) {
+                        $usedGB  = [math]::Round(([double]$total - [double]$free), 2)
+                        if ($total -gt 0) { $usedPct = [math]::Round((($usedGB / $total) * 100), 2) }
+                    }
+                } catch {}
+                $norm.Hardware.Disks += [PSCustomObject]@{
+                    Name    = $name
+                    FreeGB  = $free
+                    UsedGB  = $usedGB
+                    UsedPct = $usedPct
+                    Root    = $rootp
                 }
             }
         }
     }
 
-    # Eventos
-    if ($Eventos) {
-        $eventosRelevantes = @()
-        if ($Eventos.PSObject.Properties.Match('EventosRelevantes').Count -gt 0 -and $Eventos.EventosRelevantes) {
-            $eventosRelevantes = $Eventos.EventosRelevantes
-        }
-        if ($eventosRelevantes.Count -gt 0) {
-            $eventosAgrupados = $eventosRelevantes | Group-Object -Property Id
-            foreach ($grupo in $eventosAgrupados) {
-                $id = "$($grupo.Name)"
-                $contagem = [int]$grupo.Count
-                $peso = 1 * [math]::Log($contagem + 1)
-                if ($eventWeights.ContainsKey($id)) { $peso = $eventWeights[$id] * [math]::Log($contagem + 1) }
-                $score -= $peso
-                if ($peso -ge 5) { $issues.Add("[CRÍTICO] Evento relevante (ID: $id) detectado $contagem vezes.") }
-                else             { $issues.Add("[ALERTA] Evento relevante (ID: $id) detectado $contagem vezes.") }
+    # ---------------- REDE ----------------
+    if ($hasDados) {
+        $norm.Rede = $Root.Dados.Rede
+    } else {
+        if ($Root.Rede -and $Root.Rede.Error) { $norm.Rede = [ordered]@{ Error = $Root.Rede.Error } }
+        elseif ($Root.Rede) { $norm.Rede = $Root.Rede }
+    }
+
+    # ---------------- EVENTOS ----------------
+    if ($hasDados) {
+        $norm.Eventos = $Root.Dados.Eventos
+        if (-not $norm.Eventos -and $Root.Dados.EventosCriticos) {
+            $ec = $Root.Dados.EventosCriticos
+            $total = Get-ValueOrDefault $ec.TotalEventos 0
+            $norm.Eventos = [ordered]@{
+                CriticosTotal       = $total
+                ErrosTotal          = $total
+                RelevantesSugeridos = @(
+                    [PSCustomObject]@{ Id=10010; Titulo='DCOM não respondeu'; Observacao='Frequentemente inofensivo; ajustar permissões se causar impacto.' }
+                )
             }
         }
-
-        if ($Eventos.PSObject.Properties.Match('BugCheck154').Count -gt 0) {
-            $bc = $Eventos.BugCheck154
-            if ($bc -and ($bc | Measure-Object).Count -gt 0) {
-                $score -= 20
-                $issues.Add("[CRÍTICO] Bugcheck 154 detectado. Indica falha grave de disco/RAM.")
+    } else {
+        $ec = $Root.EventosCriticos
+        if ($ec) {
+            $total = Get-ValueOrDefault $ec.TotalEventos 0
+            $norm.Eventos = [ordered]@{
+                CriticosTotal       = $total
+                ErrosTotal          = $total
+                RelevantesSugeridos = @(
+                    [PSCustomObject]@{ Id=10010; Titulo='DCOM não respondeu'; Observacao='Frequentemente inofensivo; ajustar permissões se causar impacto.' }
+                )
             }
         }
     }
 
-    # Serviços
-    if ($ServiceStatus -and $ServiceStatus.PSObject.Properties.Match('CriticalServicesNotRunning')) {
-        if ($ServiceStatus.CriticalServicesNotRunning.Count -gt 0) {
-            $score -= 15
-            $issues.Add("[CRÍTICO] Um ou mais serviços essenciais não estão em execução.")
+    # ---------------- SERVIÇOS ----------------
+    if ($hasDados) {
+        $norm.Servicos = $Root.Dados.Servicos
+    } else {
+        $s = $Root.Servicos
+        if ($s -and $s.CriticalServicesNotRunning) {
+            $down = @()
+            foreach ($x in $s.CriticalServicesNotRunning) {
+                $down += [PSCustomObject]@{
+                    Name   = (Get-ValueOrDefault $x.Name 'Serviço')
+                    Status = (Get-ValueOrDefault $x.Status 'Indefinido')
+                }
+            }
+            $norm.Servicos = [ordered]@{ CriticosParados = $down }
         }
     }
 
-    if ($score -lt 0) { $score = 0 }
-
-    [pscustomobject]@{
-        SaudePontuacao         = [int][math]::Round($score)
-        ProblemasIdentificados = $issues
+    # ---------------- INDEXADOR (agora lê raiz OU Dados) ----------------
+    if ($hasDados -and $Root.Dados.Indexador) {
+        $norm.Indexador = $Root.Dados.Indexador
+    } elseif ($Root.Indexador) {
+        $norm.Indexador = $Root.Indexador
     }
+
+    # ---------------- SCORE ----------------
+    if ($hasDados) {
+        $norm.HealthScore = $Root.Dados.HealthScore
+    } else {
+        if ($Root.Analise -and $null -ne $Root.Analise.SaudePontuacao) {
+            $norm.HealthScore = [int]$Root.Analise.SaudePontuacao
+        }
+    }
+
+    # ---------------- FABRICANTE ----------------
+    if ($hasDados) {
+        $norm.Fabricante = $Root.Dados.Fabricante
+    } else {
+        $norm.Fabricante = $Root.Fabricante
+    }
+
+    return $norm
 }
+#endregion
 
-function Write-TypingFormattedText {
-    param(
-        [Parameter(Mandatory=$true)][string]$Text,
-        [Parameter(Mandatory=$false)][int]$Delay = 25,
-        [Parameter(Mandatory=$false)][string]$ForegroundColor = "White",
-        [Parameter(Mandatory=$false)][int]$LineWidth,
-        [Parameter(Mandatory=$false)][string]$Indent = ""
-    )
-    $lines = @()
-    $words = $Text -split ' '
-    $currentLine = ""
-    $effectiveLineWidth = [math]::Max(20, ($LineWidth - $Indent.Length))
-    foreach ($word in $words) {
-        if (($currentLine.Trim().Length + $word.Length + 1) -le $effectiveLineWidth) {
-            $currentLine += " $word"
-        } else {
-            $lines += $currentLine.Trim()
-            $currentLine = "$Indent$word"
-        }
-    }
-    $lines += $currentLine.Trim()
-    foreach ($line in $lines) {
-        foreach ($char in $line.ToCharArray()) {
-            Write-Host -NoNewline $char -ForegroundColor $ForegroundColor
-            Start-Sleep -Milliseconds $Delay
-        }
-        Write-Host ""
-    }
-}
-
+#region Relatório formatado
 function Start-DiagnosticAnalysis {
-    param([Parameter(Mandatory=$true)][string]$JsonPath)
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$JsonPath)
 
-    if (-not (Test-Path $JsonPath)) {
-        throw "Arquivo de diagnóstico '$JsonPath' não encontrado. Execute a opção apropriada do fluxo primeiro."
+    if (-not (Test-Path $JsonPath)) { Write-ErrT "Arquivo JSON não encontrado: $JsonPath"; return }
+
+    try {
+        $raw  = Get-Content -Raw -Path $JsonPath -Encoding UTF8
+        $raw  = ConvertTo-NormalizedString $raw
+        $root = $raw | ConvertFrom-Json -ErrorAction Stop
+    } catch {
+        Write-ErrT ("Falha ao interpretar JSON: {0}" -f $_.Exception.Message)
+        return
     }
 
-    $data = Get-Content $JsonPath -Raw | ConvertFrom-Json
+    $data = ConvertTo-NormalizedReport -Root $root
 
-    Clear-Host
-    $windowWidth = $Host.UI.RawUI.WindowSize.Width
-    $reportWidth = $windowWidth - 4
+    Write-SectionHeader "ANÁLISE DO DIAGNÓSTICO"
+    Write-Host ("Analisando sistema '{0}' em {1}" -f (Get-ValueOrDefault $data.Hostname 'N/D'), (Get-ValueOrDefault $data.Timestamp 'N/D')) -ForegroundColor White
+    Write-Host ""
 
-    $intelligentSummary = Get-IntelligentSummary -AnalysisData $data.Analise -RawData $data
-    Write-Host "[DIAGNÓSTICO INTELIGENTE]" -ForegroundColor Cyan
-    Write-FormattedColoredString -Text $intelligentSummary.Summary -LineWidth $reportWidth -Indent "" -ForegroundColor White
-    if ($intelligentSummary.Recommendations) {
-        $intelligentSummary.Recommendations | ForEach-Object {
-            Write-FormattedColoredString -Text "- $_" -LineWidth $reportWidth -Indent "  " -ForegroundColor Yellow
+    # -------- HARDWARE --------
+    Write-SubHeader "HARDWARE"
+    try {
+        $ram = $data.Hardware.RAM
+        if ($ram) {
+            $ramPct  = Get-ValueOrDefault $ram.UsedPercent 'N/D'
+            $ramTot  = Get-ValueOrDefault $ram.TotalGB 'N/D'
+            $ramUsed = Get-ValueOrDefault $ram.UsedGB 'N/D'
+            $ramFree = Get-ValueOrDefault $ram.FreeGB 'N/D'
+            Write-KV "Uso de RAM" ("{0}% (Total: {1} GB, Em uso: {2} GB, Livre: {3} GB)" -f $ramPct, $ramTot, $ramUsed, $ramFree)
+        } else {
+            Write-Warn "Sem dados de RAM."
         }
-    }
 
-    Write-Host "`n--- DADOS TÉCNICOS ---" -ForegroundColor DarkGray
-    $healthScore = 0
-    if ($null -ne $data.Analise -and $null -ne $data.Analise.SaudePontuacao) {
-        $healthScore = [int]$data.Analise.SaudePontuacao
-    }
-    $scoreColor = if ($healthScore -ge 80) { "Green" } elseif ($healthScore -ge 75) { "Yellow" } else { "Red" }
-    Write-Host "Pontuação de Saúde do Sistema: $healthScore/100" -ForegroundColor $scoreColor
-
-    # [HARDWARE] (igual versão anterior) ...
-    Write-Host "`n[HARDWARE]" -ForegroundColor White
-    if ($data.Hardware -and -not $data.Hardware.Error) {
-        if ($data.Hardware.RAM -and $null -ne $data.Hardware.RAM.UsedPercent) {
-            $ramUsed  = [int]$data.Hardware.RAM.UsedPercent
-            $ramTotal = [int]$data.Hardware.RAM.TotalGB
-            $ramText  = "Uso de RAM: $ramUsed% (Total: $ramTotal GB)"
-            if     ($ramUsed -ge 95) { Write-FormattedColoredString -Text "$ramText - CRÍTICO! Desempenho severamente afetado." -LineWidth $reportWidth -ForegroundColor Red }
-            elseif ($ramUsed -ge 80) { Write-FormattedColoredString -Text "$ramText - ALERTA: Uso alto, porém possível."      -LineWidth $reportWidth -ForegroundColor Yellow }
-            else                     { Write-FormattedColoredString -Text "$ramText - Normal."                                -LineWidth $reportWidth -ForegroundColor Green }
+        $disks = $data.Hardware.Disks
+        if ($disks) {
+            foreach ($d in $disks) {
+                $name  = Get-ValueOrDefault $d.Name "?"
+                $free  = Get-ValueOrDefault $d.FreeGB "N/D"
+                $used  = Get-ValueOrDefault $d.UsedGB "N/D"
+                $pct   = Get-ValueOrDefault $d.UsedPct "N/D"
+                $rootp = Get-ValueOrDefault $d.Root "N/D"
+                Write-KV ("Disco {0}" -f ($name -replace ":", "")) ("Livre: {0} GB | Em uso: {1} GB ({2}%) | Raiz: {3}" -f $free, $used, $pct, $rootp)
+            }
+        } else {
+            Write-Warn "Sem dados de discos."
         }
-        if ($data.Hardware.Disks) {
-            foreach ($disk in $data.Hardware.Disks) {
-                if ($disk -and $null -ne $disk.FreePercent -and $null -ne $disk.TotalGB) {
-                    $diskColor = if ($disk.FreePercent -lt 15) { "Red" } elseif ($disk.FreePercent -lt 30) { "Yellow" } else { "Green" }
-                    Write-FormattedColoredString -Text "Disco $($disk.DeviceID): $($disk.FreeGB) GB livres ($($disk.FreePercent)%) - Tipo: $($disk.Tipo)" -LineWidth $reportWidth -ForegroundColor $diskColor
-                } else {
-                    Write-FormattedColoredString -Text "Disco $($disk.DeviceID): Dados de espaço livre não disponíveis." -LineWidth $reportWidth -ForegroundColor Yellow
+    } catch { Write-Warn "Falha ao interpretar HARDWARE." }
+
+    # -------- REDE --------
+    Write-SubHeader "REDE"
+    try {
+        if ($data.Rede -and $data.Rede.Error) {
+            Write-Warn ("Falha na coleta de Rede: {0}" -f $data.Rede.Error)
+        } elseif ($data.Rede) {
+            Write-KV "Interface" (Get-ValueOrDefault $data.Rede.Interface 'N/D')
+            Write-KV "IPv4"      (Get-ValueOrDefault $data.Rede.IPv4 'N/D')
+            Write-KV "Gateway"   (Get-ValueOrDefault $data.Rede.Gateway 'N/D')
+            Write-KV "DNS"       (Get-ValueOrDefault $data.Rede.DNS 'N/D')
+            Write-KV "Status"    (Get-ValueOrDefault $data.Rede.Status 'N/D')
+            if ($data.Rede.PSObject.Properties['LatenciaMs']) {
+                Write-KV "Latência" (Format-LatencyDisplay $data.Rede.LatenciaMs)
+            }
+        } else {
+            Write-Warn "Dados de rede indisponíveis."
+        }
+    } catch { Write-Warn "Erro ao exibir REDE." }
+
+    # -------- EVENTOS --------
+    Write-SubHeader "ESTABILIDADE DO SISTEMA"
+    try {
+        if ($data.Eventos) {
+            $crit = Get-ValueOrDefault $data.Eventos.CriticosTotal 0
+            $err  = Get-ValueOrDefault $data.Eventos.ErrosTotal    $crit
+            Write-KV "Total de eventos críticos nos últimos 7 dias" $crit
+            Write-KV "Total de erros (gerais)" $err
+
+            if ($data.Eventos.RelevantesSugeridos) {
+                Write-Host "Sugestões para Eventos Relevantes:" -ForegroundColor White
+                foreach ($s in $data.Eventos.RelevantesSugeridos) {
+                    $id  = Get-ValueOrDefault $s.Id "N/D"
+                    $tit = Get-ValueOrDefault $s.Titulo "N/D"
+                    $obs = Get-ValueOrDefault $s.Observacao "N/D"
+                    Write-Host ("- [ID {0}] - {1}. {2}" -f $id, $tit, $obs)
                 }
             }
-        }
-    } else {
-        Write-Host "Falha na coleta de Hardware: $($data.Hardware.Error)" -ForegroundColor Red
-    }
-
-    # --- REDE ---
-    Write-Host "`n"
-    Write-Host "[REDE]" -ForegroundColor White
-
-    if ($data.Rede -and -not $data.Rede.Error) {
-        if ($null -ne $data.Rede.HasInternetConnection) {
-            $networkColor = if ($data.Rede.HasInternetConnection) { "Green" } else { "Red" }
-            $networkStatusText = if ($data.Rede.HasInternetConnection) { 'Conectado' } else { 'Desconectado' }
-            Write-FormattedColoredString -Text "Status da Internet: $networkStatusText" -LineWidth $reportWidth -Indent "" -ForegroundColor $networkColor
         } else {
-            Write-FormattedColoredString -Text "Status da Internet: Indisponível" -LineWidth $reportWidth -Indent "" -ForegroundColor Yellow
+            Write-Warn "Falha ao coletar eventos: N/D"
         }
+    } catch { Write-Warn "Erro ao exibir EVENTOS." }
 
-        if ($data.Rede.Interface) {
-            Write-FormattedColoredString -Text ("Interface: {0}" -f $data.Rede.Interface) -LineWidth $reportWidth -Indent "" -ForegroundColor Gray
-        }
-
-        $ipv4 = if ($data.Rede.IPv4) { $data.Rede.IPv4 } else { "N/D" }
-        $gw   = if ($data.Rede.Gateway) { $data.Rede.Gateway } else { "N/A" }
-        Write-FormattedColoredString -Text ("IPv4: {0}  |  Gateway: {1}" -f $ipv4, $gw) -LineWidth $reportWidth -Indent "" -ForegroundColor Gray
-
-        if ($data.Rede.DNS) {
-            $dnsList = @()
-            foreach ($d in $data.Rede.DNS) { $dnsList += "$d" }
-            if ($dnsList.Count -gt 0) {
-                Write-FormattedColoredString -Text ("DNS:  {0}" -f ($dnsList -join ", ")) -LineWidth $reportWidth -Indent "" -ForegroundColor Gray
-            }
-        }
-
-        if ($data.Rede.Latency -and $data.Rede.Latency.Keys.Count -gt 0) {
-            Write-Host "`nLatência (média/mediana, perda):" -ForegroundColor Gray
-            foreach ($k in $data.Rede.Latency.Keys) {
-                $l = $data.Rede.Latency.$k
-                if ($null -eq $l) {
-                    Write-FormattedColoredString -Text (" - {0}  N/D" -f $k) -LineWidth $reportWidth -Indent "" -ForegroundColor Gray
-                    continue
+    # -------- SERVIÇOS --------
+    Write-SubHeader "SERVIÇOS CRÍTICOS"
+    try {
+        $svc = $data.Servicos
+        if ($svc -and $svc.CriticosParados -and $svc.CriticosParados.Count -gt 0) {
+            Write-Host "Serviços essenciais que não estão em execução:" -ForegroundColor White
+            foreach ($s in $svc.CriticosParados) {
+                $nm = Get-ValueOrDefault $s.Name '?'
+                $st = Get-ValueOrDefault $s.Status 'Parado'
+                if ($st -is [int]) {
+                    if     ($st -eq 4) { $st = 'Running' }
+                    elseif ($st -eq 1) { $st = 'Stopped' }
                 }
-                $line = Format-LatencyDisplay -Target $k -LatencyObj $l
-                Write-FormattedColoredString -Text $line -LineWidth $reportWidth -Indent "" -ForegroundColor Gray
+                Write-Host ("- {0}: [SERVIÇO CRÍTICO] - {1}" -f $nm, $st)
             }
         } else {
-            Write-FormattedColoredString -Text "Latência: N/D" -LineWidth $reportWidth -Indent "" -ForegroundColor Gray
+            Write-Ok "Nenhum serviço crítico parado."
         }
-    }
-    else {
-        Write-Host ("Falha na coleta de Rede: {0}" -f ($data.Rede?.Error ?? "N/D")) -ForegroundColor Red
-    }
+    } catch { Write-Warn "Erro ao exibir SERVIÇOS." }
 
-    # [ESTABILIDADE DO SISTEMA] (igual versão anterior com checks safe)
-    Write-Host "`n[ESTABILIDADE DO SISTEMA]" -ForegroundColor White
-    if ($data.EventosCriticos -and -not $data.EventosCriticos.Error) {
-        $eventCount = $data.EventosCriticos.TotalEventos
-        $eventRelevantesCount = 0
-        if ($data.EventosCriticos.PSObject.Properties.Match('EventosRelevantes').Count -gt 0 -and $data.EventosCriticos.EventosRelevantes) {
-            $eventRelevantesCount = $data.EventosCriticos.EventosRelevantes.Count
-        }
-        $eventCriticosCount = 0
-        if ($data.EventosCriticos.PSObject.Properties.Match('EventosCriticos').Count -gt 0 -and $data.EventosCriticos.EventosCriticos) {
-            $eventCriticosCount = $data.EventosCriticos.EventosCriticos.Count
-        }
-        Write-Host "Total de eventos críticos nos últimos 7 dias: $eventCount" -ForegroundColor DarkGray
-        Write-Host "  -> Eventos relevantes (falhas): $eventRelevantesCount" -ForegroundColor Red
-        Write-Host "  -> Eventos gerais (erros): $eventCriticosCount" -ForegroundColor Yellow
-
-        if ($data.EventosCriticos.PSObject.Properties.Match('BugCheck154').Count -gt 0) {
-            $bc = $data.EventosCriticos.BugCheck154
-            if ($bc -and ($bc | Measure-Object).Count -gt 0) {
-                Write-Host "`nSugestões para Bugcheck 154:" -ForegroundColor Cyan
-                $explicacao = Get-ExplicacaoPorBugCheck -bugCheckId "154"
-                Write-FormattedColoredString -Text "  - $explicacao" -LineWidth $reportWidth -Indent "    " -ForegroundColor Yellow
-            }
-        }
-
-        if ($eventRelevantesCount -gt 0) {
-            Write-Host "`nSugestões para Eventos Relevantes:" -ForegroundColor Cyan
-            $eventosAgrupados = $data.EventosCriticos.EventosRelevantes | Group-Object -Property Id
-            foreach ($grupo in $eventosAgrupados) {
-                $explicacao = Get-ExplicacaoPorID -id $grupo.Name
-                Write-FormattedColoredString -Text "  - $explicacao" -LineWidth $reportWidth -Indent "    " -ForegroundColor Yellow
-            }
-        }
-    } else {
-        Write-Host "Falha na coleta de Eventos: $($data.EventosCriticos.Error)" -ForegroundColor Red
-    }
-
-    # [SERVIÇOS CRÍTICOS] (igual)
-    Write-Host "`n[SERVIÇOS CRÍTICOS]" -ForegroundColor White
-    if ($data.Servicos -and -not $data.Servicos.Error) {
-        if ($data.Servicos.CriticalServicesNotRunning.Count -gt 0) {
-            Write-Host "Serviços essenciais que não estão em execução:" -ForegroundColor Red
-            $data.Servicos.CriticalServicesNotRunning | ForEach-Object {
-                $explicacao = Get-ExplicacaoPorID -id "SERVICO_CRITICO_STOPPED"
-                Write-FormattedColoredString -Text ("  - {0}: {1}" -f $_.Name, $explicacao) -LineWidth $reportWidth -ForegroundColor Yellow
-            }
+    # -------- INDEXADOR (opcional) --------
+    Write-SubHeader "INDEXADOR DE PESQUISA"
+    try {
+        if ($data.Indexador) {
+            Write-KV "Status do serviço WSearch" (Get-ValueOrDefault $data.Indexador.WSearchStatus 'N/D')
+            Write-KV "Recurso SearchEngine-Client-Package habilitado" (Get-ValueOrDefault $data.Indexador.FeatureEnabled 'N/D')
         } else {
-            Write-Host "Todos os serviços críticos estão em execução." -ForegroundColor Green
+            Write-Warn "Falha no Indexador: N/D"
         }
-    } else {
-        Write-Host "Falha na coleta de serviços: $($data.Servicos.Error)" -ForegroundColor Red
-    }
+    } catch { Write-Warn "Erro ao exibir INDEXADOR." }
 
-    # [INDEXADOR DE PESQUISA]
-    Write-Host "`n[INDEXADOR DE PESQUISA]" -ForegroundColor White
-    if ($data.Indexador -and -not $data.Indexador.Error) {
-        Write-Host ("Status do serviço WSearch: {0}" -f ($data.Indexador.WSearchStatus ?? 'N/D')) -ForegroundColor Gray
-        Write-Host ("Recurso SearchEngine-Client-Package habilitado: {0}" -f ($data.Indexador.FeatureEnabled ?? 'N/D')) -ForegroundColor Gray
-    } else {
-        Write-Host ("Falha na coleta do Indexador: {0}" -f ($data.Indexador?.Error ?? "N/D")) -ForegroundColor Yellow
-    }
+    # -------- SCORE --------
+    try {
+        if ($null -ne $data.HealthScore) {
+            Write-SubHeader "PONTUAÇÃO DE SAÚDE"
+            Write-KV "Pontuação de Saúde do Sistema" ("{0}/100" -f [int]$data.HealthScore)
+        }
+    } catch {}
 
-    Write-Host "`n========================================================================================================================================================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Ok "[RELATÓRIO] Exibição concluída."
+    Write-Host ("=" * 98) -ForegroundColor Cyan
 }
+#endregion
 
-Export-ModuleMember -Function `
-    Start-DiagnosticAnalysis, Invoke-HealthAnalysis, Get-ExplicacaoPorID, `
-    Get-IntelligentSummary, Write-FormattedColoredString, `
-    Get-ExplicacaoPorBugCheck, Get-ManufacturerSoftwareSuggestion, `
-    Write-TypingFormattedText, Format-LatencyDisplay
+Export-ModuleMember -Function Start-DiagnosticAnalysis, `
+    Get-ManufacturerSoftwareSuggestion, `
+    Format-LatencyDisplay, `
+    Write-TypingFormattedText

@@ -1,16 +1,18 @@
 ﻿# maintenance.psm1
 # Módulo de manutenção do Jarvis (com Reparo do Indexador de Pesquisa)
+# Compatível PS 5.1 / 7+
 
 Set-StrictMode -Version Latest
 
-# ---------------------------
+# =========================
 # Infra de Log/UI
-# ---------------------------
+# =========================
 $OutputDir = Join-Path $PSScriptRoot "..\output"
 if (-not (Test-Path $OutputDir)) { New-Item -Path $OutputDir -ItemType Directory | Out-Null }
 $Global:JarvisLogPath = Join-Path $OutputDir "JarvisLog.txt"
 
 function Write-LogEntry {
+    [CmdletBinding()]
     param(
         [string]$LogPath = $Global:JarvisLogPath,
         [ValidateSet('INFO','WARN','ERROR')][string]$Level = "INFO",
@@ -23,12 +25,18 @@ function Write-LogEntry {
 }
 
 function Write-Jarvis {
-    param([string]$Text, [ConsoleColor]$Color = "White")
+    [CmdletBinding()]
+    param(
+        [string]$Text,
+        [ConsoleColor]$Color = "White"
+    )
     try { Write-Host $Text -ForegroundColor $Color } catch { Write-Host $Text }
     Write-LogEntry -Level INFO -Message $Text
 }
 
 function Save-TerminalState {
+    [CmdletBinding()]
+    param()
     try {
         return [ordered]@{
             FG = $Host.UI.RawUI.ForegroundColor
@@ -39,6 +47,7 @@ function Save-TerminalState {
     } catch { return $null }
 }
 function Restore-TerminalState {
+    [CmdletBinding()]
     param([hashtable]$State)
     try {
         if ($null -ne $State) {
@@ -51,20 +60,26 @@ function Restore-TerminalState {
     } catch {}
 }
 
-# ---------------------------
-# SFC / DISM / Rede / Limpezas / Memória (mantidos)
-# ---------------------------
+# =========================
+# SFC / DISM / Rede / Limpezas
+# =========================
 function Invoke-SFC {
+    [CmdletBinding()]
+    param()
     Write-Jarvis "Iniciando SFC..." Green
     try { sfc /scannow } catch { Write-Jarvis "Erro SFC: $($_.Exception.Message)" Red }
 }
 
 function Invoke-DISM {
+    [CmdletBinding()]
+    param()
     Write-Jarvis "Iniciando DISM /RestoreHealth..." Green
     try { Dism /Online /Cleanup-Image /RestoreHealth } catch { Write-Jarvis "Erro DISM: $($_.Exception.Message)" Red }
 }
 
 function Invoke-NetworkCorrections {
+    [CmdletBinding()]
+    param()
     Write-Jarvis "Iniciando correções de rede..." Green
     $steps = @(
         @{ Cmd='ipconfig /flushdns'        ; Desc='Flush DNS cache' },
@@ -83,7 +98,9 @@ function Invoke-NetworkCorrections {
     Write-Jarvis "Correções de rede concluídas. Recomenda-se reiniciar." Yellow
 }
 
-function Get-PathStats { param([string]$Path)
+function Get-PathStats {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Path)
     if (-not (Test-Path $Path)) { return @{ Count=0; SizeBytes=0 } }
     try {
         $items = Get-ChildItem -Path $Path -Recurse -Force -File -ErrorAction SilentlyContinue
@@ -92,21 +109,31 @@ function Get-PathStats { param([string]$Path)
         return @{ Count=$count; SizeBytes=$size }
     } catch { return @{ Count=0; SizeBytes=0 } }
 }
-function Remove-PathAndReport { param([string]$Path)
+
+function Remove-PathAndReport {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Path)
     $before = Get-PathStats -Path $Path
     try {
         if ($before.Count -gt 0) {
             Get-ChildItem -Path $Path -Recurse -Force -ErrorAction SilentlyContinue |
-                ForEach-Object { try { Remove-Item -LiteralPath $_.FullName -Force -Recurse -ErrorAction SilentlyContinue -Confirm:$false } catch {} }
+                ForEach-Object {
+                    try { Remove-Item -LiteralPath $_.FullName -Force -Recurse -ErrorAction SilentlyContinue -Confirm:$false } catch {}
+                }
         } else {
             Remove-Item -Path $Path -Recurse -Force -ErrorAction SilentlyContinue -Confirm:$false
         }
     } catch {}
     $after = Get-PathStats -Path $Path
-    return @{ FreedBytes=[math]::Max(0,$before.SizeBytes-$after.SizeBytes); RemovedCount=[math]::Max(0,$before.Count-$after.Count) }
+    return @{
+        FreedBytes   = [math]::Max(0, $before.SizeBytes - $after.SizeBytes)
+        RemovedCount = [math]::Max(0, $before.Count - $after.Count)
+    }
 }
 
 function Invoke-QuickClean {
+    [CmdletBinding()]
+    param()
     Write-Jarvis "`n[MANUTENÇÃO] Iniciando Limpeza Rápida..." Cyan
     $paths = @("$env:TEMP\*","$env:LOCALAPPDATA\Temp\*","$env:WINDIR\Temp\*")
     $totalFreed=0; $totalRemoved=0
@@ -121,6 +148,8 @@ function Invoke-QuickClean {
 }
 
 function Invoke-FullClean {
+    [CmdletBinding()]
+    param()
     Write-Jarvis "`n[MANUTENÇÃO] Iniciando Limpeza Completa..." Cyan
     Write-Jarvis "Pode remover caches, logs e temporários do sistema e apps." DarkYellow
     $confirm = Read-Host "Tem certeza que deseja continuar? (S/N)"
@@ -152,7 +181,9 @@ function Invoke-FullClean {
             Write-Jarvis "[1/8] Fechando navegadores..." DarkGray
             Get-Process -ErrorAction SilentlyContinue |
                 Where-Object { $_.Name -in @('msedge','chrome','firefox','iexplore','acrord32') } |
-                ForEach-Object { try { $_.CloseMainWindow() | Out-Null; Start-Sleep 2; $_.Kill() } catch {} }
+                ForEach-Object {
+                    try { $_.CloseMainWindow() | Out-Null; Start-Sleep 2; $_.Kill() } catch {}
+                }
         } else { Write-Jarvis "[1/8] Sem fechar navegadores (opção do analista)." DarkGray }
 
         Write-Jarvis "[2/8] Limpando temporários e caches..." DarkGray
@@ -208,7 +239,7 @@ function Invoke-FullClean {
         Write-Jarvis "`n[RESULTADO] Itens removidos: $totalRemoved | Espaço: $([math]::Round($totalFreed/1MB,2)) MB" Green
         return @{ ItemsRemoved=$totalRemoved; FreedMB=[math]::Round($totalFreed/1MB,2) }
     } catch {
-        Write-Jarvis "❌ Falha na limpeza: $($_.Exception.Message)" Red
+        Write-Jarvis " Falha na limpeza: $($_.Exception.Message)" Red
         Write-LogEntry -Level ERROR -Message "Falha Limpeza Completa: $($_.Exception.Message)"
         return @{ ItemsRemoved=0; FreedMB=0 }
     } finally {
@@ -217,9 +248,20 @@ function Invoke-FullClean {
     }
 }
 
-# Otimização de Memória
-if (-not ([System.Management.Automation.PSTypeName]'MemApi').Type) {
-    $memApi = @"
+# =========================
+# Otimização de Memória (segura / sem erro fatal no import)
+# =========================
+function Initialize-MemApi {
+    # Retorna $true se o tipo está pronto; $false se não conseguir (sem lançar erro)
+    try {
+        if ([System.AppDomain]::CurrentDomain.GetAssemblies() |
+              ForEach-Object { $_.GetType("MemApi", $false) } |
+              Where-Object { $_ } ) {
+            $script:MemApiReady = $true
+            return $true
+        }
+
+        $src = @"
 using System;
 using System.Runtime.InteropServices;
 public static class MemApi {
@@ -227,41 +269,102 @@ public static class MemApi {
     public static extern bool EmptyWorkingSet(IntPtr hProcess);
 }
 "@
-    Add-Type -TypeDefinition $memApi -ErrorAction SilentlyContinue
+
+        $prev = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'
+        try {
+            Add-Type -TypeDefinition $src -ErrorAction Stop | Out-Null
+            $script:MemApiReady = $true
+        } catch {
+            $script:MemApiReady = $false
+        } finally {
+            $ErrorActionPreference = $prev
+        }
+        return [bool]$script:MemApiReady
+    } catch {
+        $script:MemApiReady = $false
+        return $false
+    }
 }
+
+# Lista de processos protegidos (não tentar “trim” neles)
 $Global:ProtectedProcesses = @(
     'wininit','lsass','csrss','services','winlogon','smss','System','Idle','Registry',
     'Memory Compression','explorer','dwm','sihost','fontdrvhost','SearchIndexer','SearchUI','SearchApp','SearchHost'
 )
+
 function Invoke-OptimizeMemory {
+    [CmdletBinding()]
+    param()
     Write-Jarvis "`n[MANUTENÇÃO] Otimização de Memória..." Cyan
+    $freed = 0.0
+    $trimmed = 0
     try {
-        $beforeMB = [math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1024,2)
-        Write-Jarvis "Memória antes: $beforeMB MB" DarkGray
-        $procs = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Name -and $Global:ProtectedProcesses -notcontains $_.ProcessName -and $_.Id -ne $PID }
-        $trimmed = 0
-        foreach ($p in $procs) { try { if (-not $p.HasExited -and [MemApi]::EmptyWorkingSet($p.Handle)) { $trimmed++ } } catch {} }
-        [System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
+        # Tenta carregar o MemApi de forma segura (sem matar o módulo caso falhe)
+        $memAvailable = Initialize-MemApi
+
+        # Medição antes
+        $beforeMB = 0
+        try { $beforeMB = [math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1024,2) } catch {}
+        if ($beforeMB -gt 0) { Write-Jarvis ("Memória antes: {0} MB" -f $beforeMB) DarkGray }
+
+        $procs = Get-Process -ErrorAction SilentlyContinue |
+                 Where-Object { $_.Name -and $Global:ProtectedProcesses -notcontains $_.ProcessName -and $_.Id -ne $PID }
+
+        foreach ($p in $procs) {
+            try {
+                if ($p.HasExited) { continue }
+                if ($memAvailable) {
+                    # P/Invoke real (quando compilou OK)
+                    [void][MemApi]::EmptyWorkingSet($p.Handle)
+                    $trimmed++
+                } else {
+                    # Fallback “suave”: tentar forçar um refresh de working set sem P/Invoke
+                    $null = $p.Refresh()
+                }
+            } catch {
+                # Ignorar acessos negados ou processos que morreram no meio
+            }
+        }
+
+        # GC do PowerShell
+        try {
+            [System.GC]::Collect()
+            [System.GC]::WaitForPendingFinalizers()
+            [System.GC]::Collect()
+        } catch {}
         Start-Sleep -Milliseconds 400
-        $afterMB = [math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1024,2)
-        Write-Jarvis "Memória depois: $afterMB MB" DarkGray
-        Write-Jarvis "[RESULTADO] Liberado: $([math]::Round($afterMB-$beforeMB,2)) MB | Processos ajustados: $trimmed" Green
-        return @{ FreedMB=[math]::Round($afterMB-$beforeMB,2); ProcessesTrimmed=$trimmed }
+
+        $afterMB = 0
+        try { $afterMB = [math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1024,2) } catch {}
+        if ($afterMB -gt 0) { Write-Jarvis ("Memória depois: {0} MB" -f $afterMB) DarkGray }
+
+        if ($beforeMB -gt 0 -and $afterMB -gt 0) { $freed = [math]::Round($afterMB - $beforeMB,2) }
+
+        if ($memAvailable) {
+            Write-Jarvis ("[RESULTADO] Liberado: {0} MB | Processos ajustados: {1}" -f $freed, $trimmed) Green
+        } else {
+            Write-Jarvis ("[RESULTADO] (modo compatível) Ajustes leves aplicados | Proc. tocados: {0}" -f $trimmed) Green
+            Write-LogEntry -Level WARN -Message "OptimizeMemory executou sem MemApi (Add-Type falhou)."
+        }
+
+        return @{ FreedMB = $freed; ProcessesTrimmed = $trimmed; UsedFallback = (-not $memAvailable) }
     } catch {
-        Write-Jarvis "Erro na otimização: $($_.Exception.Message)" Red
-        return @{ FreedMB=0; ProcessesTrimmed=0 }
+        Write-Jarvis ("Erro na otimização: {0}" -f $_.Exception.Message) Red
+        return @{ FreedMB = 0; ProcessesTrimmed = 0; UsedFallback = $null }
     }
 }
 
-# ---------------------------
-# Reparo do Indexador (NOVO)
-# ---------------------------
+# =========================
+# Reparo do Indexador (idempotente)
+# =========================
 function Invoke-RepairSearchIndexer {
     <#
       - Habilita SearchEngine-Client-Package (Enable-WindowsOptionalFeature -> DISM fallback).
       - Define WSearch como Automático, zera dependências (sc.exe config depend= ""), reinicia.
-      - (Opcional) Reconstrói catálogo.
+      - (Opcional) Reconstrói catálogo (pergunta).
     #>
+    [CmdletBinding()]
     param([switch]$RebuildCatalogOnYesPrompt)
 
     Write-Jarvis "[PESQUISA] Reparo do Windows Search..." Cyan
@@ -277,7 +380,7 @@ function Invoke-RepairSearchIndexer {
         $notes.Add("Enable-WindowsOptionalFeature falhou: $($_.Exception.Message)")
         Write-Jarvis "Fallback para DISM..." Yellow
         try {
-            & dism.exe /online /enable-feature /featurename:SearchEngine-Client-Package /all
+            & dism.exe /online /enable-feature /featurename:SearchEngine-Client-Package /all | Out-Null
             if ($LASTEXITCODE -eq 0) { $notes.Add("DISM enable-feature OK") }
             else { $success=$false; $notes.Add("DISM exit $LASTEXITCODE") }
         } catch {
@@ -291,7 +394,7 @@ function Invoke-RepairSearchIndexer {
         Set-Service -Name WSearch -StartupType Automatic -ErrorAction SilentlyContinue
         Write-Jarvis "Limpando dependências do WSearch..." DarkGray
         & sc.exe config WSearch depend= "" | Out-Null
-        Write-Jarvis "Iniciando/ Reiniciando WSearch..." DarkGray
+        Write-Jarvis "Iniciando/Reiniciando WSearch..." DarkGray
         try { Restart-Service -Name WSearch -Force -ErrorAction Stop } catch { Start-Service -Name WSearch -ErrorAction SilentlyContinue }
         Start-Sleep -Seconds 2
         $svc = Get-Service -Name WSearch -ErrorAction SilentlyContinue
@@ -341,6 +444,9 @@ function Invoke-RepairSearchIndexer {
     }
 }
 
+# =========================
+# Export
+# =========================
 Export-ModuleMember -Function `
     Invoke-SFC, Invoke-DISM, Invoke-NetworkCorrections, `
     Invoke-QuickClean, Invoke-FullClean, Invoke-OptimizeMemory, `
