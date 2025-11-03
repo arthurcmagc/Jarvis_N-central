@@ -6,3 +6,14 @@
 [2025-10-30 11:58:59] [INFO] WSearch em execução.
 [2025-10-30 11:59:04] [INFO] Reconstrução ignorada.
 [2025-10-30 11:59:04] [INFO] [PESQUISA] Reparo finalizado com sucesso.
+[2025-10-31 14:03:29] [INFO] 
+[MANUTENÇÃO] Otimização de Memória...
+[2025-10-31 14:03:29] [INFO] Memória antes: 2352,47 MB
+[2025-10-31 14:03:32] [INFO] Memória depois: 5089,45 MB
+[2025-10-31 14:03:32] [INFO] [RESULTADO] Liberado: 2736,98 MB | Processos ajustados: 337
+[2025-10-31 14:03:32] [INFO] 
+[MANUTENÇÃO] Iniciando Limpeza Rápida...
+[2025-10-31 14:03:36] [INFO]   -> C:\Users\ARTHUR~1\AppData\Local\Temp\* | Removidos 300 | Liberado 1568.62 MB
+[2025-10-31 14:03:36] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-10-31 14:03:36] [INFO]   -> C:\WINDOWS\Temp\* | Removidos 45 | Liberado 125.56 MB
+[2025-10-31 14:03:37] [INFO] [RESULTADO] Itens: 345 | Espaço: 1694.18 MB

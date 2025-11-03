@@ -1,8 +1,10 @@
 ﻿# =================================================================
-#       DIAGNÓSTICO CENTRAL - JARVIS LOCAL v2 (PS 5.1/7+)
-#       - Spinner fiel: "[INFO] ...  -> [SUCESSO]"
-#       - Score pela Invoke-HealthAnalysis (módulo inteligente)
-#       - Inclui Indexador e Fabricante no JSON (como no backup)
+#  DIAGNÓSTICO CENTRAL - JARVIS v2 (PS 5.1/7+)
+#  - Coletas com spinner/timeout
+#  - Análise via Invoke-HealthAnalysis (intelligent_diagnosis.psm1)
+#  - Gera output\status-maquina.json
+#  - Envia o relatório ao painel (modulo jarvis.integration.psm1)
+#  - Integração opcional com n8n (config.json)
 # =================================================================
 
 # --- CONFIGURAÇÃO INICIAL ---
@@ -13,10 +15,10 @@ $JsonFile    = Join-Path $OutputPath "status-maquina.json"
 $LogPath     = Join-Path $ScriptDir "JarvisLog.txt"
 
 if (-not (Test-Path $OutputPath)) {
-    New-Item -ItemType Directory -Path $OutputPath | Out-Null
+    New-Item -ItemType Directory -Path $OutputPath -Force | Out-Null
 }
 
-# --- IMPORTS EXPLÍCITOS ---
+# --- IMPORTS EXPLÍCITOS (mantenha os nomes dos módulos conforme sua estrutura) ---
 Import-Module (Join-Path $ModulesPath "log.psm1")                   -Force
 Import-Module (Join-Path $ModulesPath "automation.psm1")            -Force
 Import-Module (Join-Path $ModulesPath "hardware.psm1")              -Force
@@ -25,10 +27,10 @@ Import-Module (Join-Path $ModulesPath "events.psm1")                -Force
 Import-Module (Join-Path $ModulesPath "services.psm1")              -Force
 Import-Module (Join-Path $ModulesPath "intelligent_diagnosis.psm1") -Force
 
-# --- CONTÊINER DE JOBS ---
+# --- CONTÊINER DE JOBS PARA LIMPEZA ---
 $createdJobs = New-Object System.Collections.Generic.List[object]
 
-# --- EXECUÇÃO COM TIMEOUT + SPINNER (1 linha limpa) ---
+# --- EXECUÇÃO COM TIMEOUT + SPINNER (1 linha/etapa) ---
 function Invoke-ModuleWithTimeout {
     param(
         [Parameter(Mandatory=$true)][string]$Message,
@@ -95,28 +97,28 @@ try {
         Hostname  = $env:COMPUTERNAME
     }
 
-    # Coletas (shape do backup preservado)
-    $diagnostico.Hardware        = Invoke-ModuleWithTimeout -Message "Coletando informações de Hardware "           -ModuleName "hardware.psm1"   -FunctionName "Get-HardwareStatus"          -Timeout 60
-    $diagnostico.Rede            = Invoke-ModuleWithTimeout -Message "Coletando informações de Rede "               -ModuleName "networking.psm1" -FunctionName "Get-NetworkStatus"           -Timeout 40
-    $diagnostico.EventosCriticos = Invoke-ModuleWithTimeout -Message "Verificando eventos críticos do sistema "     -ModuleName "events.psm1"     -FunctionName "Get-CriticalEvents"          -Timeout 90
-    $diagnostico.Servicos        = Invoke-ModuleWithTimeout -Message "Verificando status de serviços críticos "     -ModuleName "services.psm1"   -FunctionName "Get-CriticalServiceStatus"   -Timeout 40
+    # Coletas principais (mantenha os nomes das funções conforme seus módulos)
+    $diagnostico.Hardware        = Invoke-ModuleWithTimeout -Message "Coletando informações de Hardware"         -ModuleName "hardware.psm1"   -FunctionName "Get-HardwareStatus"          -Timeout 60
+    $diagnostico.Rede            = Invoke-ModuleWithTimeout -Message "Coletando informações de Rede"             -ModuleName "networking.psm1" -FunctionName "Get-NetworkStatus"           -Timeout 40
+    $diagnostico.EventosCriticos = Invoke-ModuleWithTimeout -Message "Verificando eventos críticos do sistema"   -ModuleName "events.psm1"     -FunctionName "Get-CriticalEvents"          -Timeout 90
+    $diagnostico.Servicos        = Invoke-ModuleWithTimeout -Message "Verificando status de serviços críticos"   -ModuleName "services.psm1"   -FunctionName "Get-CriticalServiceStatus"   -Timeout 40
 
-    # NOVO: Indexador (vai para o JSON como no backup e alimenta o relatório formatado)
-    $diagnostico.Indexador       = Invoke-ModuleWithTimeout -Message "Verificando Indexador de Pesquisa "           -ModuleName "services.psm1"   -FunctionName "Get-SearchIndexerStatus"     -Timeout 20
+    # Indexador (entra no JSON e alimenta relatório)
+    $diagnostico.Indexador       = Invoke-ModuleWithTimeout -Message "Verificando Indexador de Pesquisa"         -ModuleName "services.psm1"   -FunctionName "Get-SearchIndexerStatus"     -Timeout 20
 
-    # Fabricante/Modelo (usado na sugestão final do menu)
-    $diagnostico.Fabricante      = Invoke-ModuleWithTimeout -Message "Identificando fabricante do hardware "        -ModuleName "hardware.psm1"   -FunctionName "Get-ManufacturerInfo"        -Timeout 12
+    # Fabricante/Modelo (usado em sugestão final e exibição)
+    $diagnostico.Fabricante      = Invoke-ModuleWithTimeout -Message "Identificando fabricante do hardware"      -ModuleName "hardware.psm1"   -FunctionName "Get-ManufacturerInfo"        -Timeout 12
 
-    # Análise inteligente (score e recomendações técnicas)
+    # Análise inteligente (score e recomendações)
     $diagnostico.Analise = Invoke-HealthAnalysis -HardwareStatus $diagnostico.Hardware `
                                                  -Eventos        $diagnostico.EventosCriticos `
                                                  -ServiceStatus  $diagnostico.Servicos `
                                                  -NetworkStatus  $diagnostico.Rede
 
-    # Salva JSON
+    # Salva JSON (principal artefato)
     $diagnostico | ConvertTo-Json -Depth 6 | Set-Content -Path $JsonFile -Encoding UTF8
 
-    # Integração n8n opcional
+    # Integração opcional com n8n (se existir config.json)
     try {
         $cfgPath = Join-Path $ScriptDir "config.json"
         if (Test-Path $cfgPath) {
@@ -125,7 +127,7 @@ try {
             $threshold   = $config.health_score_threshold
 
             if ($healthScore -lt $threshold) {
-                Write-Host "`n[ALERTA] Pontuação de saúde ($healthScore) abaixo do limite. Enviando dados..." -ForegroundColor Yellow
+                Write-Host "`n[ALERTA] Pontuação de saúde ($healthScore) abaixo do limite. Enviando para Webhook..." -ForegroundColor Yellow
                 $payload = $diagnostico | ConvertTo-Json -Depth 6
                 Send-ToWebhook -WebhookUrl $config.webhook_url -JsonData $payload
             } else {
@@ -141,11 +143,25 @@ try {
     Write-LogEntry -LogPath $LogPath -Level INFO -Message "Diagnóstico completo OK. Resultado salvo em '$JsonFile'."
 }
 catch {
-    $msg = "Erro fatal no script de diagnóstico: $($_.Exception.Message)"
+    $msg = "Erro fatal no diagnóstico: $($_.Exception.Message)"
     Write-Host "`n[ERRO] $msg" -ForegroundColor Red
     Write-LogEntry -LogPath $LogPath -Level ERROR -Message $msg
     throw
 }
 finally {
     foreach ($j in $createdJobs) { try { Remove-Job -Job $j -Force | Out-Null } catch {} }
+}
+
+# --- ENVIAR PARA O PAINEL JARVIS (módulo de integração) ---
+try {
+    Import-Module (Join-Path $ModulesPath 'jarvis.integration.psm1') -Force
+    $reportPath = Join-Path $OutputPath 'status-maquina.json'
+    if (Test-Path -LiteralPath $reportPath) {
+        $ok = Send-JarvisReport -ReportJsonPath $reportPath -ProjectRoot $ScriptDir -Scope 'diagnostic' -DeviceHint 'jarvis-core'
+        if (-not $ok) { Write-Host "[JARVIS] Envio retornou false." -ForegroundColor DarkYellow }
+    } else {
+        Write-Host "[JARVIS] status-maquina.json não encontrado para envio." -ForegroundColor DarkYellow
+    }
+} catch {
+    Write-Host "[JARVIS] Falha ao integrar com o painel: $($_.Exception.Message)" -ForegroundColor DarkYellow
 }
