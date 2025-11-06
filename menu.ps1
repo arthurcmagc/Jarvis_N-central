@@ -76,7 +76,7 @@ function Import-ModuleSafe {
 }
 
 # =========================
-# Import de módulos
+# Import de módulos (GARANTIDO)
 # =========================
 $okInterp  = Import-ModuleSafe -Path $InterpretationPath -RepairNbspFirst
 $okMaint   = Import-ModuleSafe -Path $MaintenancePath   -RepairNbspFirst
@@ -90,6 +90,15 @@ if (-not $okMaint) {
 }
 if (-not $okPrompt) {
     Write-Host "ATENÇÃO: promptbuilder.psm1 não foi importado. O Prompt Inteligente pode não funcionar." -ForegroundColor Yellow
+}
+
+# =========================
+# Helper simples para checar cmdlets
+# =========================
+function Test-Command {
+    param([Parameter(Mandatory)][string]$Name)
+    try { return [bool](Get-Command -Name $Name -ErrorAction SilentlyContinue) }
+    catch { return $false }
 }
 
 # =========================
@@ -199,7 +208,6 @@ function Invoke-IntelligentPrompt {
             elseif ($data.EventosCriticos.EventosRelevantes) { $logs = @($data.EventosCriticos.EventosRelevantes) }
             elseif ($data.EventosCriticos.EventosCriticos)   { $logs = @($data.EventosCriticos.EventosCriticos) }
         } elseif ($null -ne $data.Dados -and $null -ne $data.Dados.Eventos) {
-            # Se o formato “novo” tiver uma área consolidada
             $logs = @($data.Dados.Eventos.RelevantesSugeridos)
         }
 
@@ -413,7 +421,24 @@ function Show-FixesMenu {
         switch ($fx) {
             "1" { if (Get-Command Invoke-SFC               -ErrorAction SilentlyContinue) { Invoke-SFC } else { Write-Host "Invoke-SFC indisponível."               -ForegroundColor Yellow }; Read-Host "`nPressione ENTER para voltar" }
             "2" { if (Get-Command Invoke-DISM              -ErrorAction SilentlyContinue) { Invoke-DISM } else { Write-Host "Invoke-DISM indisponível."              -ForegroundColor Yellow }; Read-Host "`nPressione ENTER para voltar" }
-            "3" { if (Get-Command Invoke-NetworkCorrections-ErrorAction SilentlyContinue) { Invoke-NetworkCorrections } else { Write-Host "Invoke-NetworkCorrections indisponível." -ForegroundColor Yellow }; Read-Host "`nPressione ENTER para voltar" }
+
+            # ==> CORRIGIDO: opção 3 usando helper e try/catch
+            "3" {
+                if (Test-Command 'Invoke-NetworkCorrections') {
+                    Write-Host ""
+                    Write-Host "Executando Correções de Rede..." -ForegroundColor Cyan
+                    try {
+                        Invoke-NetworkCorrections -ErrorAction Stop
+                        Write-Host "[OK] Correções de rede concluídas." -ForegroundColor Green
+                    } catch {
+                        Write-Host "[ERRO] Correções de rede falharam: $($_.Exception.Message)" -ForegroundColor Red
+                    }
+                } else {
+                    Write-Host "Invoke-NetworkCorrections indisponível." -ForegroundColor Yellow
+                }
+                Read-Host "`nPressione ENTER para voltar"
+            }
+
             "4" { if (Get-Command Invoke-FullClean         -ErrorAction SilentlyContinue) { Invoke-FullClean } else { Write-Host "Invoke-FullClean indisponível."       -ForegroundColor Yellow }; Read-Host "`nPressione ENTER para voltar" }
             "5" {
                 if (Get-Command Invoke-OptimizeMemory -ErrorAction SilentlyContinue) { Invoke-OptimizeMemory } else { Write-Host "Invoke-OptimizeMemory indisponível." -ForegroundColor Yellow }

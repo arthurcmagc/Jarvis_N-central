@@ -17,3 +17,82 @@
 [2025-10-31 14:03:36] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
 [2025-10-31 14:03:36] [INFO]   -> C:\WINDOWS\Temp\* | Removidos 45 | Liberado 125.56 MB
 [2025-10-31 14:03:37] [INFO] [RESULTADO] Itens: 345 | Espaço: 1694.18 MB
+[2025-11-06 08:18:37] [INFO] 
+[MANUTENÇÃO] Iniciando Limpeza Completa...
+[2025-11-06 08:18:37] [INFO] Pode remover caches, logs e temporários do sistema e apps.
+[2025-11-06 08:18:40] [INFO] Operação cancelada.
+[2025-11-06 08:18:45] [INFO] 
+[MANUTENÇÃO] Otimização de Memória...
+[2025-11-06 08:18:46] [INFO] Memória antes: 4912,58 MB
+[2025-11-06 08:18:49] [INFO] Memória depois: 7398,07 MB
+[2025-11-06 08:18:49] [INFO] [RESULTADO] Liberado: 2485,49 MB | Processos ajustados: 317
+[2025-11-06 08:18:49] [INFO] 
+[MANUTENÇÃO] Iniciando Limpeza Rápida...
+[2025-11-06 08:18:51] [INFO]   -> C:\Users\ARTHUR~1\AppData\Local\Temp\* | Removidos 1272 | Liberado 270.11 MB
+[2025-11-06 08:18:51] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:18:52] [INFO]   -> C:\WINDOWS\Temp\* | Removidos 119 | Liberado 56.3 MB
+[2025-11-06 08:18:52] [INFO] [RESULTADO] Itens: 1391 | Espaço: 326.41 MB
+[2025-11-06 08:32:33] [INFO] Iniciando correções de rede...
+[2025-11-06 08:32:33] [INFO] Correções de rede concluídas. Recomenda-se reiniciar.
+[2025-11-06 08:32:40] [INFO] 
+[MANUTENÇÃO] Otimização de Memória...
+[2025-11-06 08:32:40] [INFO] Memória antes: 7929,1 MB
+[2025-11-06 08:32:42] [INFO] Memória depois: 10785,94 MB
+[2025-11-06 08:32:42] [INFO] [RESULTADO] Liberado: 2856,84 MB | Processos ajustados: 344
+[2025-11-06 08:32:42] [INFO] 
+[MANUTENÇÃO] Iniciando Limpeza Rápida...
+[2025-11-06 08:32:42] [INFO]   -> C:\Users\ARTHUR~1\AppData\Local\Temp\* | Removidos 2 | Liberado 0 MB
+[2025-11-06 08:32:42] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:32:42] [INFO]   -> C:\WINDOWS\Temp\* | Removidos 2 | Liberado 0.02 MB
+[2025-11-06 08:32:42] [INFO] [RESULTADO] Itens: 4 | Espaço: 0.02 MB
+[2025-11-06 08:32:48] [INFO] 
+[MANUTENÇÃO] Iniciando Limpeza Rápida...
+[2025-11-06 08:32:48] [INFO]   -> C:\Users\ARTHUR~1\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:32:48] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:32:48] [INFO]   -> C:\WINDOWS\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:32:48] [INFO] [RESULTADO] Itens: 0 | Espaço: 0 MB
+[2025-11-06 08:35:23] [INFO] Iniciando SFC...
+[2025-11-06 08:35:31] [INFO] Iniciando DISM /RestoreHealth...
+[2025-11-06 08:36:01] [INFO] Iniciando correções de rede...
+[2025-11-06 08:36:01] [INFO] Correções de rede concluídas. Recomenda-se reiniciar.
+[2025-11-06 08:36:04] [INFO] 
+[MANUTENÇÃO] Iniciando Limpeza Completa...
+[2025-11-06 08:36:04] [INFO] Pode remover caches, logs e temporários do sistema e apps.
+[2025-11-06 08:36:08] [INFO] AVISO: Para limpar caches, alguns navegadores podem ser FECHADOS temporariamente.
+[2025-11-06 08:36:12] [INFO] [1/8] Sem fechar navegadores (opção do analista).
+[2025-11-06 08:36:12] [INFO] [2/8] Limpando temporários e caches...
+[2025-11-06 08:36:12] [INFO]   -> C:\Users\ARTHUR~1\AppData\Local\Temp\* | Removidos 1 | Liberado 0 MB
+[2025-11-06 08:36:12] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:36:12] [INFO]   -> C:\WINDOWS\Temp\* | Removidos 2 | Liberado 0.02 MB
+[2025-11-06 08:36:12] [INFO]   -> C:\WINDOWS\SoftwareDistribution\Download\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:36:12] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Microsoft\Windows\WebCache\* | Removidos 4 | Liberado 1.51 MB
+[2025-11-06 08:36:12] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Mozilla\Firefox\Profiles\*\cache2\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:36:15] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Google\Chrome\User Data\*\Cache\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:36:19] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Microsoft\Edge\User Data\*\Cache\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:36:19] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Microsoft\Windows\Explorer\thumbcache_* | Removidos 15 | Liberado 6.03 MB
+[2025-11-06 08:36:19] [INFO]   -> C:\ProgramData\Microsoft\Windows\WER\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:36:19] [INFO] [3/8] Limpando cache do Windows Update...
+[2025-11-06 08:36:28] [INFO] [4/8] Limpando logs de eventos antigos...
+[2025-11-06 08:36:51] [INFO] [5/8] Esvaziando Lixeira...
+[2025-11-06 08:38:27] [INFO] [6/8] Agressiva ignorada.
+[2025-11-06 08:38:27] [INFO] [7/8] DISM StartComponentCleanup (opcional)...
+[2025-11-06 08:38:30] [INFO] [8/8] Final...
+[2025-11-06 08:38:30] [INFO] 
+[RESULTADO] Itens removidos: 22 | Espaço: 7.56 MB
+[2025-11-06 08:38:40] [INFO] 
+[MANUTENÇÃO] Otimização de Memória...
+[2025-11-06 08:38:41] [INFO] Memória antes: 8709,03 MB
+[2025-11-06 08:38:42] [INFO] Memória depois: 10318,52 MB
+[2025-11-06 08:38:42] [INFO] [RESULTADO] Liberado: 1609,49 MB | Processos ajustados: 351
+[2025-11-06 08:38:42] [INFO] 
+[MANUTENÇÃO] Iniciando Limpeza Rápida...
+[2025-11-06 08:38:42] [INFO]   -> C:\Users\ARTHUR~1\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:38:42] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:38:42] [INFO]   -> C:\WINDOWS\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:38:42] [INFO] [RESULTADO] Itens: 0 | Espaço: 0 MB
+[2025-11-06 08:38:47] [INFO] 
+[MANUTENÇÃO] Iniciando Limpeza Rápida...
+[2025-11-06 08:38:47] [INFO]   -> C:\Users\ARTHUR~1\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:38:47] [INFO]   -> C:\Users\ArthurSodreHypeTecno\AppData\Local\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:38:47] [INFO]   -> C:\WINDOWS\Temp\* | Removidos 0 | Liberado 0 MB
+[2025-11-06 08:38:47] [INFO] [RESULTADO] Itens: 0 | Espaço: 0 MB

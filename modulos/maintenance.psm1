@@ -112,6 +112,7 @@ function Get-PathStats {
 
 function Remove-PathAndReport {
     [CmdletBinding()]
+
     param([Parameter(Mandatory)][string]$Path)
     $before = Get-PathStats -Path $Path
     try {
@@ -126,6 +127,7 @@ function Remove-PathAndReport {
     } catch {}
     $after = Get-PathStats -Path $Path
     return @{
+
         FreedBytes   = [math]::Max(0, $before.SizeBytes - $after.SizeBytes)
         RemovedCount = [math]::Max(0, $before.Count - $after.Count)
     }
@@ -356,86 +358,86 @@ function Invoke-OptimizeMemory {
 }
 
 # =========================
-# Reparo do Indexador (idempotente)
+# Reparo do Indexador (idempotente) — legado (interativo opcional)
 # =========================
+# --- REPARO DO INDEXADOR (SAFE / sem -Force) ---
 function Invoke-RepairSearchIndexer {
-    <#
-      - Habilita SearchEngine-Client-Package (Enable-WindowsOptionalFeature -> DISM fallback).
-      - Define WSearch como Automático, zera dependências (sc.exe config depend= ""), reinicia.
-      - (Opcional) Reconstrói catálogo (pergunta).
-    #>
     [CmdletBinding()]
     param([switch]$RebuildCatalogOnYesPrompt)
 
-    Write-Jarvis "[PESQUISA] Reparo do Windows Search..." Cyan
+    Write-Host "[PESQUISA] Reparo do Windows Search..." -ForegroundColor Cyan
     $notes = New-Object System.Collections.Generic.List[string]
     $success = $true
 
-    # 1) Habilitar recurso
+    # 1) Habilitar recurso (com fallback DISM)
     try {
-        Write-Jarvis "Habilitando recurso (Enable-WindowsOptionalFeature)..." DarkGray
         Enable-WindowsOptionalFeature -Online -FeatureName "SearchEngine-Client-Package" -All -NoRestart -ErrorAction Stop | Out-Null
         $notes.Add("Enable-WindowsOptionalFeature OK")
     } catch {
         $notes.Add("Enable-WindowsOptionalFeature falhou: $($_.Exception.Message)")
-        Write-Jarvis "Fallback para DISM..." Yellow
         try {
             & dism.exe /online /enable-feature /featurename:SearchEngine-Client-Package /all | Out-Null
-            if ($LASTEXITCODE -eq 0) { $notes.Add("DISM enable-feature OK") }
-            else { $success=$false; $notes.Add("DISM exit $LASTEXITCODE") }
-        } catch {
-            $success=$false; $notes.Add("DISM exception: $($_.Exception.Message)")
-        }
+            if ($LASTEXITCODE -eq 0) { $notes.Add("DISM enable-feature OK") } else { $success=$false; $notes.Add("DISM exit $LASTEXITCODE") }
+        } catch { $success=$false; $notes.Add("DISM exception: $($_.Exception.Message)") }
     }
 
-    # 2) Serviço WSearch
+    # 2) Serviço WSearch -> Automático (sem Force)
     try {
-        Write-Jarvis "Ajustando WSearch (Automatic)..." DarkGray
         Set-Service -Name WSearch -StartupType Automatic -ErrorAction SilentlyContinue
-        Write-Jarvis "Limpando dependências do WSearch..." DarkGray
         & sc.exe config WSearch depend= "" | Out-Null
-        Write-Jarvis "Iniciando/Reiniciando WSearch..." DarkGray
-        try { Restart-Service -Name WSearch -Force -ErrorAction Stop } catch { Start-Service -Name WSearch -ErrorAction SilentlyContinue }
-        Start-Sleep -Seconds 2
-        $svc = Get-Service -Name WSearch -ErrorAction SilentlyContinue
-        if ($svc -and $svc.Status -eq 'Running') { Write-Jarvis "WSearch em execução." Green }
-        else { $notes.Add("WSearch status: $($svc.Status)"); Write-Jarvis "WSearch não está 'Running' (Status: $($svc.Status))." Yellow }
     } catch {
-        $success = $false; $notes.Add("Serviço WSearch erro: $($_.Exception.Message)")
-        Write-Jarvis "Erro ao ajustar WSearch: $($_.Exception.Message)" Red
+        $success = $false; $notes.Add("Set/SC WSearch erro: $($_.Exception.Message)")
     }
 
-    # 3) Reconstrução de catálogo (opcional)
+    # 3) Iniciar (sem -Force) com pequena espera
+    try {
+        $svc = Get-Service -Name WSearch -ErrorAction SilentlyContinue
+        if ($null -ne $svc -and $svc.Status -ne 'Running') {
+            Start-Service -Name WSearch -ErrorAction SilentlyContinue
+            $limit = (Get-Date).AddSeconds(8)
+            do {
+                Start-Sleep -Milliseconds 400
+                $svc = Get-Service -Name WSearch -ErrorAction SilentlyContinue
+            } while ($svc -and $svc.Status -ne 'Running' -and (Get-Date) -lt $limit)
+        }
+    } catch {
+        $success = $false; $notes.Add("Start WSearch erro: $($_.Exception.Message)")
+    }
+
+    # 4) Rebuild opcional do catálogo (sem -Force)
     if ($RebuildCatalogOnYesPrompt) {
         $doRebuild = Read-Host "Deseja reconstruir o catálogo de indexação (pode demorar)? (S/N)"
         if ($doRebuild -in @('S','s')) {
             try {
-                Write-Jarvis "Parando WSearch..." DarkGray
-                Stop-Service -Name WSearch -Force -ErrorAction SilentlyContinue
-                Start-Sleep -Seconds 2
+                $svc = Get-Service -Name WSearch -ErrorAction SilentlyContinue
+                if ($svc -and $svc.Status -eq 'Running') {
+                    Stop-Service -Name WSearch -ErrorAction SilentlyContinue
+                    $stopLimit = (Get-Date).AddSeconds(8)
+                    do {
+                        Start-Sleep -Milliseconds 400
+                        $svc = Get-Service -Name WSearch -ErrorAction SilentlyContinue
+                    } while ($svc -and $svc.Status -ne 'Stopped' -and (Get-Date) -lt $stopLimit)
+                }
+
                 $catPath = "C:\ProgramData\Microsoft\Search\Data\Applications\Windows"
                 if (Test-Path -LiteralPath $catPath) {
-                    Write-Jarvis "Limpando catálogo: $catPath" DarkGray
                     Get-ChildItem -LiteralPath $catPath -Recurse -Force -ErrorAction SilentlyContinue |
                         Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
                 }
-                Write-Jarvis "Iniciando WSearch..." DarkGray
+
                 Start-Service -Name WSearch -ErrorAction SilentlyContinue
-                Start-Sleep -Seconds 2
-                $svc2 = Get-Service -Name WSearch -ErrorAction SilentlyContinue
-                if ($svc2 -and $svc2.Status -eq 'Running') { Write-Jarvis "Reconstrução iniciada." Green }
-                else { $notes.Add("Após rebuild, WSearch: $($svc2.Status)"); Write-Jarvis "WSearch não iniciou após rebuild (Status: $($svc2.Status))." Yellow }
-            } catch {
-                $success=$false; $notes.Add("Rebuild erro: $($_.Exception.Message)")
-                Write-Jarvis "Erro durante reconstrução: $($_.Exception.Message)" Red
-            }
+                $startLimit = (Get-Date).AddSeconds(8)
+                do {
+                    Start-Sleep -Milliseconds 400
+                    $svc = Get-Service -Name WSearch -ErrorAction SilentlyContinue
+                } while ($svc -and $svc.Status -ne 'Running' -and (Get-Date) -lt $startLimit)
+
+                if ($svc -and $svc.Status -eq 'Running') { $notes.Add("Reconstrução iniciada.") } else { $success=$false; $notes.Add("WSearch não iniciou após rebuild.") }
+            } catch { $success=$false; $notes.Add("Rebuild erro: $($_.Exception.Message)") }
         } else {
-            Write-Jarvis "Reconstrução ignorada." DarkGray
+            $notes.Add("Reconstrução ignorada.")
         }
     }
-
-    if ($success) { Write-LogEntry -Level INFO -Message "[PESQUISA] Reparo finalizado com sucesso." }
-    else { Write-LogEntry -Level WARN -Message "[PESQUISA] Reparo finalizado com avisos/erros: $($notes -join ' | ')" }
 
     [pscustomobject]@{
         Success = $success
@@ -445,9 +447,149 @@ function Invoke-RepairSearchIndexer {
 }
 
 # =========================
+# NOVA FUNÇÃO — Repair-WindowsSearchIndex (silenciosa e sem -Force onde não existe)
+# =========================
+function Repair-WindowsSearchIndex {
+    [CmdletBinding()]
+    param(
+        [ValidateSet('validate','lightclean','rebuild')]
+        [string]$Mode = 'validate',
+        [switch]$Silent
+    )
+
+    $SearchRoot = Join-Path $env:PROGRAMDATA 'Microsoft\Search\Data'
+    $TempPaths  = @(
+        (Join-Path $SearchRoot 'Temp\*')
+    )
+    $RebuildPaths = @(
+        (Join-Path $SearchRoot 'Applications\Windows\*'),
+        (Join-Path $SearchRoot 'Config\*')
+    )
+
+    $out = [pscustomobject]@{
+        Mode     = $Mode
+        Action   = 'None'
+        Status   = 'Unknown'
+        Details  = $null
+        Service  = 'WSearch'
+        Changed  = $false
+    }
+
+    try {
+        if (-not $Silent) { Write-Host "[INFO] Verificando Indexador de Pesquisa (mode: $Mode)" -ForegroundColor Gray }
+
+        # Serviço
+        $svc = $null
+        try { $svc = Get-Service -Name 'WSearch' -ErrorAction Stop } catch { $svc = $null }
+        if (-not $svc) {
+            $out.Status  = 'ServiceNotFound'
+            $out.Details = 'Serviço WSearch ausente nesta edição do Windows.'
+            if (-not $Silent) { Write-Host "  [INFO] WSearch não disponível nesta máquina" -ForegroundColor Yellow }
+            return $out
+        }
+
+        # StartupType & start (sem -Force)
+        try { Set-Service -Name 'WSearch' -StartupType Automatic -ErrorAction SilentlyContinue } catch {}
+        try {
+            $svc = Get-Service -Name 'WSearch' -ErrorAction SilentlyContinue
+            if ($svc -and $svc.Status -ne 'Running') { Start-Service -Name 'WSearch' -ErrorAction SilentlyContinue }
+        } catch {}
+
+        $svc = Get-Service -Name 'WSearch' -ErrorAction SilentlyContinue
+        if ($svc -and $svc.Status -eq 'Running') {
+            if (-not $Silent) { Write-Host "  [SUCESSO] WSearch em execução" -ForegroundColor Green }
+        } else {
+            if (-not $Silent) { Write-Host "  [AVISO] WSearch não conseguiu iniciar" -ForegroundColor Yellow }
+        }
+
+        switch ($Mode) {
+            'validate' {
+                $out.Action  = 'ValidateOnly'
+                $out.Status  = 'OK'
+                $out.Details = 'Serviço validado; nenhuma limpeza aplicada.'
+                if (-not $Silent) { Write-Host "  -> [SUCESSO]" -ForegroundColor Green }
+            }
+            'lightclean' {
+                $needs = $false
+                foreach ($p in $TempPaths) { if (Test-Path -LiteralPath $p) { $needs = $true; break } }
+                if ($needs) {
+                    if (-not $Silent) { Write-Host "  [INFO] Limpando artefatos temporários do índice" -ForegroundColor Yellow }
+                    try {
+                        $svc = Get-Service -Name 'WSearch' -ErrorAction SilentlyContinue
+                        if ($svc -and $svc.Status -eq 'Running') {
+                            Stop-Service -Name 'WSearch' -ErrorAction SilentlyContinue
+                            Start-Sleep -Seconds 2
+                        }
+                        foreach ($p in $TempPaths) {
+                            Remove-Item -LiteralPath $p -Recurse -ErrorAction SilentlyContinue
+                        }
+                        Start-Service -Name 'WSearch' -ErrorAction SilentlyContinue
+                        $out.Action  = 'LightCleanup'
+                        $out.Status  = 'Cleaned'
+                        $out.Details = 'Temp limpos e serviço reiniciado.'
+                        $out.Changed = $true
+                        if (-not $Silent) { Write-Host "  [SUCESSO] Indexador limpo (light) e reiniciado" -ForegroundColor Green }
+                    } catch {
+                        if (-not $Silent) { Write-Host "  [AVISO] Limpeza do índice falhou, seguindo: $($_.Exception.Message)" -ForegroundColor Yellow }
+                        $out.Action  = 'LightCleanup'
+                        $out.Status  = 'Warning'
+                        $out.Details = $_.Exception.Message
+                    }
+                } else {
+                    $out.Action  = 'LightCleanup'
+                    $out.Status  = 'NoChanges'
+                    $out.Details = 'Nenhum artefato temporário encontrado.'
+                    if (-not $Silent) { Write-Host "  [INFO] Nada para limpar (light)" -ForegroundColor Gray }
+                }
+            }
+            'rebuild' {
+                $exists = $false
+                foreach ($p in $RebuildPaths) { if (Test-Path -LiteralPath $p) { $exists = $true; break } }
+                if ($exists) {
+                    if (-not $Silent) { Write-Host "  [INFO] Rebuild do índice (limpeza controlada)" -ForegroundColor Yellow }
+                    try {
+                        $svc = Get-Service -Name 'WSearch' -ErrorAction SilentlyContinue
+                        if ($svc -and $svc.Status -eq 'Running') {
+                            Stop-Service -Name 'WSearch' -ErrorAction SilentlyContinue
+                            Start-Sleep -Seconds 2
+                        }
+                        foreach ($p in $RebuildPaths) {
+                            Remove-Item -LiteralPath $p -Recurse -ErrorAction SilentlyContinue
+                        }
+                        Start-Service -Name 'WSearch' -ErrorAction SilentlyContinue
+                        $out.Action  = 'Rebuild'
+                        $out.Status  = 'Rebuilt'
+                        $out.Details = 'Pastas do índice limpas; Windows irá reindexar em background.'
+                        $out.Changed = $true
+                        if (-not $Silent) { Write-Host "  [SUCESSO] Rebuild disparado; reindexação ocorrerá em background" -ForegroundColor Green }
+                    } catch {
+                        if (-not $Silent) { Write-Host "  [AVISO] Rebuild falhou, seguindo: $($_.Exception.Message)" -ForegroundColor Yellow }
+                        $out.Action  = 'Rebuild'
+                        $out.Status  = 'Warning'
+                        $out.Details = $_.Exception.Message
+                    }
+                } else {
+                    $out.Action  = 'Rebuild'
+                    $out.Status  = 'NoChanges'
+                    $out.Details = 'Estruturas de índice já estavam normais.'
+                    if (-not $Silent) { Write-Host "  [INFO] Nada para limpar (rebuild)" -ForegroundColor Gray }
+                }
+            }
+        }
+
+        return $out
+    } catch {
+        $out.Status  = 'Error'
+        $out.Details = $_.Exception.Message
+        if (-not $Silent) { Write-Host "  [ERRO] Falha no Indexador de Pesquisa: $($out.Details)" -ForegroundColor Red }
+        return $out
+    }
+}
+
+# =========================
 # Export
 # =========================
 Export-ModuleMember -Function `
     Invoke-SFC, Invoke-DISM, Invoke-NetworkCorrections, `
     Invoke-QuickClean, Invoke-FullClean, Invoke-OptimizeMemory, `
-    Invoke-RepairSearchIndexer
+    Invoke-RepairSearchIndexer, Repair-WindowsSearchIndex

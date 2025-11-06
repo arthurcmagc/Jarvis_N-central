@@ -1,25 +1,25 @@
 ﻿{
-    "Timestamp":  "2025-11-03T10:35:15",
+    "Timestamp":  "2025-11-06T10:38:01",
     "Hostname":  "HYPE-0146",
     "Hardware":  {
                      "CPU":  "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
                      "RAM":  {
                                  "TotalGB":  19.73,
-                                 "UsedPercent":  86.67
+                                 "UsedPercent":  74.61
                              },
                      "Disks":  [
                                    {
                                        "DeviceID":  "C:",
-                                       "FreeGB":  68.65,
+                                       "FreeGB":  72.49,
                                        "TotalGB":  235.74,
-                                       "FreePercent":  29.12,
+                                       "FreePercent":  30.75,
                                        "Tipo":  "Disco Local Físico"
                                    },
                                    {
                                        "DeviceID":  "G:",
-                                       "FreeGB":  65.21,
+                                       "FreeGB":  68.86,
                                        "TotalGB":  235.74,
-                                       "FreePercent":  27.66,
+                                       "FreePercent":  29.21,
                                        "Tipo":  "Disco Local Físico"
                                    }
                                ]
@@ -33,369 +33,369 @@
                  "LatenciaMs":  null
              },
     "EventosCriticos":  {
-                            "TotalEventos":  125,
+                            "TotalEventos":  149,
                             "EventosRelevantes":  [
                                                       {
-                                                          "TimeCreated":  "\/Date(1762166131111)\/",
+                                                          "TimeCreated":  "\/Date(1762426444196)\/",
                                                           "Id":  1801,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762165886346)\/",
+                                                          "TimeCreated":  "\/Date(1762426155847)\/",
                                                           "Id":  11,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762165831758)\/",
+                                                          "TimeCreated":  "\/Date(1762426136907)\/",
                                                           "Id":  7009,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762084106889)\/",
+                                                          "TimeCreated":  "\/Date(1762385887874)\/",
+                                                          "Id":  11,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "\/Date(1762379239223)\/",
                                                           "Id":  1801,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762083827930)\/",
+                                                          "TimeCreated":  "\/Date(1762378891425)\/",
                                                           "Id":  11,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762083808196)\/",
+                                                          "TimeCreated":  "\/Date(1762378881152)\/",
                                                           "Id":  7009,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762080191345)\/",
+                                                          "TimeCreated":  "\/Date(1762378662915)\/",
+                                                          "Id":  7009,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "\/Date(1762373090123)\/",
                                                           "Id":  11,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762080037591)\/",
+                                                          "TimeCreated":  "\/Date(1762368551539)\/",
                                                           "Id":  1801,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762079737810)\/",
+                                                          "TimeCreated":  "\/Date(1762368264383)\/",
+                                                          "Id":  11,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "\/Date(1762368251945)\/",
                                                           "Id":  7009,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762003831126)\/",
-                                                          "Id":  1801,
+                                                          "TimeCreated":  "\/Date(1762366254076)\/",
+                                                          "Id":  10010,
                                                           "LevelDisplayName":  "Erro",
-                                                          "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
+                                                          "Message":  "O servidor Microsoft.AAD.BrokerPlugin_1000.19580.1000.2_neutral_neutral_cw5n1h2txyewy!Windows.Security.Authentication.Web.Core.BackgroundGetTokenTask.ClassId.WebAccountProvider não se registrou no DCOM dentro do tempo limite necessário."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762003581179)\/",
+                                                          "TimeCreated":  "\/Date(1762362609291)\/",
                                                           "Id":  11,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1762003531257)\/",
-                                                          "Id":  7009,
-                                                          "LevelDisplayName":  "Erro",
-                                                          "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
-                                                      },
-                                                      {
-                                                          "TimeCreated":  "\/Date(1761944850400)\/",
-                                                          "Id":  1801,
-                                                          "LevelDisplayName":  "Erro",
-                                                          "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
-                                                      },
-                                                      {
-                                                          "TimeCreated":  "\/Date(1761944562246)\/",
-                                                          "Id":  11,
-                                                          "LevelDisplayName":  "Erro",
-                                                          "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
-                                                      },
-                                                      {
-                                                          "TimeCreated":  "\/Date(1761944550749)\/",
-                                                          "Id":  7009,
-                                                          "LevelDisplayName":  "Erro",
-                                                          "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
-                                                      },
-                                                      {
-                                                          "TimeCreated":  "\/Date(1761934797759)\/",
-                                                          "Id":  11,
-                                                          "LevelDisplayName":  "Erro",
-                                                          "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
-                                                      },
-                                                      {
-                                                          "TimeCreated":  "\/Date(1761918341367)\/",
-                                                          "Id":  11,
-                                                          "LevelDisplayName":  "Erro",
-                                                          "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
-                                                      },
-                                                      {
-                                                          "TimeCreated":  "\/Date(1761913290636)\/",
+                                                          "TimeCreated":  "\/Date(1762342653813)\/",
                                                           "Id":  10010,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O servidor {506E0B02-79C0-444C-B657-DDB69CD339FF} não se registrou no DCOM dentro do tempo limite necessário."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761913170591)\/",
+                                                          "TimeCreated":  "\/Date(1762342533765)\/",
                                                           "Id":  10010,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O servidor {3E8C9ABE-9226-4609-BF5B-60288A391DEE} não se registrou no DCOM dentro do tempo limite necessário."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761913049576)\/",
+                                                          "TimeCreated":  "\/Date(1762342413085)\/",
                                                           "Id":  10005,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O DCOM obteve o erro \"87\" ao tentar iniciar o serviço GamingServices com argumentos \"Não Disponível\" para executar o servidor:\r\n{D529741A-1BF1-4D1E-9976-35089622E758}"
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761913049567)\/",
+                                                          "TimeCreated":  "\/Date(1762342413071)\/",
                                                           "Id":  10005,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O DCOM obteve o erro \"87\" ao tentar iniciar o serviço GamingServices com argumentos \"Não Disponível\" para executar o servidor:\r\n{3E8C9ABE-9226-4609-BF5B-60288A391DEE}"
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761913048802)\/",
+                                                          "TimeCreated":  "\/Date(1762342411742)\/",
                                                           "Id":  10005,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O DCOM obteve o erro \"87\" ao tentar iniciar o serviço GamingServices com argumentos \"Não Disponível\" para executar o servidor:\r\n{D529741A-1BF1-4D1E-9976-35089622E758}"
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761913048794)\/",
+                                                          "TimeCreated":  "\/Date(1762342411723)\/",
                                                           "Id":  10005,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O DCOM obteve o erro \"87\" ao tentar iniciar o serviço GamingServices com argumentos \"Não Disponível\" para executar o servidor:\r\n{3E8C9ABE-9226-4609-BF5B-60288A391DEE}"
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761913043830)\/",
+                                                          "TimeCreated":  "\/Date(1762342402551)\/",
                                                           "Id":  20,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9MWPM2CQNLHN-Microsoft.GamingServices."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761913014090)\/",
-                                                          "Id":  20,
-                                                          "LevelDisplayName":  "Erro",
-                                                          "Message":  "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9NKSQGP7F2NH-5319275A.WhatsAppDesktop."
-                                                      },
-                                                      {
-                                                          "TimeCreated":  "\/Date(1761909664718)\/",
+                                                          "TimeCreated":  "\/Date(1762341330806)\/",
                                                           "Id":  1801,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761909381007)\/",
+                                                          "TimeCreated":  "\/Date(1762341009161)\/",
                                                           "Id":  11,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761909365942)\/",
+                                                          "TimeCreated":  "\/Date(1762341003152)\/",
                                                           "Id":  7009,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
                                                       },
                                                       {
-                                                          "TimeCreated":  "\/Date(1761851056778)\/",
-                                                          "Id":  1801,
-                                                          "LevelDisplayName":  "Erro",
-                                                          "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
-                                                      },
-                                                      {
-                                                          "TimeCreated":  "\/Date(1761850787683)\/",
+                                                          "TimeCreated":  "\/Date(1762278379614)\/",
                                                           "Id":  11,
                                                           "LevelDisplayName":  "Erro",
                                                           "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "\/Date(1762261609719)\/",
+                                                          "Id":  20,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9WZDNCRFJBMP-MICROSOFT.WINDOWSSTORE."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "\/Date(1762261557767)\/",
+                                                          "Id":  20,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "Falha na Instalação: o Windows não pôde instalar a seguinte atualização com o erro 0x80073D02: 9NTXGKQ8P7N0-MicrosoftWindows.CrossDevice."
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "\/Date(1762255712144)\/",
+                                                          "Id":  10005,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O DCOM obteve o erro \"87\" ao tentar iniciar o serviço GamingServices com argumentos \"Não Disponível\" para executar o servidor:\r\n{D529741A-1BF1-4D1E-9976-35089622E758}"
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "\/Date(1762255712135)\/",
+                                                          "Id":  10005,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O DCOM obteve o erro \"87\" ao tentar iniciar o serviço GamingServices com argumentos \"Não Disponível\" para executar o servidor:\r\n{3E8C9ABE-9226-4609-BF5B-60288A391DEE}"
+                                                      },
+                                                      {
+                                                          "TimeCreated":  "\/Date(1762255711495)\/",
+                                                          "Id":  10005,
+                                                          "LevelDisplayName":  "Erro",
+                                                          "Message":  "O DCOM obteve o erro \"87\" ao tentar iniciar o serviço GamingServices com argumentos \"Não Disponível\" para executar o servidor:\r\n{D529741A-1BF1-4D1E-9976-35089622E758}"
                                                       }
                                                   ],
                             "EventosCriticos":  [
                                                     {
-                                                        "TimeCreated":  "\/Date(1762168645426)\/",
-                                                        "Id":  1002,
+                                                        "TimeCreated":  "\/Date(1762434522482)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O programa olk.exe versão 1.2025.1017.100 interagiu com o Windows e foi fechado. Para ver se há mais informações disponíveis sobre o problema, verifique o histórico de problemas no painel de controle de Segurança e Manutenção.\r\n"
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 28356. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762168154373)\/",
-                                                        "Id":  1023,
+                                                        "TimeCreated":  "\/Date(1762433643355)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Windows não pode carregar a DLL de contador extensível \"C:\\WINDOWS\\system32\\sysmain.dll\" (código de erro do Win32 Não foi possível encontrar o módulo especificado.)."
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 19840. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762166131111)\/",
-                                                        "Id":  1801,
+                                                        "TimeCreated":  "\/Date(1762433268561)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 29456. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762165886346)\/",
-                                                        "Id":  11,
+                                                        "TimeCreated":  "\/Date(1762432877846)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 17276. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762165831758)\/",
-                                                        "Id":  7009,
+                                                        "TimeCreated":  "\/Date(1762432715158)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 21716. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762087310743)\/",
-                                                        "Id":  8193,
+                                                        "TimeCreated":  "\/Date(1762432437403)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 27880. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762087310742)\/",
-                                                        "Id":  13,
+                                                        "TimeCreated":  "\/Date(1762431953631)\/",
+                                                        "Id":  7024,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+                                                        "Message":  "O serviço Windows Search terminou com o seguinte erro específico de serviço: \r\n%%3221493761"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762087310738)\/",
-                                                        "Id":  8193,
+                                                        "TimeCreated":  "\/Date(1762431953631)\/",
+                                                        "Id":  7031,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+                                                        "Message":  "O serviço Windows Search foi finalizado inesperadamente. Isto aconteceu 5 vez(es). A seguinte ação corretiva será tomada em 30000 milissegundos: Reiniciar o serviço."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762087310737)\/",
-                                                        "Id":  13,
+                                                        "TimeCreated":  "\/Date(1762431953612)\/",
+                                                        "Id":  7042,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+                                                        "Message":  "O serviço Pesquisa do Windows está sendo interrompido devido a um problema no indexador:The catalog is corrupt.\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762084106889)\/",
-                                                        "Id":  1801,
+                                                        "TimeCreated":  "\/Date(1762431953611)\/",
+                                                        "Id":  7040,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
+                                                        "Message":  "O serviço de pesquisa detectou arquivos de dados corrompidos no índice {id=4400}. O serviço tentará corrigir automaticamente esse problema recriando o índice.\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762083827930)\/",
-                                                        "Id":  11,
+                                                        "TimeCreated":  "\/Date(1762431953611)\/",
+                                                        "Id":  7010,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                        "Message":  "Não é possível inicializar o índice.\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762083808196)\/",
-                                                        "Id":  7009,
+                                                        "TimeCreated":  "\/Date(1762431953610)\/",
+                                                        "Id":  3058,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+                                                        "Message":  "Não é possível inicializar o aplicativo.\n\nContexto: Aplicativo Windows\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762083760314)\/",
-                                                        "Id":  1000,
+                                                        "TimeCreated":  "\/Date(1762431953610)\/",
+                                                        "Id":  3028,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O acesso aos dados de desempenho foi negado ao usuário \"SISTEMA\" (valor de GetUserName() para o thread em execução), pois foi tentado a partir do módulo \"C:\\Program Files\\SentinelOne\\Sentinel Agent 24.2.3.471\\SentinelAgent.exe\" (valor de GetModuleFileName() para o binário que emitiu a consulta)."
+                                                        "Message":  "Não é possível inicializar o objeto coletor.\n\nContexto: Aplicativo Windows, Catálogo SystemIndex\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762080191345)\/",
-                                                        "Id":  11,
+                                                        "TimeCreated":  "\/Date(1762431953609)\/",
+                                                        "Id":  3029,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                        "Message":  "Não é possível inicializar o plug-in em \u003cSearch.TripoliIndexer\u003e.\n\nContexto: Aplicativo Windows, Catálogo SystemIndex\n\nDetalhes:\n\t0x%08x (0x80040d06 - O objeto especificado não pode ser encontrado. Especifique o nome de um objeto existente.  (HRESULT : 0x80040d06))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762080037591)\/",
-                                                        "Id":  1801,
+                                                        "TimeCreated":  "\/Date(1762431953603)\/",
+                                                        "Id":  3057,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
+                                                        "Message":  "Não é possível inicializar o gerenciador de plug-ins \u003cSearch.TripoliIndexer\u003e.\n\nContexto: Aplicativo Windows\n\nDetalhes:\n\t0x%08x (0x87af000e - (HRESULT : 0x87af000e))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762080037369)\/",
-                                                        "Id":  1023,
+                                                        "TimeCreated":  "\/Date(1762431721151)\/",
+                                                        "Id":  7024,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Windows não pode carregar a DLL de contador extensível \"C:\\WINDOWS\\system32\\sysmain.dll\" (código de erro do Win32 Não foi possível encontrar o módulo especificado.)."
+                                                        "Message":  "O serviço Windows Search terminou com o seguinte erro específico de serviço: \r\n%%3221493761"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762079737810)\/",
-                                                        "Id":  7009,
+                                                        "TimeCreated":  "\/Date(1762431721151)\/",
+                                                        "Id":  7031,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+                                                        "Message":  "O serviço Windows Search foi finalizado inesperadamente. Isto aconteceu 4 vez(es). A seguinte ação corretiva será tomada em 30000 milissegundos: Reiniciar o serviço."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762008254854)\/",
-                                                        "Id":  8193,
+                                                        "TimeCreated":  "\/Date(1762431721136)\/",
+                                                        "Id":  7042,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+                                                        "Message":  "O serviço Pesquisa do Windows está sendo interrompido devido a um problema no indexador:The catalog is corrupt.\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762008254854)\/",
-                                                        "Id":  13,
+                                                        "TimeCreated":  "\/Date(1762431721135)\/",
+                                                        "Id":  7040,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+                                                        "Message":  "O serviço de pesquisa detectou arquivos de dados corrompidos no índice {id=4400}. O serviço tentará corrigir automaticamente esse problema recriando o índice.\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762003831126)\/",
-                                                        "Id":  1801,
+                                                        "TimeCreated":  "\/Date(1762431721135)\/",
+                                                        "Id":  7010,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
+                                                        "Message":  "Não é possível inicializar o índice.\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762003581179)\/",
-                                                        "Id":  11,
+                                                        "TimeCreated":  "\/Date(1762431721135)\/",
+                                                        "Id":  3058,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                        "Message":  "Não é possível inicializar o aplicativo.\n\nContexto: Aplicativo Windows\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1762003531257)\/",
-                                                        "Id":  7009,
+                                                        "TimeCreated":  "\/Date(1762431721134)\/",
+                                                        "Id":  3028,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+                                                        "Message":  "Não é possível inicializar o objeto coletor.\n\nContexto: Aplicativo Windows, Catálogo SystemIndex\n\nDetalhes:\n\t0x%08x (0xc0041801 - O catálogo do índice de conteúdo está corrompido.  (HRESULT : 0xc0041801))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1761944850400)\/",
-                                                        "Id":  1801,
+                                                        "TimeCreated":  "\/Date(1762431721132)\/",
+                                                        "Id":  3029,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Secure Boot CA/keys need to be updated. This device signature information is included here.\r\nDeviceAttributes: FirmwareManufacturer:Dell Inc.;FirmwareVersion:1.37.0;OEMManufacturerName:Dell Inc.;OEMModelSKU:0A24;OSArchitecture:amd64;\r\nBucketId: 2eb3b57497968f0ffa593c6e314c7adfa14d811c28f7acf4928bca89d61e6fe6\r\nBucketConfidenceLevel: \r\nUpdateType: 0\r\nHResult: A operação foi concluída com êxito."
+                                                        "Message":  "Não é possível inicializar o plug-in em \u003cSearch.TripoliIndexer\u003e.\n\nContexto: Aplicativo Windows, Catálogo SystemIndex\n\nDetalhes:\n\t0x%08x (0x80040d06 - O objeto especificado não pode ser encontrado. Especifique o nome de um objeto existente.  (HRESULT : 0x80040d06))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1761944562246)\/",
-                                                        "Id":  11,
+                                                        "TimeCreated":  "\/Date(1762431721109)\/",
+                                                        "Id":  3057,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                        "Message":  "Não é possível inicializar o gerenciador de plug-ins \u003cSearch.TripoliIndexer\u003e.\n\nContexto: Aplicativo Windows\n\nDetalhes:\n\t0x%08x (0x87af000e - (HRESULT : 0x87af000e))\n"
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1761944550749)\/",
-                                                        "Id":  7009,
+                                                        "TimeCreated":  "\/Date(1762431174431)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Tempo limite esgotado (120000 milissegundos) ao aguardar a conexão do serviço Intel(R) TPM Provisioning Service."
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 11236. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1761942272202)\/",
-                                                        "Id":  8193,
+                                                        "TimeCreated":  "\/Date(1762430713254)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Erro do serviço de cópias de sombra de volume: erro inesperado ao chamar a rotina CoCreateInstance.  hr = 0x8007045b, O sistema está sendo desligado.\r\n. "
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 5744. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1761942272201)\/",
-                                                        "Id":  13,
+                                                        "TimeCreated":  "\/Date(1762430224140)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "Informações sobre o Serviço de Cópias de Sombra de Volume: não é possível iniciar o Servidor COM com CLSID {4e14fba2-2e22-11d1-9964-00c04fbbb345} e nome CEventSystem. [0x8007045b, O sistema está sendo desligado.\r\n] "
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 28536. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1761934797759)\/",
-                                                        "Id":  11,
+                                                        "TimeCreated":  "\/Date(1762430041772)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 28460. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1761918341367)\/",
-                                                        "Id":  11,
+                                                        "TimeCreated":  "\/Date(1762429745697)\/",
+                                                        "Id":  1022,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Nome Diferenciado no campo de assunto do certificado de logon de cartão inteligente não contém informações suficientes para identificar o domínio apropriado em um computador associado não pertencente ao domínio. Contate o administrador do sistema."
+                                                        "Message":  ".NET Runtime version 4.0.30319.0 - Falha ao inicializar a infra-estrutura de anexação da API do criador de perfil. Esse processo não permite que um perfil seja anexado. HRESULT: 0x80004005.  ID do Processo (decimal): 26520. ID da Mensagem: [0x2509]."
                                                     },
                                                     {
-                                                        "TimeCreated":  "\/Date(1761915149944)\/",
-                                                        "Id":  1500,
+                                                        "TimeCreated":  "\/Date(1762429257807)\/",
+                                                        "Id":  7031,
                                                         "LevelDisplayName":  "Erro",
-                                                        "Message":  "O Windows não pode fazer o seu logon porque o perfil não pode ser carregado. Verifique se você está conectado à rede e se a rede está funcionando corretamente. \r\n\r\n DETALHE - Acesso negado.\r\n"
+                                                        "Message":  "O serviço Windows Search foi finalizado inesperadamente. Isto aconteceu 3 vez(es). A seguinte ação corretiva será tomada em 30000 milissegundos: Reiniciar o serviço."
                                                     }
                                                 ]
                         },
@@ -430,11 +430,6 @@
                                           "Name":  "TermService",
                                           "DisplayName":  "Serviços de Área de Trabalho Remota",
                                           "Status":  "Stopped"
-                                      },
-                                      {
-                                          "Name":  "WSearch",
-                                          "DisplayName":  "Windows Search",
-                                          "Status":  "Running"
                                       }
                                   ],
                      "CriticalServicesNotRunning":  [
@@ -448,31 +443,27 @@
                                                         }
                                                     ]
                  },
-    "Indexador":  {
-                      "WSearchStatus":  "Running",
-                      "StartType":  "Automatic",
-                      "FeatureEnabled":  true,
-                      "IsAdmin":  true
-                  },
     "Fabricante":  {
                        "Manufacturer":  "Dell Inc.",
                        "Model":  "Vostro 3500"
                    },
     "Analise":  {
-                    "SaudePontuacao":  61,
+                    "SaudePontuacao":  64,
                     "Classificacao":  "ATENÇÃO",
-                    "EventScore":  2.2,
+                    "EventScore":  15.2,
                     "CorruptionScore":  45,
                     "ProblemasIdentificados":  [
-                                                   "[ALERTA] Uso de RAM elevado: 86.67%",
-                                                   "[ALERTA] Espaço em disco baixo: 27.66% livre no pior volume",
+                                                   "[ALERTA] Uso de RAM elevado: 74.61%",
+                                                   "[ALERTA] Espaço em disco baixo: 29.21% livre no pior volume",
                                                    "[CRÍTICO] Serviços essenciais parados: 2",
+                                                   "[ALERTA] EventScore elevado: 15,2",
                                                    "[CRÍTICO] Sinais de corrupção/instabilidade: CorruptionScore=45"
                                                ],
                     "Detalhes":  {
                                      "Penalizacoes":  {
+                                                          "Events":  -5,
                                                           "Disk":  -7,
-                                                          "RAM":  -15,
+                                                          "RAM":  -7,
                                                           "Corruption":  -5,
                                                           "Services":  -12
                                                       },
@@ -480,8 +471,8 @@
 
                                                },
                                      "UptimeDias":  0,
-                                     "MinDiskFreePct":  27.66,
-                                     "RamUsedPct":  86.67,
+                                     "MinDiskFreePct":  29.21,
+                                     "RamUsedPct":  74.61,
                                      "ServicesDown":  2
                                  }
                 }

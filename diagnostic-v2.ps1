@@ -18,7 +18,7 @@ if (-not (Test-Path $OutputPath)) {
     New-Item -ItemType Directory -Path $OutputPath -Force | Out-Null
 }
 
-# --- IMPORTS EXPLÍCITOS (mantenha os nomes dos módulos conforme sua estrutura) ---
+# --- IMPORTS EXPLÍCITOS ---
 Import-Module (Join-Path $ModulesPath "log.psm1")                   -Force
 Import-Module (Join-Path $ModulesPath "automation.psm1")            -Force
 Import-Module (Join-Path $ModulesPath "hardware.psm1")              -Force
@@ -97,28 +97,28 @@ try {
         Hostname  = $env:COMPUTERNAME
     }
 
-    # Coletas principais (mantenha os nomes das funções conforme seus módulos)
+    # Coletas principais
     $diagnostico.Hardware        = Invoke-ModuleWithTimeout -Message "Coletando informações de Hardware"         -ModuleName "hardware.psm1"   -FunctionName "Get-HardwareStatus"          -Timeout 60
     $diagnostico.Rede            = Invoke-ModuleWithTimeout -Message "Coletando informações de Rede"             -ModuleName "networking.psm1" -FunctionName "Get-NetworkStatus"           -Timeout 40
     $diagnostico.EventosCriticos = Invoke-ModuleWithTimeout -Message "Verificando eventos críticos do sistema"   -ModuleName "events.psm1"     -FunctionName "Get-CriticalEvents"          -Timeout 90
     $diagnostico.Servicos        = Invoke-ModuleWithTimeout -Message "Verificando status de serviços críticos"   -ModuleName "services.psm1"   -FunctionName "Get-CriticalServiceStatus"   -Timeout 40
 
-    # Indexador (entra no JSON e alimenta relatório)
-    $diagnostico.Indexador       = Invoke-ModuleWithTimeout -Message "Verificando Indexador de Pesquisa"         -ModuleName "services.psm1"   -FunctionName "Get-SearchIndexerStatus"     -Timeout 20
+    # (REMOVIDO) Indexador de Pesquisa
+    # $diagnostico.Indexador       = Invoke-ModuleWithTimeout -Message "Verificando Indexador de Pesquisa"         -ModuleName "services.psm1"   -FunctionName "Get-SearchIndexerStatus"     -Timeout 20
 
-    # Fabricante/Modelo (usado em sugestão final e exibição)
+    # Fabricante/Modelo
     $diagnostico.Fabricante      = Invoke-ModuleWithTimeout -Message "Identificando fabricante do hardware"      -ModuleName "hardware.psm1"   -FunctionName "Get-ManufacturerInfo"        -Timeout 12
 
-    # Análise inteligente (score e recomendações)
+    # Análise inteligente
     $diagnostico.Analise = Invoke-HealthAnalysis -HardwareStatus $diagnostico.Hardware `
                                                  -Eventos        $diagnostico.EventosCriticos `
                                                  -ServiceStatus  $diagnostico.Servicos `
                                                  -NetworkStatus  $diagnostico.Rede
 
-    # Salva JSON (principal artefato)
+    # Salva JSON
     $diagnostico | ConvertTo-Json -Depth 6 | Set-Content -Path $JsonFile -Encoding UTF8
 
-    # Integração opcional com n8n (se existir config.json)
+    # Integração opcional com n8n
     try {
         $cfgPath = Join-Path $ScriptDir "config.json"
         if (Test-Path $cfgPath) {
@@ -152,7 +152,7 @@ finally {
     foreach ($j in $createdJobs) { try { Remove-Job -Job $j -Force | Out-Null } catch {} }
 }
 
-# --- ENVIAR PARA O PAINEL JARVIS (módulo de integração) ---
+# --- ENVIAR PARA O PAINEL JARVIS ---
 try {
     Import-Module (Join-Path $ModulesPath 'jarvis.integration.psm1') -Force
     $reportPath = Join-Path $OutputPath 'status-maquina.json'

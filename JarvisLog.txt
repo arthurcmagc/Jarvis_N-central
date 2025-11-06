@@ -62,3 +62,179 @@
 [2025-11-03 10:35:25] [INFO] - Coleta de services.psm1 concluída.
 [2025-11-03 10:35:26] [INFO] - Coleta de hardware.psm1 concluída.
 [2025-11-03 10:35:26] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-03 10:45:32] [INFO] - Iniciando diagnóstico completo.
+[2025-11-03 10:45:34] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 10:45:39] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-03 10:45:40] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-03 10:45:40] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 10:45:42] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 10:45:43] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 10:45:43] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-03 10:48:38] [INFO] - Iniciando diagnóstico completo.
+[2025-11-03 10:48:40] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 10:48:44] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-03 10:48:45] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-03 10:48:46] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 10:48:48] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 10:48:48] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 10:48:49] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-03 14:51:04] [INFO] - Iniciando diagnóstico completo.
+[2025-11-03 14:51:06] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 14:51:11] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-03 14:51:12] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-03 14:51:14] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 14:51:16] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 14:51:17] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 14:51:17] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-03 15:02:24] [INFO] - Iniciando diagnóstico completo.
+[2025-11-03 15:02:27] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 15:02:32] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-03 15:02:33] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-03 15:02:34] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 15:02:36] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 15:02:37] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 15:02:37] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-03 15:58:25] [INFO] - Iniciando diagnóstico completo.
+[2025-11-03 15:58:27] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 15:58:32] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-03 15:58:33] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-03 15:58:33] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 15:58:36] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 15:58:37] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 15:58:37] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-03 21:47:05] [INFO] - Iniciando diagnóstico completo.
+[2025-11-03 21:47:07] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 21:47:13] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-03 21:47:13] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-03 21:47:14] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 21:47:17] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 21:47:18] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 21:47:19] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-03 21:49:19] [INFO] - Iniciando diagnóstico completo.
+[2025-11-03 21:49:21] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 21:49:27] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-03 21:49:27] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-03 21:49:28] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 21:49:31] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-03 21:49:31] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-03 21:49:32] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-04 08:50:30] [INFO] - Iniciando diagnóstico completo.
+[2025-11-04 08:50:33] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 08:50:39] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-04 08:50:40] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-04 08:50:41] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 08:50:44] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 08:50:45] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 08:50:46] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-04 09:19:27] [INFO] - Iniciando diagnóstico completo.
+[2025-11-04 09:19:29] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 09:19:34] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-04 09:19:35] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-04 09:19:36] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 09:19:38] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 09:19:39] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 09:19:39] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-04 09:20:38] [INFO] - Iniciando diagnóstico completo.
+[2025-11-04 09:20:40] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 09:20:45] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-04 09:20:46] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-04 09:20:47] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 09:20:50] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 09:20:51] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 09:20:51] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-04 09:21:50] [INFO] - Iniciando diagnóstico completo.
+[2025-11-04 09:21:53] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 09:21:59] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-04 09:22:01] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-04 09:22:02] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 09:22:04] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 09:22:05] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 09:22:05] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-04 10:10:00] [INFO] - Iniciando diagnóstico completo.
+[2025-11-04 10:10:02] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 10:10:07] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-04 10:10:08] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-04 10:10:09] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 10:10:12] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-04 10:10:14] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-04 10:10:14] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-05 09:15:00] [INFO] - Iniciando diagnóstico completo.
+[2025-11-05 09:15:03] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-05 09:15:13] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-05 09:15:15] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-05 09:15:16] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-05 09:15:20] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-05 09:15:22] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-05 09:15:23] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-05 12:33:38] [INFO] - Iniciando diagnóstico completo.
+[2025-11-05 12:33:40] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-05 12:33:48] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-05 12:33:50] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-05 12:33:51] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-05 12:33:55] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-05 12:33:56] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-05 12:33:57] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-05 21:09:43] [INFO] - Iniciando diagnóstico completo.
+[2025-11-05 21:09:46] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-05 21:10:01] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-05 21:10:03] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-05 21:10:05] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-05 21:10:26] [ERROR] - Erro fatal no diagnóstico: Não é possível localizar um parâmetro que coincida com o nome de parâmetro 'Force'.
+[2025-11-05 21:13:29] [INFO] - Iniciando diagnóstico completo.
+[2025-11-05 21:13:31] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-05 21:13:38] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-05 21:13:40] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-05 21:13:40] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-05 21:14:01] [ERROR] - Erro fatal no diagnóstico: Não é possível localizar um parâmetro que coincida com o nome de parâmetro 'Force'.
+[2025-11-05 21:14:14] [INFO] - Iniciando diagnóstico completo.
+[2025-11-05 21:14:16] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-05 21:14:22] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-05 21:14:23] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-05 21:14:24] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-05 21:14:44] [ERROR] - Erro fatal no diagnóstico: Não é possível localizar um parâmetro que coincida com o nome de parâmetro 'Force'.
+[2025-11-05 22:18:43] [INFO] - Iniciando diagnóstico completo.
+[2025-11-05 22:18:46] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-05 22:18:53] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-05 22:18:54] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-05 22:18:55] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-05 22:19:16] [ERROR] - Erro fatal no diagnóstico: Não é possível localizar um parâmetro que coincida com o nome de parâmetro 'Force'.
+[2025-11-05 22:19:51] [INFO] - Iniciando diagnóstico completo.
+[2025-11-05 22:19:54] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-05 22:20:01] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-05 22:20:03] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-05 22:20:04] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-05 22:20:24] [ERROR] - Erro fatal no diagnóstico: Não é possível localizar um parâmetro que coincida com o nome de parâmetro 'Force'.
+[2025-11-06 07:56:08] [INFO] - Iniciando diagnóstico completo.
+[2025-11-06 07:56:11] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-06 07:56:17] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-06 07:56:18] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-06 07:56:19] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-06 07:56:40] [ERROR] - Erro fatal no diagnóstico: Não é possível localizar um parâmetro que coincida com o nome de parâmetro 'Force'.
+[2025-11-06 08:01:14] [INFO] - Iniciando diagnóstico completo.
+[2025-11-06 08:01:16] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-06 08:01:22] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-06 08:01:23] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-06 08:01:23] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-06 08:01:24] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-06 08:01:25] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-06 08:32:02] [INFO] - Iniciando diagnóstico completo.
+[2025-11-06 08:32:05] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-06 08:32:10] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-06 08:32:11] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-06 08:32:11] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-06 08:32:12] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-06 08:32:13] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-06 08:34:47] [INFO] - Iniciando diagnóstico completo.
+[2025-11-06 08:34:50] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-06 08:34:55] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-06 08:34:55] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-06 08:34:56] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-06 08:34:57] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-06 08:34:57] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.
+[2025-11-06 10:38:01] [INFO] - Iniciando diagnóstico completo.
+[2025-11-06 10:38:03] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-06 10:38:13] [INFO] - Coleta de networking.psm1 concluída.
+[2025-11-06 10:38:14] [INFO] - Coleta de events.psm1 concluída.
+[2025-11-06 10:38:15] [INFO] - Coleta de services.psm1 concluída.
+[2025-11-06 10:38:16] [INFO] - Coleta de hardware.psm1 concluída.
+[2025-11-06 10:38:17] [INFO] - Diagnóstico completo OK. Resultado salvo em 'C:\Users\ArthurSodreHypeTecno\Desktop\Jarvis\Jarvis_N-central-main\output\status-maquina.json'.

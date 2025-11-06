@@ -4,6 +4,7 @@
 # Compatível com PowerShell 5.1 e 7+
 # - Start-DiagnosticAnalysis: exibe relatório formatado a partir do JSON (formato "backup" ou "novo")
 # - Helpers: Get-ManufacturerSoftwareSuggestion, Format-LatencyDisplay, Write-TypingFormattedText
+# - Ajuste: Indexador de Pesquisa agora tenta usar Get-SearchIndexerStatus (services.psm1) para checagem ao vivo
 # =======================================================================================
 
 #region Fallbacks / Helpers básicos
@@ -231,7 +232,7 @@ function ConvertTo-NormalizedReport {
         }
     }
 
-    # ---------------- INDEXADOR (agora lê raiz OU Dados) ----------------
+    # ---------------- INDEXADOR (raiz/Dados) ----------------
     if ($hasDados -and $Root.Dados.Indexador) {
         $norm.Indexador = $Root.Dados.Indexador
     } elseif ($Root.Indexador) {
@@ -255,6 +256,18 @@ function ConvertTo-NormalizedReport {
     }
 
     return $norm
+}
+#endregion
+
+#region Helper local: consulta o Indexador via services.psm1 (se disponível)
+function Get-LiveSearchIndexerStatusIfAvailable {
+    try {
+        $cmd = Get-Command -Name Get-SearchIndexerStatus -ErrorAction SilentlyContinue
+        if ($null -ne $cmd) {
+            return Get-SearchIndexerStatus
+        }
+    } catch {}
+    return $null
 }
 #endregion
 
@@ -371,16 +384,9 @@ function Start-DiagnosticAnalysis {
         }
     } catch { Write-Warn "Erro ao exibir SERVIÇOS." }
 
-    # -------- INDEXADOR (opcional) --------
-    Write-SubHeader "INDEXADOR DE PESQUISA"
-    try {
-        if ($data.Indexador) {
-            Write-KV "Status do serviço WSearch" (Get-ValueOrDefault $data.Indexador.WSearchStatus 'N/D')
-            Write-KV "Recurso SearchEngine-Client-Package habilitado" (Get-ValueOrDefault $data.Indexador.FeatureEnabled 'N/D')
-        } else {
-            Write-Warn "Falha no Indexador: N/D"
-        }
-    } catch { Write-Warn "Erro ao exibir INDEXADOR." }
+# -------- INDEXADOR (removido do pipeline) --------
+# (Se futuramente voltar, a renderização atual já sabe lidar.)
+# Intencionalmente não exibimos nada aqui quando não há dados.
 
     # -------- SCORE --------
     try {
